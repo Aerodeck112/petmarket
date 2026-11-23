@@ -37,7 +37,7 @@ class ImportCatalog extends Command
         }
         $bar->finish();
         $this->newLine();
-        \App\Models\Category::query()->each(fn ($c) => $c->updateQuietly(['product_count' => $c->products()->count()]));
+        $importer->refreshCounts();
         $this->info("Produse importate: {$total}");
 
         if ($this->option('images')) {

@@ -1,8 +1,9 @@
 <!doctype html>
-<html lang="ro" data-intl="ro-RO">
+<html lang="ro" data-intl="ro-RO" data-base="{{ rtrim(request()->root(), '/') }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $seo->title }}</title>
     <meta name="description" content="{{ $seo->description }}">
     <link rel="canonical" href="{{ $seo->canonical }}">

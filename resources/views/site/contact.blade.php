@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
 @section('content')
-@include('site._head', ['title' => __('Contact'), 'lead' => __('Ne poți găsi la adresa de mai jos, la telefon sau prin formular.')])
+@include('site._head', ['title' => __('Contact'), 'lead' => $page->lead ?: 'Ne poți găsi la adresa de mai jos, la telefon sau prin formular.'])
 <section style="padding-bottom: var(--section)">
     <div class="wrap split" style="align-items:start">
         <div>
@@ -9,11 +9,12 @@
                 <li><x-hv-icon name="pin" /> <span>{{ $shop['address'] }}, {{ $shop['city'] }}, {{ __('România') }}</span></li>
                 <li><x-hv-icon name="phone" /> <a href="tel:{{ preg_replace('/[^0-9+]/', '', $shop['phone']) }}" data-track="phone_click">{{ $shop['phone'] }}</a></li>
                 <li><x-hv-icon name="mail" /> <a href="mailto:{{ $shop['email'] }}">{{ $shop['email'] }}</a></li>
-                @if ($shop['instagram'])<li><x-hv-icon name="heart" /> <a href="{{ $shop['instagram'] }}" rel="noopener">{{ __(':account pe Instagram', ['account' => 'clinica_veterinara_hikevet']) }}</a></li>@endif
+                @if ($shop['instagram'])<li><x-hv-icon name="heart" /> <a href="{{ $shop['instagram'] }}" rel="noopener">Instagram</a></li>@endif
             </ul>
-            <p><a class="btn btn-primary" href="{{ $shop['booking_url'] }}" data-track="booking_click">{{ __('Programează-te') }}</a></p>
+            <p class="muted">Program: {{ $shop['hours'] }}</p>
+            <p class="muted small">{{ $shop['legal_name'] }} · CUI {{ $shop['cui'] }} · {{ $shop['reg_com'] }}</p>
             <div class="split-media" style="margin-top:2rem;aspect-ratio:4/3">
-                <iframe src="https://maps.google.com/maps?q={{ urlencode(\App\Support\Settings::get('clinic.maps_query')) }}&t=m&z=15&output=embed" title="{{ __('Harta: :address', ['address' => $shop['address'].', '.$shop['city']]) }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;border:0"></iframe>
+                <iframe src="https://maps.google.com/maps?q={{ urlencode($shop['address'].', '.$shop['city']) }}&t=m&z=15&output=embed" title="{{ __('Harta: :address', ['address' => $shop['address'].', '.$shop['city']]) }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;border:0"></iframe>
             </div>
         </div>
         <div class="card" id="formular">
@@ -21,7 +22,7 @@
             @if (session('contact_sent'))
                 <p class="notice notice--ok" role="status">{{ __('Mesajul a fost trimis. Îți răspundem cât mai curând.') }}</p>
             @endif
-            <form method="post" action="{{ site_url('/hikevet-contact/') }}" novalidate>
+            <form method="post" action="{{ site_url('/contact') }}" novalidate>
                 @csrf
                 <input type="hidden" name="ts" value="{{ time() }}">
                 <div class="hp" aria-hidden="true"><label>{{ __('Nu completa acest câmp') }} <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -48,7 +49,7 @@
                 </div>
                 <label class="check">
                     <input type="checkbox" name="consent" value="1" @checked(old('consent')) required>
-                    <span>{!! __('Sunt de acord ca HiKeVet să folosească aceste date pentru a-mi răspunde. Detalii în <a href=":url">politica de confidențialitate</a>.', ['url' => e(site_url('/politica-de-confidentialitate/'))]) !!}</span>
+                    <span>{!! __('Sunt de acord ca Pet Market să folosească aceste date pentru a-mi răspunde. Detalii în <a href=":url">politica de confidențialitate</a>.', ['url' => e(site_url('/politica-confidentialitate/'))]) !!}</span>
                 </label>
                 @error('consent')<p class="form-error">{{ $message }}</p>@enderror
                 <p style="margin-top:1.25rem"><button class="btn btn-dark" type="submit" data-track="contact_submit">{{ __('Trimite mesajul') }}</button></p>
@@ -56,5 +57,4 @@
         </div>
     </div>
 </section>
-@include('partials.subscription-band')
 @endsection

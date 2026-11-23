@@ -4,6 +4,7 @@
 @import '@fontsource-variable/bricolage-grotesque/wght.css';
 @import '@fontsource-variable/jost/wght.css';
 @import './mural.css';
+@import './shop.css';
 
 :root {
   /* Culorile muralului */

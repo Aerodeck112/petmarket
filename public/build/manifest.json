@@ -24,7 +24,7 @@
     "src": "node_modules/@fontsource-variable/jost/files/jost-latin-wght-normal.woff2"
   },
   "resources/css/admin.css": {
-    "file": "assets/admin-Bqs5fyqp.css",
+    "file": "assets/admin-hQE5A6Ke.css",
     "name": "admin",
     "names": [
       "admin.css"
@@ -33,7 +33,7 @@
     "isEntry": true
   },
   "resources/css/site.css": {
-    "file": "assets/site-C3W5HyDv.css",
+    "file": "assets/site-DFprJwOg.css",
     "name": "site",
     "names": [
       "site.css"
@@ -50,7 +50,7 @@
     ]
   },
   "resources/js/mural.js": {
-    "file": "assets/mural-z8h4NW1w.js",
+    "file": "assets/mural-DpyCy0FB.js",
     "name": "mural",
     "src": "resources/js/mural.js",
     "isDynamicEntry": true,
@@ -59,7 +59,7 @@
     ]
   },
   "resources/js/site.js": {
-    "file": "assets/site-BIOqOaOW.js",
+    "file": "assets/site-BOe6a6oP.js",
     "name": "site",
     "src": "resources/js/site.js",
     "isEntry": true,

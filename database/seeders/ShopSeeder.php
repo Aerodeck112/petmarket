@@ -46,11 +46,24 @@ class ShopSeeder extends Seeder
                 'body' => $p['template'] === 'legal' ? '<p>Textul acestei pagini se preia din magazinul actual la importul catalogului (Sistem → Import catalog) sau se completează din Conținut → Pagini.</p>' : null]);
         }
 
+        // Mesajele din bula de pe prima pagina si bannerele promo (imaginile din magazinul vechi).
         if (! Banner::query()->exists()) {
-            Banner::query()->create(['placement' => 'hero', 'title' => 'Tot ce le trebuie, ales de medici veterinari', 'subtitle' => 'Hrană, recompense și accesorii pentru câini și pisici, cu sfatul echipei HiKeVet.',
-                'cta_label' => 'Vezi magazinul', 'url' => '/magazin/', 'theme' => 'cobalt', 'sort' => 1]);
-            Banner::query()->create(['placement' => 'hero', 'title' => 'Reduceri care dau din coadă', 'subtitle' => 'Produsele la ofertă, cu prețul cel mai mic din ultimele 30 de zile afișat cinstit.',
-                'cta_label' => 'Vezi reducerile', 'url' => '/magazin/?on_sale=1', 'theme' => 'magenta', 'sort' => 2]);
+            $hero = [
+                ['Hrană super premium pentru câini', 'Pentru câini adulți de toate rasele, aleasă de medicii HiKeVet.', 'Vezi hrana pentru câini', '/categorie-produs/hrana/caini-hrana/', 'cobalt'],
+                ['Tot ce le trebuie pisicilor', 'Hrană, diete veterinare și accesorii pentru pisici fericite.', 'Vezi produsele pentru pisici', '/categorie-produs/hrana/pisici-hrana/', 'cobalt'],
+                ['Echipamente veterinare', 'Produse destinate clinicilor și cabinetelor veterinare.', 'Vezi echipamentele', '/categorie-produs/echipamente-veterinare/', 'cobalt'],
+            ];
+            foreach ($hero as $i => [$title, $sub, $cta, $url, $theme]) {
+                Banner::query()->create(['placement' => 'hero', 'title' => $title, 'subtitle' => $sub, 'cta_label' => $cta, 'url' => $url, 'theme' => $theme, 'sort' => $i + 1]);
+            }
+            $promo = [
+                ['Antiparazitare', 'Protecție contra puricilor și căpușelor.', '/categorie-produs/otc/antiparazitare-otc/', 'media/site/banners/antiparazitare.webp', 'sun'],
+                ['Diete veterinare', 'Monge VetSolution și alte diete recomandate de medic.', '/categorie-produs/diete-2/', 'media/site/banners/monge-vetsolution.webp', 'magenta'],
+                ['Accesorii', 'Covorașe, boluri, lese și tot ce mai trebuie acasă.', '/categorie-produs/accesorii/', 'media/site/banners/accesorii.webp', 'teal'],
+            ];
+            foreach ($promo as $i => [$title, $sub, $url, $img, $theme]) {
+                Banner::query()->create(['placement' => 'promo', 'title' => $title, 'subtitle' => $sub, 'cta_label' => 'Vezi produsele', 'url' => $url, 'image' => $img, 'theme' => $theme, 'sort' => $i + 1]);
+            }
         }
     }
 }

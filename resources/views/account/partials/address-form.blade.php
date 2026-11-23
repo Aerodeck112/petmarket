@@ -1,0 +1,10 @@
+@php $v = fn ($k, $d = null) => old($k, $a?->{$k} ?? $d); @endphp
+<div class="field"><label>Tip</label><select name="type"><option value="shipping" @selected($v('type') === 'shipping')>Livrare</option><option value="billing" @selected($v('type') === 'billing')>Facturare</option></select></div>
+<div class="grid-2"><div class="field"><label>Prenume</label><input name="first_name" value="{{ $v('first_name') }}" required></div><div class="field"><label>Nume</label><input name="last_name" value="{{ $v('last_name') }}" required></div></div>
+<div class="grid-2"><div class="field"><label>Firmă <span class="muted">(opțional)</span></label><input name="company" value="{{ $v('company') }}"></div><div class="field"><label>CUI <span class="muted">(opțional)</span></label><input name="cui" value="{{ $v('cui') }}">@error('cui')<p class="error">{{ $message }}</p>@enderror</div></div>
+<div class="grid-2"><div class="field"><label>Județ</label><select name="county" required>@foreach (\App\Services\Shop\Counties::ALL as $code => $name)<option value="{{ $code }}" @selected($v('county', 'MS') === $code)>{{ $name }}</option>@endforeach</select></div><div class="field"><label>Localitate</label><input name="city" value="{{ $v('city') }}" required></div></div>
+<div class="field"><label>Adresă</label><input name="address_1" value="{{ $v('address_1') }}" required></div>
+<div class="grid-2"><div class="field"><label>Bloc, ap. <span class="muted">(opțional)</span></label><input name="address_2" value="{{ $v('address_2') }}"></div><div class="field"><label>Cod poștal</label><input name="postcode" value="{{ $v('postcode') }}" maxlength="6">@error('postcode')<p class="error">{{ $message }}</p>@enderror</div></div>
+<div class="field"><label>Telefon</label><input name="phone" value="{{ $v('phone') }}"></div>
+<label class="check"><input type="checkbox" name="is_default" value="1" @checked($v('is_default'))> <span>Adresă implicită</span></label>
+<button class="btn btn-dark btn-sm" type="submit">Salvează adresa</button>

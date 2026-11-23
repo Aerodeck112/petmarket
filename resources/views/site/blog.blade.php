@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
 @section('content')
-@include('site._head', ['title' => __('Blog'), 'lead' => __('Sfaturi de la medicii HiKeVet pentru un animal sănătos.')])
+@include('site._head', ['title' => __('Blog'), 'lead' => $page->lead ?: 'Sfaturi de nutriție și îngrijire de la medicii HiKeVet.'])
 <section style="padding-bottom: var(--section)">
     <div class="wrap">
         @if ($posts->isEmpty())

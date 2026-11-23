@@ -18,7 +18,7 @@
             <div class="oops-actions">
                 <a class="btn btn-primary" href="{{ site_url('/') }}">{{ __('Mergi la prima pagină') }}</a>
                 @if (! in_array((int) $code, [503], true))
-                    <a class="btn btn-ghost" href="{{ site_url('/hikevet-contact/') }}">{{ __('Contact') }}</a>
+                    <a class="btn btn-ghost" href="{{ site_url('/contact/') }}">{{ __('Contact') }}</a>
                 @endif
                 @if (! empty($shop['phone']))
                     <a class="btn btn-ghost" href="tel:{{ preg_replace('/[^0-9+]/', '', $shop['phone']) }}">{{ __('Sună: :phone', ['phone' => $shop['phone']]) }}</a>

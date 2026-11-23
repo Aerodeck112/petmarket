@@ -92,10 +92,10 @@ class Category extends Model
         return $chain;
     }
 
-    /** Arborele vizibil pentru meniu, cache 10 minute. @return Collection<int, Category> */
+    /** Arborele vizibil pentru meniu, citit o singura data pe cerere. @return Collection<int, Category> */
     public static function tree(): Collection
     {
-        return Cache::remember('catalog.tree', 600, fn () => static::query()->visible()->where('in_menu', true)->whereNull('parent_id')
+        return once(fn () => static::query()->visible()->where('in_menu', true)->whereNull('parent_id')
             ->with(['children' => fn ($q) => $q->visible()->where('in_menu', true)->with(['children' => fn ($q) => $q->visible()->where('in_menu', true)])])
             ->orderBy('sort')->orderBy('name')->get());
     }

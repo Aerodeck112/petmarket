@@ -160,6 +160,24 @@ class CatalogImporter
         }
     }
 
+    /** Numarul de produse publicate pe categorie, inclusiv din subcategorii (afisat in meniuri si pe dale). */
+    public function refreshCounts(): void
+    {
+        $byCat = DB::table('category_product')->join('products', 'products.id', '=', 'category_product.product_id')
+            ->where('products.status', 'published')->whereNull('products.deleted_at')
+            ->select('category_id', 'product_id')->get()->groupBy('category_id')->map(fn ($rows) => $rows->pluck('product_id')->all());
+        $children = Category::query()->get(['id', 'parent_id'])->groupBy('parent_id');
+        $collect = function (int $id) use (&$collect, $byCat, $children): array {
+            $ids = $byCat[$id] ?? [];
+            foreach ($children->get($id, collect()) as $child) {
+                $ids = array_merge($ids, $collect($child->id));
+            }
+
+            return $ids;
+        };
+        Category::query()->each(fn (Category $c) => $c->updateQuietly(['product_count' => count(array_unique($collect($c->id)))]));
+    }
+
     /** Pasul 2: un lot de produse. Returneaza cate au fost procesate (0 = gata). */
     public function importProducts(int $offset, int $limit): int
     {
@@ -227,6 +245,8 @@ class CatalogImporter
             $product->stock_status = $status;
         }
         $product->deleted_at = null;
+        // Store API nu publica data produsului: ordinea „cele mai noi” urmeaza ID-ul WooCommerce, fara eticheta „Nou”.
+        $product->published_at = \Illuminate\Support\Carbon::parse('2025-06-01 00:00:00')->addMinutes((int) $row['id']);
         $product->save();
 
         $catIds = collect($row['categories'] ?? [])->map(fn ($c) => $categories[$c['id']] ?? null)->filter()->reject(fn ($id) => in_array($id, $hidden, true))->unique()->values();

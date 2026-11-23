@@ -29,9 +29,15 @@ class PageController extends Controller
             'potentialAction' => ['@type' => 'SearchAction', 'target' => site_url('/cautare/').'?q={search_term_string}', 'query-input' => 'required name=search_term_string']]);
 
         $with = fn ($q) => $q->published()->with(['mainImage', 'brand']);
-        $data = Cache::remember('home.products', 300, fn () => [
+        $data = once(fn () => [
             'deals' => $with(Product::query())->inStock()->where('on_sale', true)->orderByDesc('sold_count')->limit(12)->get(),
-            'bestsellers' => $with(Product::query())->inStock()->orderByDesc('sold_count')->orderByDesc('rating_avg')->limit(12)->get(),
+            // Pana se aduna vanzari in noua platforma, „cele mai cautate” vin din primul raft al meniului (Hrana).
+            'bestsellers' => Product::query()->where('sold_count', '>', 0)->exists()
+                ? $with(Product::query())->inStock()->orderByDesc('sold_count')->orderByDesc('rating_avg')->limit(12)->get()
+                : $with(Product::query())->inStock()->whereNotNull('brand_id')->whereHas('images')
+                    ->whereIn('id', fn ($q) => $q->select('product_id')->from('category_product')->whereIn('category_id',
+                        Category::query()->where('in_menu', true)->whereNull('parent_id')->orderBy('sort')->first()?->descendantIds() ?? [0]))
+                    ->orderByDesc('published_at')->limit(12)->get(),
             'newest' => $with(Product::query())->inStock()->orderByDesc('published_at')->limit(12)->get(),
             'featured' => $with(Product::query())->inStock()->where('is_featured', true)->limit(12)->get(),
         ]);
@@ -40,7 +46,8 @@ class PageController extends Controller
             'seo' => $seo, 'page' => $page, 'b' => $page?->blocks ?? [],
             'slides' => Banner::query()->live('hero')->get(),
             'promos' => Banner::query()->live('promo')->limit(3)->get(),
-            'categories' => Category::query()->visible()->whereNull('parent_id')->orderByDesc('is_featured')->orderBy('sort')->orderBy('name')->limit(12)->get(),
+            'categories' => Category::query()->visible()->where('in_menu', true)->whereNull('parent_id')->orderBy('sort')->orderBy('name')->get()
+                ->flatMap(fn (Category $c) => $c->children()->visible()->where('product_count', '>', 0)->orderByDesc('product_count')->limit(2)->get()->prepend($c))->take(12)->values(),
             'brands' => Brand::query()->whereNotNull('logo')->orderByDesc('is_featured')->orderBy('sort')->limit(18)->get(),
             'posts' => Post::published()->latest('published_at')->limit(3)->get(),
         ]);

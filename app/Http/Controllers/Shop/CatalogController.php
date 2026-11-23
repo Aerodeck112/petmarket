@@ -63,7 +63,7 @@ class CatalogController extends Controller
     public function brands(Seo $seo)
     {
         $seo->page('Branduri', 'Toate mărcile din magazinul Pet Market.')->crumbs([['Acasă', '/'], ['Branduri', '/branduri/']]);
-        $brands = Brand::query()->withCount(['products' => fn ($q) => $q->published()])->having('products_count', '>', 0)->orderBy('name')->get();
+        $brands = Brand::query()->withCount(['products' => fn ($q) => $q->published()])->orderBy('name')->get()->where('products_count', '>', 0);
 
         return view('shop.brands', ['seo' => $seo, 'brands' => $brands->groupBy(fn ($b) => mb_strtoupper(mb_substr($b->name, 0, 1)))]);
     }
