@@ -14,16 +14,16 @@
 | | |
 |---|---|
 | Fișier | `petmarket-install-0.1.0.zip` |
-| Dimensiune | 46 318 146 octeți (aproximativ 44 MB) |
-| Fișiere | 16 680 |
-| SHA-256 | `57353ea4f118ab4c8cae8ce4dd295989ab11fecb4cf9b2561ba839ca78cb2f40` |
-| Verificare | instalat din browser (PHP 8.3 + MariaDB 10.11): cod de acces, verificări, bază de date, tabele, administrator; apoi importul celor 5.724 de produse din admin (aprox. 35 de secunde) și copierea imaginilor |
+| Dimensiune | 46 331 278 octeți (aproximativ 44 MB) |
+| Fișiere | 16 685 |
+| SHA-256 | `6abe8dbd48337eb0cb170868ce7bf07e9ae1112e9c252911419ee4d3ef891ed6` |
+| Verificare | instalare directă simulată (PHP 8.3 + MariaDB 10.11, WordPress mutat în `public_html_vechi`): instalator complet, import 5.724 de produse, prețuri și stoc din baza WooCommerce, imagini copiate de pe disc; pachet de actualizare 0.1.1 semnat cu cheia nouă acceptat, pachet modificat respins |
 
 Pachetul **nu este în Git** (fișier binar mare). Amprenta se schimbă la fiecare reconstruire.
 
 Conține: codul, dependențele de producție, asseturile compilate, logo-ul și imaginile site-ului, exportul
 catalogului (`database/seeders/data/catalog`, 19 MB) și ghidurile. Nu conține: date de clienți, chei,
-parole, teste, dependențe de dezvoltare. `PETMARKET_UPDATE_PUBLIC_KEY` este gol (vezi `UPDATES.md` §1).
+parole, teste, dependențe de dezvoltare. Cheia publică de actualizare Pet Market este inclusă și scrisă de instalator în `.env`.
 
 ## Reconstruire
 
