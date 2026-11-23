@@ -23,8 +23,18 @@ class ImageDownloader
         return ProductImage::query()->whereNull('path')->whereNull('width')->whereNotNull('source_url')->count();
     }
 
-    /** Descarca un lot; returneaza [reusite, esuate]. */
-    public function run(int $limit = 40): array
+    /** Imaginile esuate (marcate cu latimea 0) intra din nou in coada. */
+    public function retryFailed(): int
+    {
+        return ProductImage::query()->whereNull('path')->where('width', 0)->update(['width' => null]);
+    }
+
+    /**
+     * Copiaza un lot; returneaza [reusite, esuate, blocat]. „Blocat” inseamna ca site-ul vechi a raspuns cu
+     * pagina anti-bot a gazduirii: lotul se opreste fara sa marcheze imaginile ca esuate, iar urmatorul lot
+     * reia de unde a ramas.
+     */
+    public function run(int $limit = 40, int $pauseMs = 250): array
     {
         $ok = $failed = 0;
         $images = ProductImage::query()->whereNull('path')->whereNull('width')->whereNotNull('source_url')->with('product:id,slug')->orderBy('id')->limit($limit)->get();
@@ -32,6 +42,11 @@ class ImageDownloader
             try {
                 $this->download($image);
                 $ok++;
+                if ($pauseMs && ! $this->localFile($image->source_url)) {
+                    usleep($pauseMs * 1000);
+                }
+            } catch (TemporarilyBlocked) {
+                return [$ok, $failed, true];
             } catch (Throwable $e) {
                 // Imaginea ramane pe adresa sursa; latimea 0 o marcheaza ca esuata, ca sa nu blocheze coada.
                 $image->update(['width' => 0]);
@@ -40,16 +55,36 @@ class ImageDownloader
             }
         }
 
-        return [$ok, $failed];
+        return [$ok, $failed, false];
+    }
+
+    /** Fisierul corespunzator din wp-content/uploads, daca directorul vechi este pe acelasi server. */
+    private function localFile(string $url): ?string
+    {
+        $root = config('petmarket.legacy_uploads_path');
+        if (! $root || ! preg_match('#/wp-content/uploads/(.+)$#', (string) parse_url($url, PHP_URL_PATH), $m)) {
+            return null;
+        }
+        $path = rtrim($root, '/').'/'.rawurldecode($m[1]);
+
+        return is_file($path) && ! str_contains($m[1], '..') ? $path : null;
     }
 
     private function download(ProductImage $image): void
     {
-        $response = Http::timeout(25)->withUserAgent('PetMarket-Import/1.0')->get($image->source_url);
-        if (! $response->successful()) {
-            throw new \RuntimeException('HTTP '.$response->status().' la '.$image->source_url);
+        if ($local = $this->localFile($image->source_url)) {
+            $body = (string) file_get_contents($local);
+        } else {
+            $response = Http::timeout(25)->withUserAgent('Mozilla/5.0 (compatible; PetMarket-Import/1.0)')->accept('image/*')->get($image->source_url);
+            if (in_array($response->status(), [403, 429, 503], true) || str_contains((string) $response->header('Content-Type'), 'text/html')) {
+                throw new TemporarilyBlocked('Site-ul vechi a cerut o pauză (protecție anti-bot).');
+            }
+            if (! $response->successful()) {
+                throw new \RuntimeException('HTTP '.$response->status().' la '.$image->source_url);
+            }
+            $body = $response->body();
         }
-        $gd = @imagecreatefromstring($response->body());
+        $gd = @imagecreatefromstring($body);
         if (! $gd) {
             throw new \RuntimeException('Imagine invalidă: '.$image->source_url);
         }

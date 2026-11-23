@@ -48,4 +48,26 @@ class CatalogImportTest extends TestCase
         // Adresa veche doar cu slug-ul ultimei categorii duce la calea completa.
         $this->get('/categorie-produs/'.$deep->slug)->assertRedirect(site_url($deep->path()));
     }
+
+    public function test_images_are_copied_from_local_wordpress_uploads_as_webp(): void
+    {
+        $this->seedShop();
+        $dir = sys_get_temp_dir().'/pm-wp-uploads-'.uniqid();
+        mkdir($dir.'/2026/02', 0777, true);
+        $gd = imagecreatetruecolor(1600, 1200);
+        imagejpeg($gd, $dir.'/2026/02/poza.jpg');
+        config(['petmarket.legacy_uploads_path' => $dir]);
+        $product = $this->product();
+        $image = $product->images()->create(['source_url' => 'https://pet-market.ro/wp-content/uploads/2026/02/poza.jpg']);
+
+        [$ok, $failed, $blocked] = app(\App\Services\Import\ImageDownloader::class)->run(10);
+
+        $this->assertSame([1, 0, false], [$ok, $failed, $blocked]);
+        $image->refresh();
+        $this->assertSame(1000, $image->width);
+        $this->assertFileExists(public_path('uploads/'.$image->path));
+        $this->assertStringEndsWith('-400.webp', $image->thumbUrl());
+        @unlink(public_path('uploads/'.$image->path));
+        @unlink(public_path('uploads/'.preg_replace('/\.webp$/', '-400.webp', $image->path)));
+    }
 }

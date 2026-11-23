@@ -15,8 +15,8 @@ class ImportCatalog extends Command
     public function handle(CatalogImporter $importer, ImageDownloader $images): int
     {
         if ($batch = (int) $this->option('image-batch')) {
-            [$ok, $failed] = $images->run($batch);
-            $this->line("Imagini copiate: {$ok}, eșuate: {$failed}, rămase: ".$images->pending());
+            [$ok, $failed, $blocked] = $images->run($batch);
+            $this->line("Imagini copiate: {$ok}, eșuate: {$failed}, rămase: ".$images->pending().($blocked ? ' (site-ul vechi a cerut o pauză; continuă la următoarea rulare)' : ''));
 
             return self::SUCCESS;
         }
@@ -43,9 +43,12 @@ class ImportCatalog extends Command
         if ($this->option('images')) {
             $this->info('Copiez imaginile ('.$images->pending().')…');
             while ($images->pending() > 0) {
-                [$ok, $failed] = $images->run(50);
+                [$ok, $failed, $blocked] = $images->run(50);
                 $this->line("  +{$ok} (eșuate {$failed}), rămase ".$images->pending());
-                if ($ok === 0 && $failed === 0) {
+                if ($blocked) {
+                    $this->warn('Site-ul vechi a cerut o pauză (protecție anti-bot). Aștept 60 de secunde…');
+                    sleep(60);
+                } elseif ($ok === 0 && $failed === 0) {
                     break;
                 }
             }

@@ -10,6 +10,10 @@ return [
     // Magazinul vechi (WooCommerce), sursa importului de catalog si a imaginilor.
     'legacy_url' => env('PETMARKET_LEGACY_URL', 'https://pet-market.ro'),
 
+    // Optional: directorul wp-content/uploads al magazinului vechi pe acelasi server (de exemplu
+    // /home/UTILIZATOR/public_html/wp-content/uploads). Imaginile se copiaza de pe disc, fara descarcare.
+    'legacy_uploads_path' => env('PETMARKET_LEGACY_UPLOADS_PATH'),
+
     // In afara productiei aplicatia se considera instalata (dezvoltare, teste automate).
     'assume_installed' => env('APP_ENV', 'production') !== 'production',
     'install_lock' => null,

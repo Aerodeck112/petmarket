@@ -67,6 +67,12 @@ class CatalogImport extends Page
         $this->log[] = now()->format('H:i:s').' Încep copierea imaginilor…';
     }
 
+    public function retryFailed(): void
+    {
+        $n = app(ImageDownloader::class)->retryFailed();
+        $this->log[] = now()->format('H:i:s')." {$n} imagini eșuate au fost puse din nou în coadă.";
+    }
+
     public function stop(): void
     {
         $this->running = null;
@@ -89,7 +95,13 @@ class CatalogImport extends Page
                 Notification::make()->title('Produsele au fost importate')->success()->send();
             }
         } elseif ($this->running === 'images') {
-            [$ok, $failed] = app(ImageDownloader::class)->run(25);
+            [$ok, $failed, $blocked] = app(ImageDownloader::class)->run(20);
+            if ($blocked) {
+                $this->running = null;
+                $this->log[] = now()->format('H:i:s')." Site-ul vechi a cerut o pauză după {$ok} imagini (protecție anti-bot). Reia peste câteva minute sau folosește copierea de pe disc (INSTALL_CPANEL.md §7).";
+
+                return;
+            }
             if ($failed) {
                 $this->log[] = now()->format('H:i:s')." {$failed} imagini nu au putut fi copiate (rămân pe adresa veche).";
             }
@@ -115,6 +127,7 @@ class CatalogImport extends Page
             'imgTotal' => (clone $images)->count(),
             'imgLocal' => (clone $images)->whereNotNull('path')->count(),
             'imgFailed' => (clone $images)->whereNull('path')->where('width', 0)->count(),
+            'localUploads' => (bool) config('petmarket.legacy_uploads_path'),
         ];
     }
 }

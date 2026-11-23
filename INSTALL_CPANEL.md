@@ -152,7 +152,13 @@ Din admin, *Sistem → Import catalog*:
 2. **Produse**: pe loturi de câte 300; pagina rămâne deschisă până la 100%.
 3. **Imagini**: se copiază de pe pet-market.ro în `public/uploads/products`, optimizate WebP. Până la
    copiere, site-ul nou le afișează de pe adresa veche. **Copierea trebuie terminată înainte de oprirea
-   WordPress.** Fără browser deschis, se poate adăuga temporar o sarcină cron la 5 minute:
+   WordPress.**
+
+   **Varianta rapidă (recomandată):** dacă WordPress este pe același cont cPanel, pune în `.env`
+   `PETMARKET_LEGACY_UPLOADS_PATH="/home/UTILIZATOR/public_html/wp-content/uploads"`: imaginile se copiază
+   direct de pe disc, în câteva minute. Altfel se descarcă de pe pet-market.ro, cu pauze, pentru că
+   găzduirea actuală are protecție anti-bot și oprește descărcările rapide (copierea reia singură de unde
+   a rămas). Fără browser deschis, se poate adăuga temporar o sarcină cron la 5 minute:
 
 ```bash
 cd /home/UTILIZATOR/petmarket && /usr/local/bin/php artisan petmarket:import --image-batch=200 >> /dev/null 2>&1

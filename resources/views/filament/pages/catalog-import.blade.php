@@ -25,7 +25,8 @@
             <h3>3. Imagini</h3>
             @php $ipct = $imgTotal ? round($imgLocal * 100 / $imgTotal) : 0; @endphp
             <div class="pm-progress"><span style="width: {{ $ipct }}%"></span></div>
-            <p class="pm-muted">{{ number_format($imgLocal, 0, ',', '.') }} / {{ number_format($imgTotal, 0, ',', '.') }} copiate pe server @if ($imgFailed)· {{ $imgFailed }} eșuate @endif</p>
+            <p class="pm-muted">{{ number_format($imgLocal, 0, ',', '.') }} / {{ number_format($imgTotal, 0, ',', '.') }} copiate pe server @if ($imgFailed)· {{ $imgFailed }} eșuate <button type="button" class="pm-link" wire:click="retryFailed">reîncearcă</button>@endif</p>
+            <p class="pm-muted">Sursa: {{ $localUploads ? 'directorul wp-content/uploads de pe acest server (rapid)' : 'descărcare de pe pet-market.ro (lent, cu pauze)' }}.</p>
             <p class="pm-muted">Până la copiere, imaginile se afișează de pe pet-market.ro. Copierea trebuie terminată înainte de oprirea site-ului vechi.</p>
             @if ($running === 'images')
                 <x-filament::button color="gray" wire:click="stop" icon="heroicon-o-stop">Oprește</x-filament::button>
