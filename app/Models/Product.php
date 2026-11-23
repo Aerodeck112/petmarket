@@ -1,0 +1,184 @@
+<?php
+
+namespace App\Models;
+
+use App\Enums\StockStatus;
+use App\Models\Concerns\HasSalePrice;
+use App\Support\Settings;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Product extends Model
+{
+    use HasSalePrice, SoftDeletes;
+
+    public const TYPES = ['simple' => 'Simplu', 'variable' => 'Cu variante'];
+
+    public const STATUSES = ['published' => 'Publicat', 'draft' => 'Ciornă', 'private' => 'Privat'];
+
+    protected $guarded = ['id'];
+
+    protected $casts = [
+        'sale_starts_at' => 'datetime', 'sale_ends_at' => 'datetime', 'published_at' => 'datetime',
+        'manage_stock' => 'boolean', 'allow_backorders' => 'boolean', 'is_featured' => 'boolean', 'is_visible' => 'boolean', 'on_sale' => 'boolean',
+        'stock_status' => StockStatus::class, 'rating_avg' => 'float', 'vat_rate' => 'float',
+    ];
+
+    protected static function booted(): void
+    {
+        static::saving(function (Product $p) {
+            if ($p->type === 'simple') {
+                $p->price = $p->effectivePrice();
+                $p->price_max = $p->price;
+                $p->on_sale = $p->saleIsActive();
+                if ($p->manage_stock && $p->stock_qty !== null) {
+                    $p->stock_status = $p->stock_qty > 0 ? StockStatus::InStock : ($p->allow_backorders ? StockStatus::OnBackorder : StockStatus::OutOfStock);
+                }
+            }
+            if ($p->status === 'published' && ! $p->published_at) {
+                $p->published_at = now();
+            }
+        });
+        static::saved(function (Product $p) {
+            if ($p->type === 'simple' && $p->wasChanged('price') && $p->price !== null) {
+                PriceHistory::record($p->id, null, $p->price);
+            }
+        });
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class)->withPivot('is_primary');
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort')->orderBy('id');
+    }
+
+    public function mainImage(): HasOne
+    {
+        return $this->hasOne(ProductImage::class)->orderBy('sort')->orderBy('id');
+    }
+
+    public function variants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class)->orderBy('sort')->orderBy('id');
+    }
+
+    public function activeVariants(): HasMany
+    {
+        return $this->variants()->where('is_active', true);
+    }
+
+    public function attributes(): BelongsToMany
+    {
+        return $this->belongsToMany(Attribute::class, 'product_attribute')->withPivot(['for_variations', 'is_visible', 'sort'])->orderByPivot('sort');
+    }
+
+    public function attributeValues(): BelongsToMany
+    {
+        return $this->belongsToMany(AttributeValue::class, 'attribute_value_product');
+    }
+
+    public function upsells(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'product_links', 'product_id', 'linked_id')->wherePivot('type', 'upsell')->withPivot('sort');
+    }
+
+    public function crossSells(): BelongsToMany
+    {
+        return $this->belongsToMany(self::class, 'product_links', 'product_id', 'linked_id')->wherePivot('type', 'crosssell')->withPivot('sort');
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function scopePublished(Builder $q): Builder
+    {
+        return $q->where('status', 'published')->where('is_visible', true);
+    }
+
+    public function scopeInStock(Builder $q): Builder
+    {
+        return $q->where('stock_status', '!=', StockStatus::OutOfStock->value);
+    }
+
+    public function path(): string
+    {
+        return '/produs/'.$this->slug.'/';
+    }
+
+    public function isVariable(): bool
+    {
+        return $this->type === 'variable';
+    }
+
+    public function isPurchasable(): bool
+    {
+        return $this->status === 'published' && $this->price !== null && $this->stock_status !== StockStatus::OutOfStock;
+    }
+
+    public function vatRate(): float
+    {
+        return (float) ($this->vat_rate ?? Settings::get('commerce.vat_rate'));
+    }
+
+    public function isNew(): bool
+    {
+        return $this->published_at && $this->published_at->gt(now()->subDays((int) Settings::get('commerce.new_badge_days')));
+    }
+
+    public function primaryCategory(): ?Category
+    {
+        return $this->categories->sortByDesc(fn ($c) => [$c->pivot->is_primary, $c->depth])->first();
+    }
+
+    /** Recalculeaza pretul minim/maxim, reducerea si stocul unui produs variabil din variantele lui. */
+    public function syncFromVariants(): void
+    {
+        if (! $this->isVariable()) {
+            return;
+        }
+        $variants = $this->variants()->where('is_active', true)->get();
+        $prices = $variants->map->effectivePrice()->filter(fn ($p) => $p !== null);
+        $this->price = $prices->min();
+        $this->price_max = $prices->max();
+        $this->on_sale = $variants->contains(fn (ProductVariant $v) => $v->saleIsActive());
+        $this->stock_status = $variants->contains(fn ($v) => $v->stock_status === StockStatus::InStock) ? StockStatus::InStock
+            : ($variants->contains(fn ($v) => $v->stock_status === StockStatus::OnBackorder) ? StockStatus::OnBackorder : StockStatus::OutOfStock);
+        $this->stock_qty = $variants->every(fn ($v) => $v->manage_stock) ? (int) $variants->sum('stock_qty') : null;
+        $this->saveQuietly();
+    }
+
+    /** Cel mai mic pret din ultimele 30 de zile dinaintea reducerii (Directiva Omnibus). */
+    public function lowestPrice30(?int $variantId = null): ?int
+    {
+        return PriceHistory::lowestBefore($this->id, $variantId, 30);
+    }
+
+    public function refreshRating(): void
+    {
+        $approved = $this->reviews()->where('status', 'approved');
+        $this->rating_count = (clone $approved)->count();
+        $this->rating_avg = round((float) (clone $approved)->avg('rating'), 2);
+        $this->saveQuietly();
+    }
+}

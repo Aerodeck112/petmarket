@@ -1,0 +1,589 @@
+{
+ "source_site": "https://pet-market.ro",
+ "generated": "2026-11-23",
+ "note": "Design assets only (no product images). WebP = converted, max 1920px wide.",
+ "assets": [
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2026/01/ChatGPT-Image-29-ian.-2026-16_10_12-e1769696626846.png",
+   "alt": "PET-MARKET",
+   "where": "header logo (desktop + mobile), toate paginile",
+   "files": [
+    "logo/logo-pet-market.png",
+    "logo/logo-pet-market.webp"
+   ],
+   "original_size": [
+    1183,
+    370
+   ],
+   "webp_size": [
+    1183,
+    370
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2026/04/ChatGPT-Image-29-ian.-2026-16_10_12-e1769696626846-1.png",
+   "alt": "PET-MARKET",
+   "where": "variantă logo încărcată 2026/04 (sursa site icon)",
+   "files": [
+    "logo/logo-pet-market-v2.png",
+    "logo/logo-pet-market-v2.webp"
+   ],
+   "original_size": [
+    1183,
+    370
+   ],
+   "webp_size": [
+    1183,
+    370
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/logo.svg",
+   "alt": "",
+   "where": "logo.svg din media library (demo WoodMart, NEFOLOSIT pe site)",
+   "files": [
+    "logo/logo-demo-woodmart.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2026/04/cropped-ChatGPT-Image-29-ian.-2026-16_10_12-e1769696626846-1.png",
+   "alt": "",
+   "where": "WordPress Site Icon 512x512 (sursa favicon)",
+   "files": [
+    "favicon/site-icon-512.png",
+    "favicon/site-icon-512.webp"
+   ],
+   "original_size": [
+    512,
+    512
+   ],
+   "webp_size": [
+    512,
+    512
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2026/04/cropped-ChatGPT-Image-29-ian.-2026-16_10_12-e1769696626846-1-32x32.png",
+   "alt": "",
+   "where": "<link rel=icon sizes=32x32>",
+   "files": [
+    "favicon/favicon-32.png"
+   ],
+   "original_size": [
+    32,
+    32
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2026/04/cropped-ChatGPT-Image-29-ian.-2026-16_10_12-e1769696626846-1-192x192.png",
+   "alt": "",
+   "where": "<link rel=icon sizes=192x192>",
+   "files": [
+    "favicon/favicon-192.png"
+   ],
+   "original_size": [
+    192,
+    192
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2026/04/cropped-ChatGPT-Image-29-ian.-2026-16_10_12-e1769696626846-1-180x180.png",
+   "alt": "",
+   "where": "<link rel=apple-touch-icon>",
+   "files": [
+    "favicon/apple-touch-icon-180.png"
+   ],
+   "original_size": [
+    180,
+    180
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2026/04/cropped-ChatGPT-Image-29-ian.-2026-16_10_12-e1769696626846-1-270x270.png",
+   "alt": "",
+   "where": "msapplication-TileImage",
+   "files": [
+    "favicon/mstile-270.png"
+   ],
+   "original_size": [
+    270,
+    270
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/australian-breed-domestic-pet-with-blue-and-brown-2026-01-07-01-14-59-utc-scaled.jpg",
+   "alt": "Hrana Super Premium pentru câini adulți de toate rasele!",
+   "where": "homepage slider #slider-105, slide 1 → /categorie-produs/hrana/caini-hrana/",
+   "files": [
+    "hero/slide-1-caini.webp"
+   ],
+   "original_size": [
+    2560,
+    1707
+   ],
+   "webp_size": [
+    1920,
+    1280
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/portrait-of-cat-breaking-through-yellow-paper-posi-2026-01-08-23-05-31-utc-scaled.jpg",
+   "alt": "Produse pentru pisici – descoperă gama completă",
+   "where": "homepage slider, slide 2 → /categorie-produs/hrana/pisici-hrana/",
+   "files": [
+    "hero/slide-2-pisici.webp"
+   ],
+   "original_size": [
+    2560,
+    1707
+   ],
+   "webp_size": [
+    1920,
+    1280
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/sick-labrador-2026-03-24-13-09-42-utc-scaled.jpg",
+   "alt": "Echipamente Veterinare – produse destinate clinicilor veterinare",
+   "where": "homepage slider, slide 3 → /categorie-produs/echipamente-veterinare/",
+   "files": [
+    "hero/slide-3-echipamente.webp"
+   ],
+   "original_size": [
+    2560,
+    1777
+   ],
+   "webp_size": [
+    1920,
+    1333
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-11.55.26-scaled.png",
+   "alt": "Hrană HiperPremium",
+   "where": "homepage tab «Pentru Câini», banner 1 → /?s=eddy&post_type=product",
+   "files": [
+    "banners/hrana-hiperpremium.webp"
+   ],
+   "original_size": [
+    2560,
+    939
+   ],
+   "webp_size": [
+    1920,
+    704
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-11.57.48-scaled.png",
+   "alt": "Antiparazitare",
+   "where": "homepage tab «Pentru Câini», banner 2 → /categorie-produs/otc/antiparazitare-otc",
+   "files": [
+    "banners/antiparazitare.webp"
+   ],
+   "original_size": [
+    2560,
+    837
+   ],
+   "webp_size": [
+    1920,
+    628
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-12.23.51.png",
+   "alt": "Hrană umedă SuperPremium",
+   "where": "homepage tab «Pentru Câini», banner 3 → /?s=Gemon hrană umedă pentru căței",
+   "files": [
+    "banners/hrana-umeda-superpremium.webp"
+   ],
+   "original_size": [
+    1280,
+    1460
+   ],
+   "webp_size": [
+    1280,
+    1460
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-12.18.13.png",
+   "alt": "OTC",
+   "where": "homepage tab «Pentru Câini», banner 4 → /produs/atopivet-collar-medium-large-dogs/",
+   "files": [
+    "banners/otc-caini.webp"
+   ],
+   "original_size": [
+    1563,
+    1460
+   ],
+   "webp_size": [
+    1563,
+    1460
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-12.16.20.png",
+   "alt": "Accesorii",
+   "where": "homepage tab «Pentru Câini», banner 5 → /produs/covorase-absorbante-60x60cm-40buc-sac/",
+   "files": [
+    "banners/accesorii.webp"
+   ],
+   "original_size": [
+    1921,
+    1441
+   ],
+   "webp_size": [
+    1920,
+    1440
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-12.38.40.png",
+   "alt": "Descoperă produsele pentru pisici",
+   "where": "homepage tab «Pentru Pisici», banner 1 → /?s=pisici",
+   "files": [
+    "banners/produse-pisici.webp"
+   ],
+   "original_size": [
+    1892,
+    923
+   ],
+   "webp_size": [
+    1892,
+    923
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-12.49.42.png",
+   "alt": "OTC",
+   "where": "homepage tab «Pentru Pisici», banner 2 → /?s=medicamente pisici",
+   "files": [
+    "banners/otc-pisici.webp"
+   ],
+   "original_size": [
+    1763,
+    716
+   ],
+   "webp_size": [
+    1763,
+    716
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-12.46.49.png",
+   "alt": "Monge VetSolution",
+   "where": "homepage tab «Pentru Pisici», banner 3 → /produs/monge-vetsolution-renal-oxalati-...-4649/",
+   "files": [
+    "banners/monge-vetsolution.webp"
+   ],
+   "original_size": [
+    919,
+    1122
+   ],
+   "webp_size": [
+    919,
+    1122
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-13.00.08.png",
+   "alt": "HPM",
+   "where": "homepage tab «Pentru Pisici», banner 4 → /produs/hpm-senior-neutered-cat-15kg/",
+   "files": [
+    "banners/hpm.webp"
+   ],
+   "original_size": [
+    947,
+    1474
+   ],
+   "webp_size": [
+    947,
+    1474
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/Captura-de-ecran-din-2026-06-19-la-12.56.09.png",
+   "alt": "Tratamente pentru purici",
+   "where": "homepage tab «Pentru Pisici», banner 5 → /produs/evicto-45mg-x-4-pipete/",
+   "files": [
+    "banners/tratamente-purici.webp"
+   ],
+   "original_size": [
+    936,
+    1471
+   ],
+   "webp_size": [
+    936,
+    1471
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-cat-eat-frash-food.jpg",
+   "alt": "",
+   "where": "homepage secțiunea «SUPORT DEDICAT» (imagine)",
+   "files": [
+    "sections/suport-dedicat-pisica.webp"
+   ],
+   "original_size": [
+    750,
+    825
+   ],
+   "webp_size": [
+    750,
+    825
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-cat-eat-frash-food-bg-1-min.jpg",
+   "alt": "",
+   "where": "homepage secțiunea «SUPORT DEDICAT» (background CSS, post-15.css)",
+   "files": [
+    "sections/suport-dedicat-bg.webp"
+   ],
+   "original_size": [
+    1964,
+    630
+   ],
+   "webp_size": [
+    1920,
+    616
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2026/04/golden-retriever-dog-outdoors-2026-03-24-23-49-58-utc-scaled.jpg",
+   "alt": "",
+   "where": "pagina Despre noi (/about-us/)",
+   "files": [
+    "sections/despre-noi-golden-retriever.webp"
+   ],
+   "original_size": [
+    2560,
+    1830
+   ],
+   "webp_size": [
+    1920,
+    1372
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-about-us-3-opt.jpg",
+   "alt": "",
+   "where": "pagina Despre noi",
+   "files": [
+    "sections/despre-noi-3.webp"
+   ],
+   "original_size": [
+    690,
+    400
+   ],
+   "webp_size": [
+    690,
+    400
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-about-us-4-opt.jpg",
+   "alt": "",
+   "where": "pagina Despre noi",
+   "files": [
+    "sections/despre-noi-4.webp"
+   ],
+   "original_size": [
+    690,
+    400
+   ],
+   "webp_size": [
+    690,
+    400
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-dog.svg",
+   "alt": "",
+   "where": "homepage «Din dragoste pentru animale!» (ilustrație câine)",
+   "files": [
+    "icons/pt-dog.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-cat.svg",
+   "alt": "",
+   "where": "homepage «Din dragoste pentru animale!» (ilustrație pisică)",
+   "files": [
+    "icons/pt-cat.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-marquee-paw.svg",
+   "alt": "",
+   "where": "homepage bandă marquee (separator lăbuță)",
+   "files": [
+    "icons/marquee-paw.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-marquee-bone.svg",
+   "alt": "",
+   "where": "homepage bandă marquee (separator os)",
+   "files": [
+    "icons/marquee-bone.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/wd-furniture-long-arrow-black.svg",
+   "alt": "",
+   "where": "butoane «Cumpără acum» din slider",
+   "files": [
+    "icons/arrow-long.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/09/check.svg",
+   "alt": "",
+   "where": "pagina produs, info-box «Livrare gratuită la comenzi de peste 1000 RON»",
+   "files": [
+    "icons/check.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-free-delivery-min.svg",
+   "alt": "",
+   "where": "Despre noi – «Livrare rapidă»",
+   "files": [
+    "icons/free-delivery.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-high-quality-min.svg",
+   "alt": "",
+   "where": "Despre noi – calitate",
+   "files": [
+    "icons/high-quality.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-support-min.svg",
+   "alt": "",
+   "where": "Despre noi – «Asistență 24/7»",
+   "files": [
+    "icons/support.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/wd-instagram.svg",
+   "alt": "",
+   "where": "media library (icon Instagram)",
+   "files": [
+    "icons/instagram.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/chevron-down-black.svg",
+   "alt": "",
+   "where": "pagina /brands/ (demo)",
+   "files": [
+    "icons/chevron-down.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-ctg-dogs.svg",
+   "alt": "",
+   "where": "media library – icon categorie câini (demo, nefolosit acum)",
+   "files": [
+    "icons/ctg-dogs.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-ctg-cats.svg",
+   "alt": "",
+   "where": "media library – icon categorie pisici (demo, nefolosit acum)",
+   "files": [
+    "icons/ctg-cats.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-ctg-more-pets.svg",
+   "alt": "",
+   "where": "media library – icon alte animale (demo, nefolosit acum)",
+   "files": [
+    "icons/ctg-more-pets.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/pt-ctg-best-deals.svg",
+   "alt": "",
+   "where": "media library – icon oferte (demo, nefolosit acum)",
+   "files": [
+    "icons/ctg-best-deals.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/google-play.svg",
+   "alt": "google-play",
+   "where": "footer «Disponibil ÎN CURÂND pe:»",
+   "files": [
+    "footer/google-play.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/app-store.svg",
+   "alt": "app-store",
+   "where": "footer «Disponibil ÎN CURÂND pe:»",
+   "files": [
+    "footer/app-store.svg"
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/anpc-sal1-1.png",
+   "alt": "ANPC – Soluționarea Alternativă a Litigiilor",
+   "where": "footer, link https://reclamatiisal.anpc.ro/",
+   "files": [
+    "footer/anpc-sal.png",
+    "footer/anpc-sal.webp"
+   ],
+   "original_size": [
+    500,
+    124
+   ],
+   "webp_size": [
+    500,
+    124
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/anpc-sol.png",
+   "alt": "Soluționarea Online a Litigiilor (SOL)",
+   "where": "footer, link consumer-redress.ec.europa.eu",
+   "files": [
+    "footer/anpc-sol.png",
+    "footer/anpc-sol.webp"
+   ],
+   "original_size": [
+    500,
+    124
+   ],
+   "webp_size": [
+    500,
+    124
+   ]
+  },
+  {
+   "source": "https://pet-market.ro/wp-content/uploads/2025/08/icon_securitate_LibraPay_600x60px.jpg",
+   "alt": "LibraPay – plăți securizate",
+   "where": "footer + pagina produs (sub butonul Adaugă în coș)",
+   "files": [
+    "footer/librapay-securitate.jpg",
+    "footer/librapay-securitate.webp"
+   ],
+   "original_size": [
+    600,
+    60
+   ],
+   "webp_size": [
+    600,
+    60
+   ]
+  }
+ ]
+}

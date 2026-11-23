@@ -1,0 +1,122 @@
+@import '../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../app/Filament/**/*';
+@source '../../resources/views/filament/**/*';
+
+/* Panoul clinicii: aceeasi identitate ca site-ul public, cu densitate potrivita pentru lucru zilnic. */
+.fi-sidebar-nav-groups { row-gap: 1.25rem; }
+.fi-header-heading { letter-spacing: -0.015em; }
+.fi-btn { border-radius: 999px; }
+.fi-input-wrp, .fi-select-input { border-radius: 0.9rem; }
+.fi-section, .fi-ta-ctn, .fi-wi-stats-overview-stat { border-radius: 1.25rem; }
+
+.hv-client { display: grid; gap: 1.25rem; }
+.hv-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.75rem; }
+.hv-stat { border-radius: 1.1rem; padding: 1rem 1.1rem; background: #ecf2e3; }
+.dark .hv-stat { background: rgba(255, 255, 255, 0.06); }
+.hv-stat dt { font-size: 0.82rem; color: #47524b; }
+.dark .hv-stat dt { color: #b6c2ba; }
+.hv-stat dd { font-size: 1.55rem; font-weight: 700; margin-top: 0.15rem; line-height: 1.15; }
+.hv-stat dd small { font-size: 0.85rem; font-weight: 500; }
+.hv-card { border: 1px solid rgb(228 228 231); border-radius: 1.25rem; padding: 1.1rem 1.25rem; background: #fff; }
+.dark .hv-card { background: rgb(24 24 27); border-color: rgb(63 63 70); }
+.hv-card h3 { font-weight: 700; font-size: 1.05rem; margin-bottom: 0.75rem; }
+.hv-table { width: 100%; font-size: 0.9rem; border-collapse: collapse; }
+.hv-table th { text-align: left; font-weight: 600; padding: 0.45rem 0.6rem; border-bottom: 1px solid rgb(228 228 231); white-space: nowrap; }
+.hv-table td { padding: 0.5rem 0.6rem; border-bottom: 1px solid rgb(244 244 245); vertical-align: top; }
+.dark .hv-table th, .dark .hv-table td { border-color: rgb(63 63 70); }
+.hv-pill { display: inline-block; padding: 0.15rem 0.65rem; border-radius: 999px; font-size: 0.78rem; font-weight: 600; background: #ecf2e3; color: #1d2a23; }
+.hv-pill--ok { background: #c8efd9; color: #0a3d28; }
+.hv-pill--warn { background: #ffe3a6; color: #5a3d00; }
+.hv-pill--off { background: #e4e4e7; color: #3f3f46; }
+.hv-pill--bad { background: #fde4e1; color: #7a1a14; }
+.hv-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.25rem; align-items: start; }
+.hv-muted { color: #6b7280; font-size: 0.88rem; }
+.hv-scroll { overflow-x: auto; }
+.hv-cal { display: grid; grid-template-columns: 4rem repeat(7, minmax(110px, 1fr)); font-size: 0.82rem; border: 1px solid rgb(228 228 231); border-radius: 1rem; overflow: hidden; background: #fff; }
+.dark .hv-cal { background: rgb(24 24 27); border-color: rgb(63 63 70); }
+.hv-cal > div { border-bottom: 1px solid rgb(244 244 245); border-right: 1px solid rgb(244 244 245); padding: 0.3rem 0.4rem; min-height: 2.4rem; }
+.dark .hv-cal > div { border-color: rgb(39 39 42); }
+.hv-cal .hv-cal-head { font-weight: 700; background: #ecf2e3; position: sticky; top: 0; }
+.dark .hv-cal .hv-cal-head { background: rgb(39 39 42); }
+.hv-cal .hv-cal-time { color: #6b7280; font-variant-numeric: tabular-nums; }
+.hv-appt { display: block; border-radius: 0.6rem; padding: 0.25rem 0.45rem; margin-bottom: 0.2rem; background: #c8efd9; color: #0a3d28; font-weight: 600; line-height: 1.25; }
+.hv-appt--requested { background: #ffe3a6; color: #5a3d00; }
+.hv-appt--block { background: #e4e4e7; color: #3f3f46; }
+.hv-doc { background: #fff; color: #111; border-radius: 1rem; padding: 1.5rem; border: 1px solid rgb(228 228 231); }
+
+/* Campania de sterilizare */
+.hv-cp { display: grid; gap: 1rem; }
+.hv-cp-tabs { display: flex; flex-wrap: wrap; gap: .35rem; }
+.hv-cp-tabs a { padding: .45rem .85rem; border-radius: 999px; border: 1px solid rgb(228 228 231); font-size: .85rem; font-weight: 600; color: rgb(63 63 70); text-decoration: none; background: #fff; }
+.hv-cp-tabs a.is-active { background: #0b5c3b; border-color: #0b5c3b; color: #fff; }
+.hv-cp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: .85rem 1rem; }
+.hv-cp-field { display: grid; gap: .3rem; }
+.hv-cp-field.is-full { grid-column: 1 / -1; }
+.hv-cp-field label, .hv-cp-label { font-size: .8rem; font-weight: 600; color: rgb(63 63 70); }
+.hv-cp-field input[type=text], .hv-cp-field input[type=email], .hv-cp-field input[type=tel], .hv-cp-field input[type=date], .hv-cp-field input[type=time],
+.hv-cp-field input[type=number], .hv-cp-field input[type=search], .hv-cp-field select, .hv-cp-field textarea {
+  width: 100%; border: 1px solid rgb(212 212 216); border-radius: .5rem; padding: .5rem .65rem; font-size: .9rem; background: #fff; }
+.hv-cp-field textarea { min-height: 5.5rem; }
+.hv-cp-field input[readonly] { background: rgb(244 244 245); color: rgb(82 82 91); }
+.hv-cp-field.is-focus { outline: 3px solid #ff5b2e; outline-offset: 4px; border-radius: .5rem; }
+.hv-cp-radio { display: flex; gap: 1rem; padding: .45rem 0; }
+.hv-cp-note { font-size: .85rem; color: rgb(82 82 91); margin: .25rem 0 .9rem; }
+.hv-cp-flash { padding: .75rem 1rem; border-radius: .6rem; font-size: .9rem; }
+.hv-cp-flash--ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+.hv-cp-flash--warn { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; }
+.hv-cp-flash--bad { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+.hv-cp-actions { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.hv-cp-btn { display: inline-flex; align-items: center; gap: .35rem; padding: .5rem .9rem; border-radius: .5rem; font-weight: 600; font-size: .85rem; border: 1px solid rgb(212 212 216); background: #fff; color: rgb(39 39 42); text-decoration: none; cursor: pointer; }
+.hv-cp-btn--primary { background: #0b5c3b; border-color: #0b5c3b; color: #fff; }
+.hv-cp-btn--danger { border-color: #fca5a5; color: #991b1b; }
+.hv-cp-photo { max-width: 16rem; max-height: 14rem; border-radius: .5rem; border: 1px solid rgb(228 228 231); }
+.hv-cp-check { display: flex; gap: .6rem; align-items: center; padding: .45rem .6rem; border-radius: .5rem; font-size: .85rem; text-decoration: none; color: inherit; }
+.hv-cp-check.is-ok { background: #f0fdf4; }
+.hv-cp-check.is-missing { background: #fef2f2; color: #991b1b; }
+.hv-cp-progress { height: .45rem; background: rgb(244 244 245); border-radius: 999px; overflow: hidden; }
+.hv-cp-progress span { display: block; height: 100%; background: #21b073; }
+.hv-cp-qr { display: grid; grid-template-columns: 11rem 1fr; gap: 1rem; align-items: start; }
+.hv-cp-qr img { width: 11rem; height: 11rem; }
+.hv-cp-filters { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: .6rem; }
+.hv-cp-code { font-size: 1.6rem; font-weight: 800; letter-spacing: .15em; font-family: ui-monospace, monospace; }
+@media (max-width: 720px) { .hv-cp-qr { grid-template-columns: 1fr; } }
+
+/* Raport Primarie */
+.hv-rp details > summary { cursor: pointer; }
+.hv-rp .hv-card > summary { font-size: .98rem; padding: .1rem 0; }
+.hv-rp .hv-card[open] > summary { margin-bottom: .75rem; }
+.hv-cp-flash--bad { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+.hv-rp-kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: .6rem; }
+.hv-rp-kpis--small { margin: .6rem 0; }
+.hv-rp-kpi { background: #fff; border: 1px solid #dbe5e4; border-radius: .7rem; padding: .65rem .8rem; }
+.hv-rp-kpi strong { display: block; font-size: 1.35rem; color: #0f766e; line-height: 1.2; }
+.hv-rp-kpi span { display: block; font-size: .74rem; color: #475569; font-weight: 600; }
+.hv-rp-h { font-weight: 700; margin: 1rem 0 .35rem; }
+.hv-rp-split { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: 1rem; margin: .5rem 0 1rem; align-items: start; }
+.hv-rp-split > form { border: 1px solid #e2e8f0; border-radius: .7rem; padding: .8rem; display: grid; gap: .4rem; }
+.hv-rp-case { border: 1px solid #e2e8f0; border-radius: .7rem; padding: .75rem; margin-top: .6rem; display: grid; gap: .4rem; }
+.hv-rp-case-head { display: flex; justify-content: space-between; gap: .75rem; align-items: flex-start; }
+.hv-rp-issue { display: grid; grid-template-columns: 1fr auto; gap: .1rem .75rem; padding: .5rem .7rem; border-radius: .55rem; background: #fef2f2; color: #7f1d1d; text-decoration: none; }
+.hv-rp-issue span { grid-column: 1; font-size: .82rem; }
+.hv-rp-issue em { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-style: normal; font-weight: 700; }
+.hv-rp-verify { display: grid; grid-template-columns: 6.5rem 1fr auto; gap: .8rem; align-items: center; border: 1px solid #e2e8f0; border-left-width: 4px; border-radius: .6rem; padding: .55rem; margin-top: .45rem; }
+.hv-rp-verify.is-danger { border-left-color: #dc2626; background: #fff7f7; }
+.hv-rp-verify.is-warning { border-left-color: #f59e0b; }
+.hv-rp-verify.is-ok { border-left-color: #16a34a; }
+.hv-rp-thumb { width: 6.5rem; height: 6.5rem; border-radius: .5rem; overflow: hidden; background: #f1f5f9; display: flex; align-items: center; justify-content: center; text-align: center; font-size: .75rem; color: #64748b; }
+.hv-rp-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.hv-rp-numbers { display: flex; gap: 1.2rem; margin: .25rem 0; }
+.hv-rp-numbers small { display: block; font-size: .7rem; color: #64748b; }
+.hv-rp-numbers strong { font-size: 1.1rem; }
+@media (max-width: 720px) { .hv-rp-verify { grid-template-columns: 5rem 1fr; } .hv-rp-thumb { width: 5rem; height: 5rem; } }
+.hv-rp { grid-template-columns: minmax(0, 1fr); }
+.hv-rp > * { min-width: 0; }
+
+/* Pisica de pe ecranul de autentificare */
+.hv-login-buddy { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+.hv-login-buddy-art { width: 72px; }
+.hv-login-buddy-art svg { display: block; width: 100%; height: auto; overflow: visible; }
+.hv-login-buddy .cat-lids { display: none; }
+.hv-login-buddy p { margin: 0; font-weight: 600; background: #fff; border: 2px solid #1f1638; border-radius: 14px 14px 14px 4px; padding: 0.4rem 0.7rem; color: #1f1638; box-shadow: 3px 3px 0 #1f1638; }
+.hv-login-buddy .xmas-hat { display: none; }

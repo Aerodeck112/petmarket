@@ -1,0 +1,70 @@
+{
+  "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-ext-wght-normal.woff2": {
+    "file": "assets/bricolage-grotesque-latin-ext-wght-normal-CcLUaPy7.woff2",
+    "src": "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2": {
+    "file": "assets/bricolage-grotesque-latin-wght-normal-DLoelf7F.woff2",
+    "src": "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-vietnamese-wght-normal.woff2": {
+    "file": "assets/bricolage-grotesque-vietnamese-wght-normal-BUzh504Q.woff2",
+    "src": "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-vietnamese-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/jost/files/jost-cyrillic-wght-normal.woff2": {
+    "file": "assets/jost-cyrillic-wght-normal-CjwCQKo9.woff2",
+    "src": "node_modules/@fontsource-variable/jost/files/jost-cyrillic-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/jost/files/jost-latin-ext-wght-normal.woff2": {
+    "file": "assets/jost-latin-ext-wght-normal-BDUtSsKd.woff2",
+    "src": "node_modules/@fontsource-variable/jost/files/jost-latin-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/jost/files/jost-latin-wght-normal.woff2": {
+    "file": "assets/jost-latin-wght-normal-ObQm3Zd1.woff2",
+    "src": "node_modules/@fontsource-variable/jost/files/jost-latin-wght-normal.woff2"
+  },
+  "resources/css/admin.css": {
+    "file": "assets/admin-Bqs5fyqp.css",
+    "name": "admin",
+    "names": [
+      "admin.css"
+    ],
+    "src": "resources/css/admin.css",
+    "isEntry": true
+  },
+  "resources/css/site.css": {
+    "file": "assets/site-C3W5HyDv.css",
+    "name": "site",
+    "names": [
+      "site.css"
+    ],
+    "src": "resources/css/site.css",
+    "isEntry": true,
+    "assets": [
+      "assets/bricolage-grotesque-vietnamese-wght-normal-BUzh504Q.woff2",
+      "assets/bricolage-grotesque-latin-ext-wght-normal-CcLUaPy7.woff2",
+      "assets/bricolage-grotesque-latin-wght-normal-DLoelf7F.woff2",
+      "assets/jost-cyrillic-wght-normal-CjwCQKo9.woff2",
+      "assets/jost-latin-ext-wght-normal-BDUtSsKd.woff2",
+      "assets/jost-latin-wght-normal-ObQm3Zd1.woff2"
+    ]
+  },
+  "resources/js/mural.js": {
+    "file": "assets/mural-z8h4NW1w.js",
+    "name": "mural",
+    "src": "resources/js/mural.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/site.js"
+    ]
+  },
+  "resources/js/site.js": {
+    "file": "assets/site-BIOqOaOW.js",
+    "name": "site",
+    "src": "resources/js/site.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/mural.js"
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+*.log
+.DS_Store
+.env
+.env.backup
+.env.production
+.phpactor.json
+.phpunit.result.cache
+/.codex
+/.cursor/
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+/auth.json
+/node_modules
+# /public/build este versionat: asseturile se livreaza precompilate pentru cPanel
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/vendor
+_ide_helper.php
+Homestead.json
+Homestead.yaml
+Thumbs.db
+
+# Surse WordPress private (repo public)
+/source-wordpress/*
+!/source-wordpress/README.md
+# Date reale / exporturi
+/storage/imports/
+*.sql
+*.sql.gz
+
+
+# Listele de coduri raportate vin din pluginul privat; se citesc local la import
+/database/import-spec/reported-through-september-2026.json
+/database/import-spec/september-2026-145.json
+
+# Asseturile panoului de administrare (public/js|css|fonts/filament) sunt versionate:
+# pe cPanel nu exista o comanda care sa le publice la instalare din arhiva.
+
+# Episoadele video se livreaza separat (pachet media), nu prin Git sau prin actualizari
+/public/media/episoade/*.mp4
