@@ -11,7 +11,14 @@ panou (cu migrare, fișier modificat și fișier șters), respingerea unui pache
 semnare, actualizare 0.1.1 → 0.1.2 din linia de comandă și un pachet cu migrare stricată
 intenționat, care a fost anulat automat cu site-ul rămas funcțional pe 0.1.2.
 
-## 1. Cheile de semnare (o singură dată)
+## 1. Cheile de semnare
+
+Pentru Pet Market s-a generat o pereche nouă de chei (23.11.2026), separată de cea HiKeVet. Cheia publică
+`lfFS4typhQKcrpYvx1XPAg2X/JgvTyxdDE017XTxs8A=` este inclusă în pachetul de instalare și ajunge singură în
+`.env`. Cheia privată (`release-signing.key`) o păstrează proprietarul, offline; la construirea unei
+actualizări se pune temporar în `storage/app/release-signing.key` și se șterge după semnare.
+
+Generarea unei perechi noi (doar dacă cheia privată se pierde):
 
 Pe calculatorul de unde se publică versiunile, **nu pe server**:
 

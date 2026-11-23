@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 
 class ImportCatalog extends Command
 {
-    protected $signature = 'petmarket:import {--products-only : Sare peste categorii, branduri și pagini} {--images : Copiază și imaginile produselor} {--image-batch=0 : Doar un lot de N imagini (pentru cron)}';
+    protected $signature = 'petmarket:import {--products-only : Sare peste categorii, branduri și pagini} {--images : Copiază și imaginile produselor} {--image-batch=0 : Doar un lot de N imagini (pentru cron)} {--wp-sync : Aduce prețurile și stocul din baza WooCommerce de pe același server}';
 
     protected $description = 'Importă catalogul magazinului WooCommerce (categorii, branduri, produse, pagini) și, opțional, imaginile.';
 
@@ -21,6 +21,12 @@ class ImportCatalog extends Command
             return self::SUCCESS;
         }
 
+        if ($this->option('wp-sync')) {
+            $stats = app(\App\Services\Import\LegacyWordPress::class)->syncPricesAndStock();
+            $this->info('Din WooCommerce: '.json_encode($stats, JSON_UNESCAPED_UNICODE));
+
+            return self::SUCCESS;
+        }
         if (! $importer->available()) {
             $this->error('Lipsesc fișierele catalogului din database/seeders/data/catalog.');
 

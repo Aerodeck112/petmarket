@@ -67,6 +67,20 @@ class CatalogImport extends Page
         $this->log[] = now()->format('H:i:s').' Încep copierea imaginilor…';
     }
 
+    public function wpSync(): void
+    {
+        @set_time_limit(300);
+        try {
+            $stats = app(\App\Services\Import\LegacyWordPress::class)->syncPricesAndStock();
+            $this->log[] = now()->format('H:i:s')." Din WooCommerce: {$stats['updated']} produse actualizate (preț, stoc, stare), {$stats['unpublished']} nepublicate, {$stats['missing']} produse publicate care lipsesc din export.";
+            Audit::log('import.wp_sync', null, 'Sincronizare prețuri și stoc din baza WooCommerce: '.json_encode($stats));
+            Notification::make()->title('Prețurile și stocul au fost aduse din WooCommerce')->success()->send();
+        } catch (\Throwable $e) {
+            $this->log[] = now()->format('H:i:s').' Sincronizarea a eșuat: '.$e->getMessage();
+            Notification::make()->title('Nu am putut citi baza WordPress')->body($e->getMessage())->danger()->send();
+        }
+    }
+
     public function retryFailed(): void
     {
         $n = app(ImageDownloader::class)->retryFailed();
@@ -127,7 +141,9 @@ class CatalogImport extends Page
             'imgTotal' => (clone $images)->count(),
             'imgLocal' => (clone $images)->whereNotNull('path')->count(),
             'imgFailed' => (clone $images)->whereNull('path')->where('width', 0)->count(),
-            'localUploads' => (bool) config('petmarket.legacy_uploads_path'),
+            'localUploads' => \App\Services\Import\LegacyWordPress::uploadsPath(),
+            'wpRoot' => \App\Services\Import\LegacyWordPress::root(),
+            'wpDb' => (bool) \App\Services\Import\LegacyWordPress::credentials(),
         ];
     }
 }

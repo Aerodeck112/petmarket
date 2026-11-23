@@ -2,6 +2,35 @@
 
 Ghidul descrie instalarea Pet Market dintr-un pachet ZIP, fără linie de comandă.
 
+## Pe scurt: instalarea directă pe pet-market.ro
+
+Varianta aleasă: noul magazin ia locul celui vechi pe același cont cPanel. Site-ul este indisponibil
+aproximativ 20–30 de minute. WordPress nu se șterge: rămâne în `public_html_vechi`, de unde noul magazin
+copiază imaginile și ia prețurile și stocul la zi; revenirea durează un minut.
+
+1. **Backup complet** din cPanel (JetBackup sau *Backup Wizard*): fișiere și baza WordPress.
+2. **Bază nouă**: cPanel → *MySQL Databases* → bază goală + utilizator cu *All Privileges* (§3.2).
+3. **Pachetul**: în `/home/UTILIZATOR` încarci `petmarket-install-0.1.0.zip` și îl dezarhivezi → `petmarket/`.
+4. **Comutarea** (cPanel → *Terminal*), după ce verifici că niciun alt domeniu nu stă în `public_html` (§4):
+
+   ```bash
+   cd ~ && mv public_html public_html_vechi && ln -s petmarket/public public_html
+   ```
+
+5. **Instalatorul**: deschizi `https://pet-market.ro/install`, codul e în `petmarket/storage/app/install-code.txt` (§3.4).
+   La SMTP pui datele căsuței `office@pet-market.ro`.
+6. **Catalogul**: `/admin` → *Sistem → Import catalog*: pașii 1 și 2 (categorii, produse), apoi pasul 4
+   „Prețuri și stoc din WooCommerce” (citește baza veche, găsită automat în `public_html_vechi/wp-config.php`)
+   și pasul 3 „Copiază imaginile” (de pe disc, câteva minute).
+7. **Setări**: *Sistem → Setări magazin* → tabul *Ecolet* (Client ID, Client Secret, email și parolă Ecolet),
+   apoi „Testează Ecolet”. IBAN-ul și datele firmei sunt deja completate.
+8. **Cron** la fiecare minut (§3.5) și o comandă de test cap-coadă (plasare, email, trimitere la Ecolet).
+9. **Google**: în Search Console trimiți `https://pet-market.ro/sitemap.xml`.
+
+Revenire la WordPress, oricând: `cd ~ && rm public_html && mv public_html_vechi public_html`.
+
+## Ghidul complet
+
 **Ce a fost verificat:** instalarea completă din pachet, în browser, pe Apache 2.4 + PHP 8.3
 (mod_php) + MariaDB 10.11, cu `.htaccess` activ. **Ce nu a fost verificat:** un cont cPanel real
 (LiteSpeed, CloudLinux, limitele găzduirii Pet Market). Prima instalare trebuie făcută pe un
@@ -97,7 +126,7 @@ trebuie să devină „în regulă” în câteva minute.
    (vezi secțiunea 7).
 3. Dacă nu ai completat SMTP la instalare, emailurile se scriu doar în jurnal. Datele SMTP se pun
    în `.env` (`MAIL_*`), prin File Manager.
-4. Pune cheia publică de actualizare în `.env` (vezi `UPDATES.md`).
+4. Cheia publică pentru actualizări este deja în pachet: instalatorul o scrie singur în `.env`.
 5. Creează conturile personalului din *Sistem → Personal*.
 
 ## 4. Domeniul principal

@@ -13,6 +13,18 @@
 - SEO: sitemap index cu imagini, robots.txt, date structurate Product / BreadcrumbList / PetStore, canonical, paginile filtrate cu noindex, feed Google Merchant, redirecturi 301 pentru adresele vechi.
 - Cookie-uri de măsurare (GTM, GA4, Google Ads, Meta) doar după accept; evenimente GA4 ecommerce.
 
+- Prețurile afișate sunt prețuri de vânzare; TVA-ul se aplică la factură, în programul de facturare.
+- Transfer bancar în contul Libra Internet Bank al FEST4PETS SRL; suport online 09:00 – 16:30.
+
+### Ecolet
+- Trimiterea comenzii în „Comenzi de trimis” din Ecolet (adresă, localitate din nomenclatorul Ecolet, greutate, ramburs), manual sau automat.
+- AWB-ul, curierul și statusul vin înapoi la 10 minute: comanda trece în „Expediată” (clientul primește emailul cu AWB) și în „Finalizată” la livrare.
+- AWB-ul în PDF direct din pagina comenzii; test de conexiune din Setări magazin.
+
+### Instalare directă pe pet-market.ro
+- Magazinul vechi rămas în `public_html_vechi` este găsit automat: imaginile se copiază de pe disc, iar prețurile, reducerile, stocul exact și starea produselor se citesc din baza WooCommerce (`wp-config.php`).
+- Cheie nouă de semnare a actualizărilor, inclusă în pachet.
+
 ### Administrare
 - Panou cu vânzări azi / 7 / 30 de zile, grafic, comenzi recente, stoc redus.
 - Comenzi: tab-uri pe status, filtre, export CSV, pagina comenzii cu schimbare de status (cu restituirea stocului), AWB și link de urmărire, încasare, note interne sau către client, proformă și listă de picking.

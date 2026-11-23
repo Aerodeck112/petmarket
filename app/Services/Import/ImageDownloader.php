@@ -61,7 +61,7 @@ class ImageDownloader
     /** Fisierul corespunzator din wp-content/uploads, daca directorul vechi este pe acelasi server. */
     private function localFile(string $url): ?string
     {
-        $root = config('petmarket.legacy_uploads_path');
+        $root = LegacyWordPress::uploadsPath();
         if (! $root || ! preg_match('#/wp-content/uploads/(.+)$#', (string) parse_url($url, PHP_URL_PATH), $m)) {
             return null;
         }
