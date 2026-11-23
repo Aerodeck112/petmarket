@@ -2,12 +2,19 @@
 
 namespace Tests;
 
+use App\Enums\PaymentMethod;
 use App\Enums\Role;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\ShippingMethod;
 use App\Models\User;
-use Database\Seeders\PriceListSeeder;
+use App\Services\Shop\Line;
+use App\Services\Shop\OrderService;
 use Database\Seeders\RolesSeeder;
+use Database\Seeders\ShopSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -27,14 +34,20 @@ abstract class TestCase extends BaseTestCase
         return $app;
     }
 
-    /** Date de baza pentru testele de business: roluri, lista de preturi reala, disc privat fals. */
-    protected function seedBusiness(): void
+    /** Date de baza: roluri, metode de livrare, pagini, bannere; disc privat fals. */
+    protected function seedShop(): void
     {
-        $this->seed([RolesSeeder::class, PriceListSeeder::class]);
+        $this->seed([RolesSeeder::class, ShopSeeder::class]);
         Storage::fake('private');
     }
 
-    protected function staff(Role $role = Role::Doctor): User
+    /** Pastrat pentru testele de infrastructura preluate din HiKeVet. */
+    protected function seedBusiness(): void
+    {
+        $this->seedShop();
+    }
+
+    protected function staff(Role $role = Role::ShopManager): User
     {
         $user = User::factory()->create();
         $user->assignRole($role->value);
@@ -42,30 +55,40 @@ abstract class TestCase extends BaseTestCase
         return $user;
     }
 
-    protected function client(): User
+    protected function customer(): User
     {
-        $user = User::factory()->create();
-        $user->assignRole(Role::Client->value);
+        $user = User::factory()->create(['first_name' => 'Ana', 'last_name' => 'Pop']);
+        $user->assignRole(Role::Customer->value);
 
         return $user;
     }
 
-    /** PNG valid, 1x1, folosit ca semnatura in teste. */
-    protected function signature(): string
+    protected function product(array $attrs = []): Product
     {
-        return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+        $name = $attrs['name'] ?? 'Hrană test '.Str::random(5);
+
+        return Product::query()->create(array_merge([
+            'type' => 'simple', 'status' => 'published', 'name' => $name, 'slug' => Str::slug($name),
+            'regular_price' => 10000, 'manage_stock' => true, 'stock_qty' => 10,
+        ], $attrs));
     }
 
-    /** Date sintetice pentru un contract. CNP-ul este fictiv. */
-    protected function contractData(array $overrides = []): array
+    protected function checkoutData(array $overrides = []): array
     {
         return array_merge([
-            'pet_name' => 'Rex', 'agree' => true, 'species' => 'dog', 'sex' => 'male', 'dob' => '2022-05-10', 'breed' => 'Metis',
-            'breed_other' => '', 'weight' => 12.5, 'sterilized' => 'nu', 'chronic' => 'nu', 'chronic_text' => '', 'emergency' => 'nu',
-            'routine' => ['anual'], 'owner_name' => 'Popescu Test', 'owner_email' => 'popescu.test@example.com', 'owner_phone' => '0700000000',
-            'owner_addr' => 'Str. Exemplu nr. 1, Târgu Mureș', 'owner_cnp' => '1900101000000', 'owner_ci_serie' => 'ZZ', 'owner_ci_nr' => '000000',
-            'pet_microchip' => '', 'legal' => ['contract' => true, 'annex' => true, 'terms' => true, 'guide' => true, 'privacy' => true, 'not_insurance' => true],
-            'signature' => $this->signature(), 'payment_period_months' => 1, 'submission_token' => 'test-token-'.uniqid(),
+            'customer_type' => 'pf', 'email' => 'client.test@example.com', 'phone' => '0722123456',
+            'b_first_name' => 'Ana', 'b_last_name' => 'Pop', 'b_county' => 'MS', 'b_city' => 'Târgu Mureș', 'b_address_1' => 'Str. Test 1',
+            'shipping_method_id' => ShippingMethod::query()->where('code', 'curier')->value('id'), 'payment_method' => 'cod', 'terms' => '1',
         ], $overrides);
+    }
+
+    /** O comanda plasata direct prin serviciu (fara HTTP). */
+    protected function placeOrder(?Product $product = null, int $qty = 1, PaymentMethod $payment = PaymentMethod::Cod): Order
+    {
+        $product ??= $this->product();
+        $address = ['first_name' => 'Ana', 'last_name' => 'Pop', 'county' => 'Mureș', 'county_code' => 'MS', 'city' => 'Târgu Mureș', 'address_1' => 'Str. Test 1', 'country' => 'RO'];
+
+        return app(OrderService::class)->place([new Line($product, null, $qty)], null, ShippingMethod::query()->where('code', 'curier')->firstOrFail(), $payment,
+            ['email' => 'client.test@example.com', 'phone' => '0722123456', 'customer_type' => 'pf', 'billing' => $address, 'shipping' => $address, 'note' => null, 'marketing' => false]);
     }
 }

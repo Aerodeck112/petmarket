@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\Role;
-use App\Models\Contract;
+use App\Models\Order;
 use App\Models\User;
 use App\Services\Backup\BackupService;
 use App\Services\Updates\ReleasePackage;
@@ -274,26 +274,26 @@ class UpdateAndBackupTest extends TestCase
 
     public function test_backup_is_encrypted_and_restore_brings_data_back(): void
     {
-        $this->postJson('/abonamente/contract', $this->contractData())->assertOk();
+        $order = $this->placeOrder();
         $backups = app(BackupService::class);
         $result = $backups->create('test-restaurare');
 
         try {
             $raw = file_get_contents($result['path']);
             $this->assertStringStartsWith("HVBK1\n", $raw);
-            $this->assertStringNotContainsString('popescu.test@example.com', $raw);
-            $this->assertStringNotContainsString('Rex', $raw);
+            $this->assertStringNotContainsString('client.test@example.com', $raw);
+            $this->assertStringNotContainsString('Târgu Mureș', $raw);
             $this->assertSame($result['rows'], $backups->verify($result['path'])['rows']);
 
             // Date pierdute si date adaugate dupa backup.
-            $number = Contract::query()->value('number');
-            Contract::query()->delete();
+            $number = $order->number;
+            Order::query()->forceDelete();
             User::factory()->create(['email' => 'aparut.dupa.backup@example.com']);
 
             $stats = $backups->restore($result['path']);
             $this->assertGreaterThan(0, $stats['rows']);
-            $this->assertSame($number, Contract::query()->sole()->number);
-            $this->assertSame('1900101000000', Contract::query()->sole()->payload['owner_cnp']);
+            $this->assertSame($number, Order::query()->sole()->number);
+            $this->assertSame('Pop', Order::query()->sole()->billing['last_name']);
             $this->assertNull(User::query()->where('email', 'aparut.dupa.backup@example.com')->first());
 
             // Un backup alterat sau criptat cu alta cheie este refuzat inainte de a atinge baza de date.
@@ -302,7 +302,7 @@ class UpdateAndBackupTest extends TestCase
                 $backups->restore($result['path']);
                 $this->fail('Backupul alterat ar fi trebuit refuzat.');
             } catch (RuntimeException) {
-                $this->assertSame(1, Contract::count());
+                $this->assertSame(1, Order::count());
             }
         } finally {
             @unlink($result['path']);
@@ -341,6 +341,6 @@ class UpdateAndBackupTest extends TestCase
     {
         $this->actingAs($this->staff(Role::SuperAdmin))->get('/admin/platform-updates')->assertOk()->assertSee('Sănătatea sistemului');
         $this->actingAs($this->staff(Role::Admin))->get('/admin/platform-updates')->assertForbidden();
-        $this->actingAs($this->staff(Role::Doctor))->get('/admin/platform-updates')->assertForbidden();
+        $this->actingAs($this->staff(Role::Warehouse))->get('/admin/platform-updates')->assertForbidden();
     }
 }

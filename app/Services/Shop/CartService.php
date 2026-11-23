@@ -30,7 +30,8 @@ class CartService
             return $this->cart;
         }
         $user = auth()->user();
-        $token = request()->cookie(self::COOKIE);
+        // Cookie-ul de 30 de zile tine cosul intre vizite; sesiunea il tine in aceeasi vizita chiar daca cookie-ul lipseste.
+        $token = request()->cookie(self::COOKIE) ?: (request()->hasSession() ? request()->session()->get('cart_token') : null);
         $cart = $token ? Cart::query()->where('token', $token)->first() : null;
         if (! $cart && $user) {
             $cart = Cart::query()->where('user_id', $user->id)->latest('updated_at')->first();
@@ -41,8 +42,11 @@ class CartService
         if (! $cart && $create) {
             $cart = Cart::query()->create(['token' => Str::random(48), 'user_id' => $user?->id]);
         }
-        if ($cart && $cart->token !== $token) {
+        if ($cart && $cart->token !== request()->cookie(self::COOKIE)) {
             Cookie::queue(self::COOKIE, $cart->token, 60 * 24 * 30, null, null, null, true, false, 'lax');
+        }
+        if ($cart && request()->hasSession()) {
+            request()->session()->put('cart_token', $cart->token);
         }
 
         return $this->cart = $cart;
