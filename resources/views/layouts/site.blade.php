@@ -14,7 +14,7 @@
     <meta property="og:title" content="{{ $seo->title }}">
     <meta property="og:description" content="{{ $seo->description }}">
     <meta property="og:url" content="{{ $seo->canonical }}">
-    <meta property="og:image" content="{{ $seo->image ?? asset('media/brand/og-pet-market.png') }}">
+    <meta property="og:image" content="{{ $seo->image ?? asset('media/site/hero/slide-1-caini.webp') }}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#1e3ba8">
     @if ($shop['verification'])<meta name="google-site-verification" content="{{ $shop['verification'] }}">@endif
@@ -68,7 +68,7 @@
                     <ul class="suggest-list">
                         <template x-for="(p, i) in results.products" :key="p.url">
                             <li><a :href="p.url" :class="{ 'is-active': i === active }" role="option">
-                                <span class="suggest-img"><img :src="p.image || '{{ asset('media/brand/placeholder.svg') }}'" alt="" loading="lazy"></span>
+                                <span class="suggest-img"><img :src="p.image || '{{ asset('media/brand/pet-market-logo-320.png') }}'" alt="" loading="lazy"></span>
                                 <span class="suggest-name" x-text="p.name"></span>
                                 <span class="suggest-price"><b x-text="p.price"></b><s x-show="p.regular" x-text="p.regular"></s></span>
                             </a></li>
@@ -241,8 +241,8 @@
                 <span class="made-by-tip" aria-hidden="true">Ham! Aici am învățat să vând recompense.</span>
             </a>
             <div class="footer-badges">
-                <a href="https://reclamatiisal.anpc.ro/" rel="noopener"><img src="{{ asset('media/brand/anpc-sal.svg') }}" alt="ANPC – Soluționarea alternativă a litigiilor" width="250" height="62" loading="lazy"></a>
-                <a href="https://ec.europa.eu/consumers/odr" rel="noopener"><img src="{{ asset('media/brand/anpc-sol.svg') }}" alt="Soluționarea online a litigiilor (SOL)" width="250" height="62" loading="lazy"></a>
+                <a href="https://reclamatiisal.anpc.ro/" rel="noopener"><img src="{{ asset('media/brand/anpc-sal.webp') }}" alt="ANPC – Soluționarea alternativă a litigiilor" width="250" height="62" loading="lazy"></a>
+                <a href="https://ec.europa.eu/consumers/odr" rel="noopener"><img src="{{ asset('media/brand/anpc-sol.webp') }}" alt="Soluționarea online a litigiilor (SOL)" width="250" height="62" loading="lazy"></a>
             </div>
         </div>
     </div>

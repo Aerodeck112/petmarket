@@ -57,8 +57,8 @@ class AuditLogResource extends Resource
             SelectFilter::make('action')->label('Acțiune')->options(fn () => AuditLog::query()->distinct()->orderBy('action')->pluck('action', 'action')->all())->searchable(),
             Filter::make('period')->label('Perioadă')->columns(2)->schema([DatePicker::make('from')->label('De la'), DatePicker::make('until')->label('Până la')])
                 ->query(fn (Builder $query, array $data) => $query
-                    ->when($data['from'] ?? null, fn (Builder $q, $d) => $q->whereDate('created_at', '>=', $d))
-                    ->when($data['until'] ?? null, fn (Builder $q, $d) => $q->whereDate('created_at', '<=', $d))),
+                    ->when($data['from'] ?? null, fn (Builder $query, $d) => $query->whereDate('created_at', '>=', $d))
+                    ->when($data['until'] ?? null, fn (Builder $query, $d) => $query->whereDate('created_at', '<=', $d))),
             Filter::make('sensitive')->label('Acces la documente și exporturi')
                 ->query(fn (Builder $query) => $query->whereIn('action', ['contract.viewed', 'contract.downloaded', 'consent.viewed', 'sterilization.viewed', 'sterilization.exported'])),
         ]);

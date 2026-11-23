@@ -3,7 +3,7 @@
 @source '../../app/Filament/**/*';
 @source '../../resources/views/filament/**/*';
 
-/* Panoul clinicii: aceeasi identitate ca site-ul public, cu densitate potrivita pentru lucru zilnic. */
+/* Panoul magazinului: aceeasi identitate ca site-ul public, cu densitate potrivita pentru lucru zilnic. */
 .fi-sidebar-nav-groups { row-gap: 1.25rem; }
 .fi-header-heading { letter-spacing: -0.015em; }
 .fi-btn { border-radius: 999px; }
@@ -120,3 +120,59 @@
 .hv-login-buddy .cat-lids { display: none; }
 .hv-login-buddy p { margin: 0; font-weight: 600; background: #fff; border: 2px solid #1f1638; border-radius: 14px 14px 14px 4px; padding: 0.4rem 0.7rem; color: #1f1638; box-shadow: 3px 3px 0 #1f1638; }
 .hv-login-buddy .xmas-hat { display: none; }
+
+/* ---------- Pet Market: pagina comenzii, dashboard, import ---------- */
+.fi-sidebar { background: linear-gradient(180deg, #f3f5ff 0%, #fff 40%); }
+.dark .fi-sidebar { background: rgb(24 24 27); }
+.fi-sidebar-item-active > a { box-shadow: inset 3px 0 0 #1e3ba8; }
+.pm-order { display: grid; gap: 1rem; }
+.pm-order-top { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; align-items: center; }
+.pm-order-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 1rem; align-items: start; }
+@media (max-width: 1100px) { .pm-order-grid { grid-template-columns: 1fr; } }
+.pm-stack { display: grid; gap: 1rem; }
+.pm-card { border: 1px solid rgb(228 228 231); border-radius: 1.25rem; padding: 1.1rem 1.25rem; background: #fff; font-size: 0.92rem; }
+.dark .pm-card { background: rgb(24 24 27); border-color: rgb(63 63 70); }
+.pm-card h3 { font-weight: 700; font-size: 1rem; margin-bottom: 0.65rem; }
+.pm-card p + p { margin-top: 0.5rem; }
+.pm-card--note { background: #fff8dc; border-color: #ffc21f; }
+.dark .pm-card--note { background: rgba(255, 194, 31, 0.1); }
+.pm-card--hiko { display: flex; gap: 0.75rem; align-items: center; background: #1e3ba8; color: #e4e9ff; border: 0; }
+.pm-card--hiko img { width: 96px; height: auto; flex: none; }
+.pm-big { font-size: 1.15rem; font-weight: 700; }
+.pm-muted { color: #6b7280; font-size: 0.85rem; }
+.pm-link { color: #1e3ba8; font-weight: 600; }
+.dark .pm-link { color: #9fb6ff; }
+.pm-code { font-family: ui-monospace, monospace; background: #ffe1ef; padding: 0.05rem 0.4rem; border-radius: 6px; }
+.pm-pill { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.82rem; font-weight: 600; background: #f4f4f5; color: #27272a; }
+.pm-pill--success { background: #c9efe9; color: #0b4a44; }
+.pm-pill--warning { background: #fff1c2; color: #5a3d00; }
+.pm-pill--danger { background: #ffe1ef; color: #8a0f4a; }
+.pm-pill--info { background: #ffe4d1; color: #7a2c00; }
+.pm-pill--primary { background: #dde4ff; color: #142a7a; }
+.pm-pill a { text-decoration: underline; }
+.pm-table { width: 100%; border-collapse: collapse; }
+.pm-table th { text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; color: #6b7280; padding: 0.4rem 0.5rem; border-bottom: 1px solid rgb(228 228 231); }
+.pm-table td { padding: 0.65rem 0.5rem; border-bottom: 1px solid rgb(244 244 245); vertical-align: top; }
+.dark .pm-table th, .dark .pm-table td { border-color: rgb(63 63 70); }
+.pm-table .r { text-align: right; white-space: nowrap; }
+.pm-thumb { width: 3.5rem; }
+.pm-thumb img { width: 3rem; height: 3rem; object-fit: contain; border-radius: 0.6rem; background: #fff; border: 1px solid rgb(228 228 231); }
+.pm-totals { margin: 0.75rem 0 0 auto; max-width: 360px; display: grid; gap: 0.3rem; }
+.pm-totals div { display: flex; justify-content: space-between; gap: 1rem; }
+.pm-totals dt { color: #52525b; }
+.pm-grand { border-top: 2px solid #1f1638; padding-top: 0.45rem; margin-top: 0.2rem; font-size: 1.15rem; font-weight: 800; }
+.dark .pm-grand { border-color: #e4e4e7; }
+.pm-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+.pm-ev { display: grid; grid-template-columns: 0.9rem 1fr; gap: 0.6rem; }
+.pm-ev-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: #1e3ba8; margin-top: 0.35rem; }
+.pm-ev--note .pm-ev-dot { background: #a1a1aa; }
+.pm-ev--customer_note .pm-ev-dot { background: #e6177a; }
+.pm-ev--payment .pm-ev-dot { background: #13958a; }
+.pm-ev--shipping .pm-ev-dot { background: #ffc21f; }
+.pm-import { display: grid; gap: 1rem; }
+.pm-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+.pm-progress { height: 0.75rem; border-radius: 999px; background: #e4e4e7; overflow: hidden; margin: 0.5rem 0; }
+.pm-progress span { display: block; height: 100%; background: repeating-linear-gradient(-45deg, #1e3ba8 0 10px, #2b4bc4 10px 20px); transition: width 0.4s; }
+.pm-log { max-height: 240px; overflow: auto; font-family: ui-monospace, monospace; font-size: 0.8rem; background: #f4f4f5; border-radius: 0.75rem; padding: 0.6rem 0.75rem; }
+.dark .pm-log { background: rgb(39 39 42); }
+.pm-prod-thumb img { object-fit: contain !important; background: #fff; }

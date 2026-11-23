@@ -28,7 +28,10 @@ class ProductImage extends Model
     public function thumbUrl(): ?string
     {
         if ($this->path && str_ends_with($this->path, '.webp')) {
-            return asset('uploads/'.preg_replace('/\.webp$/', '-400.webp', $this->path));
+            $thumb = preg_replace('/\.webp$/', '-400.webp', $this->path);
+            if (is_file(public_path('uploads/'.$thumb))) {
+                return asset('uploads/'.$thumb);
+            }
         }
 
         return $this->url();

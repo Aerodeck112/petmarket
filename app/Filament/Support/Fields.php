@@ -61,4 +61,12 @@ class Fields
             Textarea::make('seo_description')->label('Descriere pentru Google')->rows(2)->maxLength(320)->helperText('Recomandat 120–160 de caractere.'),
         ]);
     }
+
+    /** Suma editata in lei, salvata in bani (intreg), ca toate sumele din magazin. */
+    public static function money(string $name, string $label): TextInput
+    {
+        return TextInput::make($name)->label($label)->numeric()->minValue(0)->step(0.01)->suffix('lei')
+            ->formatStateUsing(fn ($state) => $state === null ? null : number_format($state / 100, 2, '.', ''))
+            ->dehydrateStateUsing(fn ($state) => $state === null || $state === '' ? null : (int) round(((float) str_replace(',', '.', (string) $state)) * 100));
+    }
 }

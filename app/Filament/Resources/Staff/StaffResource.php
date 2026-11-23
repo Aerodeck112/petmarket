@@ -68,7 +68,7 @@ class StaffResource extends Resource
 
     public static function roleOptions(): array
     {
-        $roles = collect(Role::cases())->reject(fn (Role $r) => $r === Role::Client);
+        $roles = collect(Role::cases())->reject(fn (Role $r) => $r === Role::Customer);
         if (! auth()->user()?->hasRole(Role::SuperAdmin->value)) {
             $roles = $roles->reject(fn (Role $r) => $r === Role::SuperAdmin);
         }

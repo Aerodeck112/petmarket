@@ -10,12 +10,15 @@
             </div>
             <div class="thanks-pets" aria-hidden="true">@include('partials.mascot-dog')@include('partials.mascot-cat')</div>
         </div>
+        @php
+            $gaItems = $order->items->map(fn ($i) => ['item_id' => $i->sku ?: (string) $i->product_id, 'item_name' => $i->name, 'price' => $i->unit_price / 100, 'quantity' => $i->qty])->values();
+        @endphp
         @push('scripts')
         <script>
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({ ecommerce: null });
             window.dataLayer.push({ event: 'purchase', ecommerce: { transaction_id: @js($order->number), value: {{ $order->total / 100 }}, tax: {{ $order->vat_total / 100 }}, shipping: {{ $order->shipping_total / 100 }}, currency: 'RON', coupon: @js($order->coupon_code),
-                items: @json($order->items->map(fn ($i) => ['item_id' => $i->sku ?: (string) $i->product_id, 'item_name' => $i->name, 'price' => $i->unit_price / 100, 'quantity' => $i->qty])->values()) } });
+                items: {!! json_encode($gaItems, JSON_HEX_TAG | JSON_UNESCAPED_UNICODE) !!} } });
         </script>
         @endpush
     @else
