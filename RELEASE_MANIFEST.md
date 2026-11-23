@@ -14,9 +14,9 @@
 | | |
 |---|---|
 | Fișier | `petmarket-install-0.1.0.zip` |
-| Dimensiune | 46 318 132 octeți (aproximativ 44 MB) |
+| Dimensiune | 46 318 146 octeți (aproximativ 44 MB) |
 | Fișiere | 16 680 |
-| SHA-256 | `c1c8cc62c948615f8ccdd83afb832888a3bb295e134156b729cfb12647fce077` |
+| SHA-256 | `57353ea4f118ab4c8cae8ce4dd295989ab11fecb4cf9b2561ba839ca78cb2f40` |
 | Verificare | instalat din browser (PHP 8.3 + MariaDB 10.11): cod de acces, verificări, bază de date, tabele, administrator; apoi importul celor 5.724 de produse din admin (aprox. 35 de secunde) și copierea imaginilor |
 
 Pachetul **nu este în Git** (fișier binar mare). Amprenta se schimbă la fiecare reconstruire.
