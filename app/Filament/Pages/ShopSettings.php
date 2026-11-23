@@ -42,7 +42,10 @@ class ShopSettings extends Page implements HasForms
     /** Campurile cu sume se editeaza in lei si se salveaza in bani. */
     private const MONEY = ['commerce.free_shipping_threshold', 'commerce.min_order', 'payments.cod_fee'];
 
-    private const INTS = ['commerce.vat_rate', 'commerce.low_stock_threshold', 'commerce.new_badge_days'];
+    private const INTS = ['commerce.vat_rate', 'commerce.low_stock_threshold', 'commerce.new_badge_days', 'ecolet.parcel_length', 'ecolet.parcel_width', 'ecolet.parcel_height'];
+
+    /** Secretele Ecolet: se salveaza criptat si nu se afiseaza inapoi. */
+    private const SECRETS = ['ecolet__client_secret' => 'ecolet.client_secret', 'ecolet__password' => 'ecolet.password'];
 
     public static function canAccess(): bool
     {
@@ -51,7 +54,7 @@ class ShopSettings extends Page implements HasForms
 
     private static function keys(): array
     {
-        return array_values(array_filter(array_keys(Settings::DEFAULTS), fn ($k) => preg_match('/^(shop|commerce|payments|mail)\./', $k)));
+        return array_values(array_filter(array_keys(Settings::DEFAULTS), fn ($k) => preg_match('/^(shop|commerce|payments|mail|ecolet)\./', $k)));
     }
 
     private static function field(string $key): string
@@ -101,9 +104,7 @@ class ShopSettings extends Page implements HasForms
                     ]),
                 ]),
                 Tab::make('Reguli comerciale')->icon('heroicon-o-scale')->schema([
-                    Section::make('Prețuri și taxe')->columns(3)->schema([
-                        TextInput::make($f('commerce.vat_rate'))->label('Cota TVA standard')->numeric()->suffix('%')->required()->minValue(0)->maxValue(30),
-                        Toggle::make($f('commerce.prices_include_vat'))->label('Prețurile includ TVA')->disabled()->helperText('Ca în magazinul vechi („TVA inclus”).'),
+                    Section::make('Prețuri și comenzi')->description('Prețurile din magazin sunt prețuri finale de vânzare. TVA-ul se aplică la emiterea facturii, în programul de facturare.')->columns(3)->schema([
                         TextInput::make($f('commerce.order_prefix'))->label('Prefix număr comandă')->maxLength(6)->required(),
                     ]),
                     Section::make('Livrare și comandă')->columns(3)->schema([
@@ -134,6 +135,27 @@ class ShopSettings extends Page implements HasForms
                             ->helperText('Necesită contul procesatorului de plăți (de confirmat: Netopia, EuPlătesc sau Stripe). Până atunci rămâne oprit.'),
                     ]),
                 ]),
+                Tab::make('Ecolet')->icon('heroicon-o-truck')->schema([
+                    Section::make('Conexiune')->description('În panoul Ecolet: Setări cont → API → creează o aplicație OAuth; de acolo iei Client ID și Client Secret. Emailul și parola sunt cele ale contului Ecolet.')->columns(2)->schema([
+                        Toggle::make($f('ecolet.enabled'))->label('Integrarea Ecolet este activă')->columnSpanFull(),
+                        TextInput::make($f('ecolet.client_id'))->label('Client ID')->maxLength(120),
+                        TextInput::make('ecolet__client_secret')->label('Client Secret')->password()->revealable()->autocomplete('off')
+                            ->placeholder(fn () => filled(Settings::get('ecolet.client_secret')) ? 'salvat; completează doar pentru a-l schimba' : ''),
+                        TextInput::make($f('ecolet.username'))->label('Email cont Ecolet')->email(),
+                        TextInput::make('ecolet__password')->label('Parolă cont Ecolet')->password()->revealable()->autocomplete('off')
+                            ->placeholder(fn () => filled(Settings::get('ecolet.password')) ? 'salvată; completează doar pentru a o schimba' : ''),
+                    ]),
+                    Section::make('Colete')->columns(3)->schema([
+                        TextInput::make($f('ecolet.parcel_length'))->label('Lungime implicită')->numeric()->suffix('cm'),
+                        TextInput::make($f('ecolet.parcel_width'))->label('Lățime implicită')->numeric()->suffix('cm'),
+                        TextInput::make($f('ecolet.parcel_height'))->label('Înălțime implicită')->numeric()->suffix('cm'),
+                        TextInput::make($f('ecolet.content'))->label('Conținut declarat')->maxLength(100)->columnSpan(2),
+                        TextInput::make($f('ecolet.service'))->label('Serviciu implicit (opțional)')->placeholder('ex. dpd_standard')
+                            ->helperText('Gol = alegi curierul în Ecolet, la fiecare colet.'),
+                        Toggle::make($f('ecolet.auto_send'))->label('Trimite automat comenzile noi în Ecolet')->helperText('Comenzile „În procesare” ajung singure în „Comenzi de trimis”, în maximum 10 minute.')->columnSpan(2),
+                        Toggle::make($f('ecolet.complete_on_delivery'))->label('Marchează „Finalizată” la livrare'),
+                    ]),
+                ]),
                 Tab::make('Notificări')->icon('heroicon-o-envelope')->schema([
                     TagsInput::make($f('mail.shop_recipients'))->label('Comenzile noi și mesajele ajung la')->placeholder('adresa@exemplu.ro')->nestedRecursiveRules(['email']),
                 ]),
@@ -162,9 +184,36 @@ class ShopSettings extends Page implements HasForms
                 $changed[] = $key;
             }
         }
+        foreach (self::SECRETS as $field => $key) {
+            if (filled($state[$field] ?? null)) {
+                Settings::set($key, trim((string) $state[$field]), true);
+                Settings::set('ecolet.token', null);
+                $changed[] = $key;
+            }
+            $this->data[$field] = null;
+        }
+        if (in_array('ecolet.auto_send', $changed, true) && Settings::get('ecolet.auto_send')) {
+            Settings::set('ecolet.auto_since', now()->toDateTimeString());
+        }
         if ($changed) {
             Audit::log('settings.updated', null, 'Setări modificate: '.implode(', ', $changed));
         }
         Notification::make()->title('Setările au fost salvate')->success()->send();
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('ecoletTest')->label('Testează Ecolet')->icon('heroicon-o-signal')->color('gray')
+                ->visible(fn () => \App\Services\Shipping\EcoletClient::configured())
+                ->action(function () {
+                    try {
+                        $me = app(\App\Services\Shipping\EcoletClient::class)->me();
+                        Notification::make()->title('Conexiunea cu Ecolet funcționează')->body('Cont: '.($me['data']['email'] ?? $me['email'] ?? Settings::get('ecolet.username')))->success()->send();
+                    } catch (\Throwable $e) {
+                        Notification::make()->title('Ecolet nu răspunde')->body($e->getMessage())->danger()->send();
+                    }
+                }),
+        ];
     }
 }

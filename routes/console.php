@@ -11,3 +11,5 @@ Schedule::command('queue:work --stop-when-empty --max-time=50')->everyMinute()->
 Schedule::call(fn () => Cache::forever('petmarket.last_cron_run', now()->toIso8601String()))->everyMinute()->name('petmarket-heartbeat');
 // Reducerile programate (cu data de inceput / sfarsit) isi actualizeaza pretul afisat si filtrele.
 Schedule::command('petmarket:sync-sales')->everyFifteenMinutes()->withoutOverlapping();
+// Ecolet: AWB-urile si statusurile coletelor (doar daca integrarea este configurata).
+Schedule::command('petmarket:ecolet-sync')->everyTenMinutes()->withoutOverlapping();

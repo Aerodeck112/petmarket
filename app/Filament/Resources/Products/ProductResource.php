@@ -114,11 +114,9 @@ class ProductResource extends Resource
                     Fields::rich('description', 'Descriere completă'),
                 ]),
                 Tab::make('Preț')->icon('heroicon-o-banknotes')->visible(fn (Get $get) => $get('type') !== 'variable')->schema([
-                    Grid::make(3)->schema([
-                        Fields::money('regular_price', 'Preț de bază (cu TVA)')->required(fn (Get $get) => $get('type') !== 'variable'),
+                    Grid::make(2)->schema([
+                        Fields::money('regular_price', 'Preț de vânzare')->required(fn (Get $get) => $get('type') !== 'variable'),
                         Fields::money('sale_price', 'Preț redus')->helperText('Gol = fără reducere.'),
-                        TextInput::make('vat_rate')->label('Cotă TVA')->numeric()->suffix('%')->placeholder(fn () => (string) Settings::get('commerce.vat_rate'))
-                            ->helperText('Gol = cota standard din setări.'),
                     ]),
                     Grid::make(2)->schema([
                         DateTimePicker::make('sale_starts_at')->label('Reducerea începe')->seconds(false)->native(false),

@@ -51,7 +51,7 @@ class ViewOrder extends ViewRecord
             $fn();
             $this->record->refresh();
             Notification::make()->title($ok)->success()->send();
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException|\RuntimeException $e) {
             Notification::make()->title($e->getMessage())->danger()->send();
         }
     }
@@ -74,13 +74,20 @@ class ViewOrder extends ViewRecord
 
             Action::make('awb')->label('AWB / expediere')->icon('heroicon-o-truck')->color('warning')
                 ->visible(fn () => $this->can())
-                ->fillForm(fn () => ['carrier' => $this->record->carrier ?: 'sameday', 'awb' => $this->record->tracking_number, 'ship' => true])
+                ->fillForm(fn () => ['carrier' => $this->record->carrier ?: 'ecolet', 'awb' => $this->record->tracking_number, 'ship' => true])
                 ->schema([
                     Select::make('carrier')->label('Curier')->options(ShippingMethod::CARRIERS + ['altul' => 'Alt curier'])->required(),
                     TextInput::make('awb')->label('Număr AWB')->required()->maxLength(80),
                     Toggle::make('ship')->label('Marchează comanda ca expediată și anunță clientul')->default(true),
                 ])
                 ->action(fn (array $data) => $this->run(fn () => $this->service()->setTracking($this->record, $data['carrier'], $data['awb'], (bool) $data['ship']), 'AWB salvat')),
+
+            Action::make('ecolet')->label('Trimite la Ecolet')->icon('heroicon-o-paper-airplane')->color('info')
+                ->visible(fn () => $this->can() && \App\Services\Shipping\EcoletClient::configured() && ! $this->record->ecolet_order_to_send_id && ! $this->record->tracking_number)
+                ->requiresConfirmation()->modalHeading('Trimite coletul la Ecolet')
+                ->modalDescription(fn () => 'Comanda apare în Ecolet la „Comenzi de trimis”, unde alegi curierul și generezi AWB-ul. AWB-ul vine înapoi aici automat.'
+                    .($this->record->payment_method->value === 'cod' ? ' Ramburs: '.money($this->record->total).'.' : ''))
+                ->action(fn () => $this->run(fn () => app(\App\Services\Shipping\EcoletShipments::class)->push($this->record), 'Comanda a fost trimisă la Ecolet')),
 
             Action::make('paid')->label('Marchează încasată')->icon('heroicon-o-banknotes')->color('success')
                 ->visible(fn () => $this->can() && $this->record->payment_status->value !== 'paid')
@@ -120,6 +127,20 @@ class ViewOrder extends ViewRecord
                             'phone' => $data['phone'], 'email' => $data['email']]);
                         Audit::log('order.addresses', $this->record, 'Adrese modificate la comanda '.$this->record->number, $before, $this->record->only(['billing', 'shipping', 'phone', 'email']));
                         Notification::make()->title('Adresele au fost salvate')->success()->send();
+                    }),
+                Action::make('ecoletSync')->label('Actualizează din Ecolet')->icon('heroicon-o-arrow-path')
+                    ->visible(fn () => (bool) $this->record->ecolet_order_to_send_id && \App\Services\Shipping\EcoletClient::configured())
+                    ->action(fn () => $this->run(fn () => app(\App\Services\Shipping\EcoletShipments::class)->sync($this->record), 'Date actualizate din Ecolet')),
+                Action::make('ecoletAwb')->label('Descarcă AWB (PDF)')->icon('heroicon-o-printer')
+                    ->visible(fn () => (bool) $this->record->ecolet_order_id && \App\Services\Shipping\EcoletClient::configured())
+                    ->action(function () {
+                        try {
+                            $pdf = app(\App\Services\Shipping\EcoletShipments::class)->waybill($this->record);
+
+                            return response()->streamDownload(fn () => print($pdf), 'AWB-'.($this->record->tracking_number ?: $this->record->number).'.pdf', ['Content-Type' => 'application/pdf']);
+                        } catch (\RuntimeException $e) {
+                            Notification::make()->title($e->getMessage())->warning()->send();
+                        }
                     }),
                 Action::make('resend')->label('Retrimite confirmarea')->icon('heroicon-o-envelope')->visible(fn () => $this->can())
                     ->requiresConfirmation()->action(function () {

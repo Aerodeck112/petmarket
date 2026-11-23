@@ -23,7 +23,7 @@ class Settings
         'shop.postcode' => '540198',
         'shop.city' => 'Târgu Mureș',
         'shop.county' => 'Mureș',
-        'shop.hours' => 'L–V 08:00–20:00 · S 10:00–14:00',
+        'shop.hours' => 'Suport online 09:00 – 16:30',
         'shop.instagram' => 'https://www.instagram.com/petmarket.ro/',
         'shop.facebook' => 'https://www.facebook.com/profile.php?id=61591455733059',
         'shop.tiktok' => '',
@@ -46,11 +46,23 @@ class Settings
         'payments.cod_fee' => 0,
         'payments.card_enabled' => false,
         'payments.transfer_enabled' => true,
-        'payments.transfer_details' => '',
+        'payments.transfer_details' => "Beneficiar: FEST4PETS SRL\nCUI: 46349603\nIBAN: RO22 BREL 0002 0042 1262 0100\nBanca: Libra Internet Bank",
         'payments.transfer_note' => 'Fă plata direct în contul nostru bancar și folosește numărul comenzii ca referință. Comanda pleacă după ce plata intră în cont.',
         'payments.stripe_public' => '',
 
         'mail.shop_recipients' => ['office@pet-market.ro'],
+
+        // Ecolet (platforma de curierat folosita de magazin). Datele de acces se pastreaza criptat.
+        'ecolet.enabled' => false,
+        'ecolet.client_id' => '',
+        'ecolet.username' => '',
+        'ecolet.auto_send' => false,
+        'ecolet.complete_on_delivery' => true,
+        'ecolet.parcel_length' => 30,
+        'ecolet.parcel_width' => 20,
+        'ecolet.parcel_height' => 15,
+        'ecolet.content' => 'Produse pentru animale de companie',
+        'ecolet.service' => '',
 
         'marketing.gtm_id' => '',
         'marketing.ga4_id' => '',

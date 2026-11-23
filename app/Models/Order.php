@@ -19,7 +19,7 @@ class Order extends Model
     protected $casts = [
         'status' => OrderStatus::class, 'payment_status' => PaymentStatus::class, 'payment_method' => PaymentMethod::class,
         'billing' => 'array', 'shipping' => 'array', 'marketing_opt_in' => 'boolean', 'stock_reduced' => 'boolean',
-        'accepted_terms_at' => 'datetime', 'paid_at' => 'datetime', 'shipped_at' => 'datetime', 'completed_at' => 'datetime', 'cancelled_at' => 'datetime',
+        'accepted_terms_at' => 'datetime', 'ecolet_synced_at' => 'datetime', 'paid_at' => 'datetime', 'shipped_at' => 'datetime', 'completed_at' => 'datetime', 'cancelled_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -87,7 +87,7 @@ class Order extends Model
             'cargus' => 'https://www.cargus.ro/personal/urmareste-coletul/?tracking_number='.$awb,
             'dpd' => 'https://tracking.dpd.ro/?shipmentNumber='.$awb,
             'gls' => 'https://gls-group.com/RO/ro/urmarire-colet?match='.$awb,
-            default => null,
+            default => 'https://panel.ecolet.ro/ro/track',
         };
     }
 }

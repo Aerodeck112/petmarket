@@ -59,7 +59,6 @@
                         <span class="sticker sticker--sale" x-show="onSale && regular" x-text="'-' + Math.round(100 - price * 100 / regular) + '%'" x-cloak></span>
                     </p>
                 </template>
-                <p class="vat-note">TVA inclus</p>
                 <p class="omnibus" x-show="onSale && lowest30" x-cloak>Cel mai mic preț din ultimele 30 de zile: <b x-text="fmt(lowest30)"></b></p>
             </div>
 

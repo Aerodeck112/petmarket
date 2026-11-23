@@ -10,6 +10,7 @@
         <span class="pm-pill pm-pill--{{ $order->status->color() }}"><x-filament::icon :icon="$order->status->icon()" class="h-4 w-4" /> {{ $order->status->label() }}</span>
         <span class="pm-pill pm-pill--{{ $order->payment_status->color() }}">{{ $order->payment_status->label() }} · {{ $order->payment_method->label() }}</span>
         <span class="pm-muted">Plasată {{ $order->created_at->format('d.m.Y, H:i') }} ({{ $order->created_at->diffForHumans() }}) din {{ $order->source === 'admin' ? 'administrare' : 'site' }}</span>
+        @if ($order->ecolet_order_to_send_id)<span class="pm-pill pm-pill--primary">Ecolet: {{ $order->ecolet_status ?: 'trimisă' }}@if ($order->ecolet_service) · {{ $order->ecolet_service }}@endif @if ($order->ecolet_synced_at)<span class="pm-muted">({{ $order->ecolet_synced_at->diffForHumans() }})</span>@endif</span>@endif
         @if ($order->tracking_number)<span class="pm-pill pm-pill--warning">AWB {{ $order->tracking_number }}@if ($order->trackingUrl()) · <a href="{{ $order->trackingUrl() }}" target="_blank" rel="noopener">urmărește</a>@endif</span>@endif
     </div>
 
@@ -26,7 +27,7 @@
                             <td>
                                 @if ($item->product)<a href="{{ \App\Filament\Resources\Products\ProductResource::getUrl('edit', ['record' => $item->product_id]) }}" class="pm-link">{{ $item->name }}</a>@else{{ $item->name }}@endif
                                 @if ($item->variant_label)<div class="pm-muted">{{ $item->variant_label }}</div>@endif
-                                <div class="pm-muted">SKU {{ $item->sku ?: '—' }} · TVA {{ rtrim(rtrim(number_format($item->vat_rate, 2, ',', ''), '0'), ',') }}%</div>
+                                <div class="pm-muted">SKU {{ $item->sku ?: '—' }}</div>
                             </td>
                             <td class="r">{{ money($item->unit_price) }}@if ($item->regular_unit_price > $item->unit_price)<div class="pm-muted"><s>{{ money($item->regular_unit_price) }}</s></div>@endif</td>
                             <td class="r"><b>× {{ $item->qty }}</b></td>
@@ -41,7 +42,6 @@
                     <div><dt>Livrare · {{ $order->shipping_method_name }}</dt><dd>{{ $order->shipping_total ? money($order->shipping_total) : 'gratuită' }}</dd></div>
                     @if ($order->fee_total)<div><dt>Taxă ramburs</dt><dd>{{ money($order->fee_total) }}</dd></div>@endif
                     <div class="pm-grand"><dt>Total</dt><dd>{{ money($order->total) }}</dd></div>
-                    <div><dt>din care TVA</dt><dd>{{ money($order->vat_total) }}</dd></div>
                     @if ($order->refunded_total)<div><dt>Rambursat</dt><dd>−{{ money($order->refunded_total) }}</dd></div>@endif
                 </dl>
             </section>

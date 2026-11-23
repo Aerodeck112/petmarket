@@ -11,7 +11,7 @@
                 <li><x-hv-icon name="mail" /> <a href="mailto:{{ $shop['email'] }}">{{ $shop['email'] }}</a></li>
                 @if ($shop['instagram'])<li><x-hv-icon name="heart" /> <a href="{{ $shop['instagram'] }}" rel="noopener">Instagram</a></li>@endif
             </ul>
-            <p class="muted">Program: {{ $shop['hours'] }}</p>
+            <p class="muted">{{ $shop['hours'] }}</p>
             <p class="muted small">{{ $shop['legal_name'] }} · CUI {{ $shop['cui'] }} · {{ $shop['reg_com'] }}</p>
             <div class="split-media" style="margin-top:2rem;aspect-ratio:4/3">
                 <iframe src="https://maps.google.com/maps?q={{ urlencode($shop['address'].', '.$shop['city']) }}&t=m&z=15&output=embed" title="{{ __('Harta: :address', ['address' => $shop['address'].', '.$shop['city']]) }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;border:0"></iframe>

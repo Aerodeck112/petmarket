@@ -104,7 +104,8 @@ class OrderResource extends Resource
                     ->description(fn (Order $o) => $o->payment_status->label()),
                 TextColumn::make('items_count')->label('Produse')->alignCenter(),
                 TextColumn::make('total')->label('Total')->formatStateUsing(fn ($state) => money($state))->sortable()->alignEnd()->weight('bold'),
-                TextColumn::make('tracking_number')->label('AWB')->placeholder('—')->toggleable()->copyable(),
+                TextColumn::make('tracking_number')->label('AWB')->placeholder('—')->toggleable()->copyable()
+                    ->description(fn (Order $o) => $o->ecolet_order_to_send_id && ! $o->tracking_number ? 'în Ecolet' : null),
                 TextColumn::make('coupon_code')->label('Cupon')->badge()->color('info')->placeholder('—')->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('source')->label('Sursă')->toggleable(isToggledHiddenByDefault: true),
             ])

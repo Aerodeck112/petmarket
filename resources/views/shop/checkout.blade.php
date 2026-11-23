@@ -101,7 +101,7 @@
             <button class="btn btn-primary btn-block btn-buy" type="submit" :disabled="submitting">
                 <x-hv-icon name="lock" width="20" height="20" /> <span x-text="submitting ? 'Se trimite…' : 'Plasează comanda'">Plasează comanda</span>
             </button>
-            <p class="muted small">Comanda implică obligația de plată. Prețurile includ TVA.</p>
+            <p class="muted small">Comanda implică obligația de plată. Factura se emite la livrare.</p>
             <x-buddy class="co-buddy" kind="cat" pose="sit" :say="\App\Support\Buddies::forPath('finalizare')['say']" />
         </aside>
     </form>

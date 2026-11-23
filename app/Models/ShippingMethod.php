@@ -8,7 +8,7 @@ class ShippingMethod extends Model
 {
     public const KINDS = ['courier' => 'Curier la adresă', 'locker' => 'Locker / easybox', 'pickup' => 'Ridicare personală'];
 
-    public const CARRIERS = ['sameday' => 'Sameday', 'fan' => 'FAN Courier', 'cargus' => 'Cargus', 'dpd' => 'DPD', 'gls' => 'GLS'];
+    public const CARRIERS = ['ecolet' => 'Ecolet', 'sameday' => 'Sameday', 'fan' => 'FAN Courier', 'cargus' => 'Cargus', 'dpd' => 'DPD', 'gls' => 'GLS'];
 
     protected $guarded = ['id'];
 

@@ -17,7 +17,7 @@ class ShopSeeder extends Seeder
     {
         // Ca in magazinul vechi: curier rapid 23 lei, gratuit de la 1.000 lei (pragul general din setari).
         $methods = [
-            ['code' => 'curier', 'name' => 'Livrare cu curier rapid', 'kind' => 'courier', 'carrier' => null, 'cost' => 2300, 'eta' => '2–4 zile lucrătoare', 'sort' => 1,
+            ['code' => 'curier', 'name' => 'Livrare cu curier rapid', 'kind' => 'courier', 'carrier' => 'ecolet', 'cost' => 2300, 'eta' => '2–4 zile lucrătoare', 'sort' => 1,
                 'description' => 'Coletul ajunge la adresa ta. Primești numărul AWB pe email când pleacă.'],
             ['code' => 'easybox', 'name' => 'Livrare în easybox', 'kind' => 'locker', 'carrier' => 'sameday', 'cost' => 1900, 'eta' => '1–3 zile lucrătoare', 'sort' => 2,
                 'cod_allowed' => false, 'description' => 'Ridici coletul din lockerul ales, oricând.', 'is_active' => false],

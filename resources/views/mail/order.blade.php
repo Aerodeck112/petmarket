@@ -15,7 +15,7 @@
     <tr><td></td><td style="padding:4px 8px;">Livrare: {{ $order->shipping_method_name }}</td><td align="right" style="padding:4px 0;">{{ $order->shipping_total ? money($order->shipping_total) : 'gratuită' }}</td></tr>
     @if ($order->fee_total)<tr><td></td><td style="padding:4px 8px;">Taxă ramburs</td><td align="right" style="padding:4px 0;">{{ money($order->fee_total) }}</td></tr>@endif
     <tr><td></td><td style="padding:8px 8px;font-weight:bold;font-size:16px;color:#1F1638;">Total</td><td align="right" style="padding:8px 0;font-weight:bold;font-size:16px;color:#1F1638;">{{ money($order->total) }}</td></tr>
-    <tr><td></td><td colspan="2" style="padding:0 8px 8px;color:#6B6580;font-size:12px;">din care TVA {{ money($order->vat_total) }} · plată: {{ $order->payment_method->label() }}</td></tr>
+    <tr><td></td><td colspan="2" style="padding:0 8px 8px;color:#6B6580;font-size:12px;">plată: {{ $order->payment_method->label() }}</td></tr>
 </table>
 @if ($order->payment_method->value === 'transfer' && ! $forShop && $s::get('payments.transfer_details'))
     <p style="margin:16px 0 0;padding:14px;background:#FFF6D6;border-radius:10px;"><strong>Date pentru transfer:</strong><br>{!! nl2br(e($s::get('payments.transfer_details'))) !!}<br>La detalii plată scrie: <strong>{{ $order->number }}</strong></p>

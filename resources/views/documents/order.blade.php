@@ -29,25 +29,24 @@
     <div><b>Livrare</b> ({{ $order->shipping_method_name }})<br>{{ trim(($order->shipping['first_name'] ?? '').' '.($order->shipping['last_name'] ?? '')) }}<br>{{ \App\Models\Order::addressLine($order->shipping) }}<br>{{ $order->phone }}@if ($order->tracking_number)<br>AWB {{ $order->tracking_number }}@endif</div>
 </div>
 <table>
-    <thead><tr>@unless ($proforma)<th></th>@endunless<th>#</th><th>Produs</th><th>SKU</th><th class="r">Cant.</th>@if ($proforma)<th class="r">Preț unitar</th><th class="r">TVA</th><th class="r">Valoare</th>@endif</tr></thead>
+    <thead><tr>@unless ($proforma)<th></th>@endunless<th>#</th><th>Produs</th><th>SKU</th><th class="r">Cant.</th>@if ($proforma)<th class="r">Preț unitar</th><th class="r">Valoare</th>@endif</tr></thead>
     <tbody>
     @foreach ($order->items as $i => $item)
         <tr>@unless ($proforma)<td><div class="box"></div></td>@endunless<td>{{ $i + 1 }}</td><td>{{ $item->name }}@if ($item->variant_label)<br><span class="muted">{{ $item->variant_label }}</span>@endif</td><td>{{ $item->sku }}</td><td class="r"><b>{{ $item->qty }}</b></td>
-            @if ($proforma)<td class="r">{{ money($item->unit_price) }}</td><td class="r">{{ rtrim(rtrim(number_format($item->vat_rate, 2, ',', ''), '0'), ',') }}%</td><td class="r">{{ money($item->total) }}</td>@endif</tr>
+            @if ($proforma)<td class="r">{{ money($item->unit_price) }}</td><td class="r">{{ money($item->total) }}</td>@endif</tr>
     @endforeach
     </tbody>
     @if ($proforma)
     <tfoot>
-        <tr class="tot"><td colspan="5"></td><td colspan="1" class="r">Subtotal</td><td class="r">{{ money($order->subtotal) }}</td></tr>
-        @if ($order->discount_total)<tr class="tot"><td colspan="5"></td><td class="r">Reducere</td><td class="r">−{{ money($order->discount_total) }}</td></tr>@endif
-        <tr class="tot"><td colspan="5"></td><td class="r">Livrare</td><td class="r">{{ money($order->shipping_total) }}</td></tr>
-        @if ($order->fee_total)<tr class="tot"><td colspan="5"></td><td class="r">Taxă ramburs</td><td class="r">{{ money($order->fee_total) }}</td></tr>@endif
-        <tr class="grand"><td colspan="5"></td><td class="r">Total</td><td class="r">{{ money($order->total) }}</td></tr>
-        <tr class="tot"><td colspan="5"></td><td class="r muted">din care TVA</td><td class="r muted">{{ money($order->vat_total) }}</td></tr>
+        <tr class="tot"><td colspan="4"></td><td colspan="1" class="r">Subtotal</td><td class="r">{{ money($order->subtotal) }}</td></tr>
+        @if ($order->discount_total)<tr class="tot"><td colspan="4"></td><td class="r">Reducere</td><td class="r">−{{ money($order->discount_total) }}</td></tr>@endif
+        <tr class="tot"><td colspan="4"></td><td class="r">Livrare</td><td class="r">{{ money($order->shipping_total) }}</td></tr>
+        @if ($order->fee_total)<tr class="tot"><td colspan="4"></td><td class="r">Taxă ramburs</td><td class="r">{{ money($order->fee_total) }}</td></tr>@endif
+        <tr class="grand"><td colspan="4"></td><td class="r">Total</td><td class="r">{{ money($order->total) }}</td></tr>
     </tfoot>
     @endif
 </table>
 @if ($order->customer_note)<p class="note"><b>Mențiunea clientului:</b> {{ $order->customer_note }}</p>@endif
-@if ($proforma)<p class="muted" style="margin-top:22px">Document fără valoare fiscală. Factura fiscală se emite la livrare.@if ($d = $s::get('payments.transfer_details'))<br>{!! nl2br(e($d)) !!}@endif</p>@else
+@if ($proforma)<p class="muted" style="margin-top:22px">Document fără valoare fiscală. Factura fiscală, cu TVA-ul aplicabil, se emite la livrare.@if ($d = $s::get('payments.transfer_details'))<br>{!! nl2br(e($d)) !!}@endif</p>@else
 <p class="muted" style="margin-top:22px">Pregătit de: __________________ &nbsp; Verificat: __________________ &nbsp; Colete: ____</p>@endif
 </body></html>
