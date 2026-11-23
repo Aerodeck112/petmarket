@@ -29,7 +29,7 @@ class ProductVariant extends Model
             }
         });
         static::saved(function (ProductVariant $v) {
-            if ($v->wasChanged('price') && $v->price !== null) {
+            if (($v->wasRecentlyCreated || $v->wasChanged('price')) && $v->price !== null) {
                 PriceHistory::record($v->product_id, $v->id, $v->price);
             }
         });

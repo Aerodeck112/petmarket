@@ -22,9 +22,9 @@ class AuthController extends Controller
     public function access(Seo $seo)
     {
         if (Auth::check()) {
-            return redirect()->away(site_url('/panou-cont/'));
+            return redirect()->away(site_url('/contul-meu/'));
         }
-        $seo->page(__('Acces cont'));
+        $seo->page(__('Contul meu'));
         $seo->noindex = true;
 
         return view('account.access', ['seo' => $seo]);
@@ -55,17 +55,18 @@ class AuthController extends Controller
         $request->session()->regenerate();
         $user->forceFill(['last_login_at' => now()])->save();
 
-        return redirect()->intended($user->isStaff() ? site_url('/admin') : site_url('/panou-cont/'));
+        return redirect()->intended($user->isStaff() ? site_url('/admin') : site_url('/contul-meu/'));
     }
 
     public function register(Request $request)
     {
         if ($request->filled('website')) {
-            return redirect()->away(site_url('/acces-cont/'));
+            return redirect()->away(site_url('/contul-meu/autentificare/'));
         }
 
         $data = $request->validate([
             'name' => ['required', 'string', 'min:3', 'max:120'],
+            'newsletter' => ['nullable', 'boolean'],
             'reg_email' => ['required', 'email:rfc', 'max:190'],
             'phone' => ['nullable', 'string', 'max:30'],
             'reg_password' => ['required', 'confirmed', PasswordRule::defaults()],
@@ -78,19 +79,24 @@ class AuthController extends Controller
         if (User::query()->where('email', $email)->exists()) {
             Password::broker()->sendResetLink(['email' => $email]);
 
-            return redirect()->away(site_url('/acces-cont/'))->with('status', __('Dacă emailul nu avea deja un cont, contul a fost creat. Verifică emailul pentru pașii următori.'));
+            return redirect()->away(site_url('/contul-meu/autentificare/'))->with('status', __('Dacă emailul nu avea deja un cont, contul a fost creat. Verifică emailul pentru pașii următori.'));
         }
 
-        $user = new User(['name' => $data['name'], 'email' => $email, 'phone' => $data['phone'] ?? null]);
+        [$first, $last] = array_pad(explode(' ', trim($data['name']), 2), 2, null);
+        $user = new User(['name' => $data['name'], 'first_name' => $first, 'last_name' => $last, 'email' => $email, 'phone' => $data['phone'] ?? null]);
         $user->password = $data['reg_password'];
         $user->save();
-        $user->assignRole(Role::Client->value);
-        Audit::log('client.registered', $user, 'Cont creat din pagina Acces cont', null, null, $user->id);
+        $user->assignRole(Role::Customer->value);
+        Audit::log('customer.registered', $user, 'Cont de client creat din site', null, null, $user->id);
+
+        if ($request->boolean('newsletter')) {
+            \App\Models\NewsletterSubscriber::query()->firstOrCreate(['email' => $email], ['name' => $first, 'source' => 'register', 'token' => Str::random(40)]);
+        }
 
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->away(site_url('/panou-cont/'));
+        return redirect()->away(site_url('/contul-meu/'));
     }
 
     public function logout(Request $request)
@@ -143,6 +149,6 @@ class AuthController extends Controller
             throw ValidationException::withMessages(['email' => __('Linkul a expirat sau nu este valid. Cere un link nou.')]);
         }
 
-        return redirect()->away(site_url('/acces-cont/'))->with('status', __('Parola a fost setată. Te poți autentifica.'));
+        return redirect()->away(site_url('/contul-meu/autentificare/'))->with('status', __('Parola a fost setată. Te poți autentifica.'));
     }
 }

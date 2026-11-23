@@ -31,14 +31,14 @@ class ContactController extends Controller
                 'message' => $data['message'], 'consent_processing' => true,
             ]);
 
-            $notifier->send(Settings::emails('mail.clinic_recipients'), 'Mesaj nou din formularul de contact',
+            $notifier->send(Settings::emails('mail.shop_recipients'), 'Mesaj nou din formularul de contact',
                 '<p><strong>'.e($data['name']).'</strong> ('.e($data['email']).($data['phone'] ?? '' ? ', '.e($data['phone']) : '').')</p><p>'.nl2br(e($data['message'])).'</p>',
                 'contact', 'contact_message', $message->id);
             $notifier->send([$data['email']], 'Am primit mesajul tău',
-                '<p>Bună, '.e($data['name']).'!</p><p>Am primit mesajul tău și îți răspundem cât mai curând. Pentru urgențe, sună la '.e(Settings::get('clinic.phone')).'.</p>',
+                '<p>Bună, '.e($data['name']).'!</p><p>Am primit mesajul tău și îți răspundem cât mai curând. Pentru urgențe, sună la '.e(Settings::get('shop.phone')).'.</p>',
                 'contact_confirmation', 'contact_message', $message->id);
         }
 
-        return redirect()->away(site_url('/hikevet-contact/#formular'))->with('contact_sent', true);
+        return redirect()->away(site_url('/contact/#formular'))->with('contact_sent', true);
     }
 }

@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
-<title>Instalare HiKeVet – @yield('title')</title>
+<title>Instalare Pet Market – @yield('title')</title>
 <style>
 :root{--green:#21b073;--deep:#0b5c3b;--ink:#1d2a23;--mint:#ecf2e3;--line:#d5dfd0;--bad:#b3261e}
 *{box-sizing:border-box}body{margin:0;background:var(--mint);color:#47524b;font:17px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
@@ -18,7 +18,7 @@ table{width:100%;border-collapse:collapse;font-size:.95rem}td{padding:.5rem .4re
 </head>
 <body>
 <main>
-<p style="font-weight:700;color:var(--deep);letter-spacing:.02em">HiKeVet – instalare</p>
+<p style="font-weight:700;color:var(--deep);letter-spacing:.02em">Pet Market by HiKeVet – instalare</p>
 <ol class="steps" aria-label="Pași de instalare">
 @foreach (['Cod de acces', 'Verificări', 'Bază de date și email', 'Tabele', 'Administrator'] as $i => $label)
     <li @if ($i + 1 === $step) aria-current="step" @endif>{{ $i + 1 }}. {{ $label }}</li>

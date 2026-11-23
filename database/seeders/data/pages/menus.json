@@ -1,0 +1,625 @@
+{
+ "main": [
+  {
+   "title": "Lichidări de stoc",
+   "url": "https://pet-market.ro/categorie-produs/lichidari-de-stoc/"
+  },
+  {
+   "title": "Hrană",
+   "url": "https://pet-market.ro/categorie-produs/hrana/",
+   "children": [
+    {
+     "title": "Câini",
+     "url": "https://pet-market.ro/categorie-produs/hrana/caini-hrana/",
+     "children": [
+      {
+       "title": "Hrană umedă",
+       "url": "https://pet-market.ro/categorie-produs/hrana/caini-hrana/hrana-umeda-caini-hrana/"
+      },
+      {
+       "title": "Hrană uscată",
+       "url": "https://pet-market.ro/categorie-produs/hrana/caini-hrana/hrana-uscata-caini-hrana/"
+      },
+      {
+       "title": "Recompense",
+       "url": "https://pet-market.ro/categorie-produs/hrana/caini-hrana/recompense-caini-hrana/"
+      },
+      {
+       "title": "B.A.R.F.",
+       "url": "https://pet-market.ro/categorie-produs/hrana/caini-hrana/b-a-r-f-caini-hrana/"
+      },
+      {
+       "title": "Hrană monoproteică",
+       "url": "https://pet-market.ro/categorie-produs/hrana/caini-hrana/hrana-monoproteica/"
+      }
+     ]
+    },
+    {
+     "title": "Pisici",
+     "url": "https://pet-market.ro/categorie-produs/hrana/pisici-hrana/",
+     "children": [
+      {
+       "title": "Hrană umedă",
+       "url": "https://pet-market.ro/categorie-produs/hrana/pisici-hrana/hrana-umeda-pisici-hrana/"
+      },
+      {
+       "title": "Hrană uscată",
+       "url": "https://pet-market.ro/categorie-produs/hrana/pisici-hrana/hrana-uscata-pisici-hrana/"
+      },
+      {
+       "title": "Recompense",
+       "url": "https://pet-market.ro/categorie-produs/hrana/pisici-hrana/recompense-pisici-hrana/"
+      },
+      {
+       "title": "B.A.R.F.",
+       "url": "https://pet-market.ro/categorie-produs/hrana/pisici-hrana/b-a-r-f-pisici-hrana/"
+      },
+      {
+       "title": "Hrană monoproteică",
+       "url": "https://pet-market.ro/categorie-produs/hrana/pisici-hrana/hrana-monoproteica-pisici-hrana/"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Diete",
+   "url": "https://pet-market.ro/categorie-produs/diete-2/",
+   "children": [
+    {
+     "title": "Slăbire / diabet",
+     "url": "https://pet-market.ro/categorie-produs/diete-2/slabire-diabet/",
+     "children": [
+      {
+       "title": "Câini",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/slabire-diabet/caini/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/slabire-diabet/caini/umeda-caini/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/slabire-diabet/caini/uscata/"
+        }
+       ]
+      },
+      {
+       "title": "Pisici",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/slabire-diabet/pisici/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/slabire-diabet/pisici/umeda-pisici/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/slabire-diabet/pisici/uscata-pisici/"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Suport articular",
+     "url": "https://pet-market.ro/categorie-produs/diete-2/suport-articular/",
+     "children": [
+      {
+       "title": "Câini",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-articular/caini-suport-articular/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-articular/caini-suport-articular/umeda-caini-suport-articular/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-articular/caini-suport-articular/uscata-caini-suport-articular/"
+        }
+       ]
+      },
+      {
+       "title": "Pisici",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-articular/pisici-suport-articular/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-articular/pisici-suport-articular/umeda-pisici-suport-articular/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-articular/pisici-suport-articular/uscata-pisici-suport-articular/"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Suport dermatologic / hipoalergenic",
+     "url": "https://pet-market.ro/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/",
+     "children": [
+      {
+       "title": "Câini",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/caini-suport-dermatologic-hipoalergenic/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/caini-suport-dermatologic-hipoalergenic/umeda-caini-suport-dermatologic-hipoalergenic/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/caini-suport-dermatologic-hipoalergenic/uscata-caini-suport-dermatologic-hipoalergenic/"
+        }
+       ]
+      },
+      {
+       "title": "Pisici",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/pisici-suport-dermatologic-hipoalergenic/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/pisici-suport-dermatologic-hipoalergenic/umeda-pisici-suport-dermatologic-hipoalergenic/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/pisici-suport-dermatologic-hipoalergenic/uscata-pisici-suport-dermatologic-hipoalergenic/"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Suport renal",
+     "url": "https://pet-market.ro/categorie-produs/diete-2/suport-renal/",
+     "children": [
+      {
+       "title": "Câini",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-renal/caini-suport-renal/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-renal/caini-suport-renal/umeda-caini-suport-renal/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-renal/caini-suport-renal/uscata-caini-suport-renal/"
+        }
+       ]
+      },
+      {
+       "title": "Pisici",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-renal/pisici-suport-renal/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-renal/pisici-suport-renal/umeda-pisici-suport-renal/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-renal/pisici-suport-renal/uscata-pisici-suport-renal/"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Suport hepatic",
+     "url": "https://pet-market.ro/categorie-produs/diete-2/suport-hepatic/",
+     "children": [
+      {
+       "title": "Câini",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-hepatic/caini-suport-hepatic/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-hepatic/caini-suport-hepatic/umeda-caini-suport-hepatic/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-hepatic/caini-suport-hepatic/uscata-caini-suport-hepatic/"
+        }
+       ]
+      },
+      {
+       "title": "Pisici",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-hepatic/pisici-suport-hepatic/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-hepatic/pisici-suport-hepatic/umeda-pisici-suport-hepatic/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-hepatic/pisici-suport-hepatic/uscata-pisici-suport-hepatic/"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Suport digestiv",
+     "url": "https://pet-market.ro/categorie-produs/diete-2/suport-digestiv/",
+     "children": [
+      {
+       "title": "Câini",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-digestiv/caini-suport-digestiv/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-digestiv/caini-suport-digestiv/umeda-caini-suport-digestiv/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-digestiv/caini-suport-digestiv/uscata-caini-suport-digestiv/"
+        }
+       ]
+      },
+      {
+       "title": "Pisici",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-digestiv/pisici-suport-digestiv/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-digestiv/pisici-suport-digestiv/umeda-pisici-suport-digestiv/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-digestiv/pisici-suport-digestiv/uscata-pisici-suport-digestiv/"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Suport urinar",
+     "url": "https://pet-market.ro/categorie-produs/diete-2/suport-urinar/",
+     "children": [
+      {
+       "title": "Câini",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-urinar/caini-suport-urinar/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-urinar/caini-suport-urinar/umeda-caini-suport-urinar/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-urinar/caini-suport-urinar/uscata-caini-suport-urinar/"
+        }
+       ]
+      },
+      {
+       "title": "Pisici",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/suport-urinar/pisici-suport-urinar/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-urinar/pisici-suport-urinar/umeda-pisici-suport-urinar/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/suport-urinar/pisici-suport-urinar/uscata-pisici-suport-urinar/"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "title": "Convalescență / recovery",
+     "url": "https://pet-market.ro/categorie-produs/diete-2/convalescenta-recovery/",
+     "children": [
+      {
+       "title": "Câini",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/convalescenta-recovery/caini-convalescenta-recovery/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/convalescenta-recovery/caini-convalescenta-recovery/umeda-caini-convalescenta-recovery/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/convalescenta-recovery/caini-convalescenta-recovery/uscata-caini-convalescenta-recovery/"
+        }
+       ]
+      },
+      {
+       "title": "Pisici",
+       "url": "https://pet-market.ro/categorie-produs/diete-2/convalescenta-recovery/pisici-convalescenta-recovery/",
+       "children": [
+        {
+         "title": "Umedă",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/convalescenta-recovery/pisici-convalescenta-recovery/umeda-pisici-convalescenta-recovery/"
+        },
+        {
+         "title": "Uscată",
+         "url": "https://pet-market.ro/categorie-produs/diete-2/convalescenta-recovery/pisici-convalescenta-recovery/uscata-pisici-convalescenta-recovery/"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "Suplimente",
+   "url": "https://pet-market.ro/categorie-produs/otc/",
+   "children": [
+    {
+     "title": "Antiparazitare",
+     "url": "https://pet-market.ro/categorie-produs/otc/antiparazitare-otc/",
+     "children": [
+      {
+       "title": "Câini – interne",
+       "url": "https://pet-market.ro/categorie-produs/otc/antiparazitare-otc/caini-interne/"
+      },
+      {
+       "title": "Câini – externe",
+       "url": "https://pet-market.ro/categorie-produs/otc/antiparazitare-otc/caini-externe/"
+      },
+      {
+       "title": "Câini – intern/extern",
+       "url": "https://pet-market.ro/categorie-produs/otc/antiparazitare-otc/caini-intern-extern/"
+      },
+      {
+       "title": "Pisici – interne",
+       "url": "https://pet-market.ro/categorie-produs/otc/antiparazitare-otc/pisici-interne/"
+      },
+      {
+       "title": "Pisici – externe",
+       "url": "https://pet-market.ro/categorie-produs/otc/antiparazitare-otc/pisici-externe/"
+      },
+      {
+       "title": "Pisici – intern/extern",
+       "url": "https://pet-market.ro/categorie-produs/otc/antiparazitare-otc/pisici-intern-extern/"
+      }
+     ]
+    },
+    {
+     "title": "Afecțiuni dermatologice",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-dermatologice/",
+     "children": [
+      {
+       "title": "Otice",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-dermatologice/otice/"
+      },
+      {
+       "title": "Spot-on",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-dermatologice/spot-on/"
+      },
+      {
+       "title": "Tablete / capsule",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-dermatologice/tablete-capsule/"
+      }
+     ]
+    },
+    {
+     "title": "Afecțiuni cardiovasculare",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-cardiovasculare/"
+    },
+    {
+     "title": "Afecțiuni renale",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-renale/",
+     "children": [
+      {
+       "title": "Câine",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-renale/caine/"
+      },
+      {
+       "title": "Pisică",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-renale/pisica/"
+      }
+     ]
+    },
+    {
+     "title": "Afecțiuni digestive",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-digestive/",
+     "children": [
+      {
+       "title": "Câine",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-digestive/caine-afectiuni-digestive/"
+      },
+      {
+       "title": "Pisică",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-digestive/pisica-afectiuni-digestive/"
+      }
+     ]
+    },
+    {
+     "title": "Afecțiuni urinare",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-urinare/",
+     "children": [
+      {
+       "title": "Câine",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-urinare/caine-afectiuni-urinare/"
+      },
+      {
+       "title": "Pisică",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-urinare/pisica-afectiuni-urinare/"
+      }
+     ]
+    },
+    {
+     "title": "Afecțiuni osteo-articulare",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-osteo-articulare/",
+     "children": [
+      {
+       "title": "Câine",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-osteo-articulare/caine-afectiuni-osteo-articulare/"
+      },
+      {
+       "title": "Pisică",
+       "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-osteo-articulare/pisica-afectiuni-osteo-articulare/"
+      }
+     ]
+    },
+    {
+     "title": "Afecțiuni neurologice",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-neurologice/"
+    },
+    {
+     "title": "Afecțiuni oncologice",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-oncologice/"
+    },
+    {
+     "title": "Afecțiuni stomatologice",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-stomatologice/"
+    },
+    {
+     "title": "Afecțiuni hepatice",
+     "url": "https://pet-market.ro/categorie-produs/otc/afectiuni-hepatice/"
+    }
+   ]
+  },
+  {
+   "title": "Accesorii",
+   "url": "https://pet-market.ro/categorie-produs/accesorii/"
+  },
+  {
+   "title": "Echipamente veterinare",
+   "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/",
+   "children": [
+    {
+     "title": "Cabinete / clinici veterinare",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/cabinete-clinici-veterinare/"
+    },
+    {
+     "title": "Consumabile",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/consumabile/"
+    },
+    {
+     "title": "Instrumentar",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/instrumentar/"
+    },
+    {
+     "title": "Mobilier și inox",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/mobilier-si-inox/"
+    },
+    {
+     "title": "Cuști / internare / contenție",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/custi-internare-contentie/"
+    },
+    {
+     "title": "Stomatologie",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/stomatologie/"
+    },
+    {
+     "title": "Chirurgie",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/chirurgie/"
+    },
+    {
+     "title": "ATI, anestezie și monitorizare",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/ati-anestezie-si-monitorizare/"
+    },
+    {
+     "title": "Oxigenoterapie și ICU",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/oxigenoterapie-si-icu/"
+    },
+    {
+     "title": "Iluminare operatorie și examinare",
+     "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/iluminare-operatorie-si-examinare/"
+    }
+   ]
+  },
+  {
+   "title": "Igienă",
+   "url": "https://pet-market.ro/categorie-produs/igiena/"
+  }
+ ],
+ "header_right": [
+  {
+   "title": "Despre Noi",
+   "url": "https://pet-market.ro/about-us/"
+  },
+  {
+   "title": "Contact",
+   "url": "#"
+  }
+ ],
+ "mobile": [
+  {
+   "title": "PET-MARKET",
+   "url": "https://pet-market.ro/"
+  },
+  {
+   "title": "Despre noi",
+   "url": "https://pet-market.ro/about-us/"
+  },
+  {
+   "title": "Contact",
+   "url": "#"
+  },
+  {
+   "title": "Contul meu",
+   "url": "https://pet-market.ro/contul-meu/"
+  },
+  {
+   "title": "Politică de rambursări și returnări",
+   "url": "https://pet-market.ro/refund_returns/"
+  },
+  {
+   "title": "Termeni și condiții",
+   "url": "https://pet-market.ro/termeni-conditii/"
+  },
+  {
+   "title": "Politica de confidențialitate",
+   "url": "https://pet-market.ro/politica-confidentialitate/"
+  },
+  {
+   "title": "Informații Livrare",
+   "url": "https://pet-market.ro/livrare/"
+  },
+  {
+   "title": "Lista de dorințe",
+   "url": "https://pet-market.ro/wishlist/"
+  },
+  {
+   "title": "Login / Register",
+   "url": "https://pet-market.ro/contul-meu/"
+  }
+ ],
+ "footer_categories": [
+  {
+   "title": "Echipamente Veterinare",
+   "url": "https://pet-market.ro/categorie-produs/echipamente-veterinare/"
+  },
+  {
+   "title": "Hrană",
+   "url": "https://pet-market.ro/categorie-produs/hrana/"
+  },
+  {
+   "title": "Câini",
+   "url": "https://pet-market.ro/categorie-produs/hrana/caini-hrana/"
+  },
+  {
+   "title": "Pisici",
+   "url": "https://pet-market.ro/categorie-produs/hrana/pisici-hrana/"
+  },
+  {
+   "title": "Accesorii",
+   "url": "https://pet-market.ro/categorie-produs/accesorii/"
+  }
+ ],
+ "footer_legal": [
+  {
+   "title": "Politica de Confidențialitate",
+   "url": "https://pet-market.ro/politica-confidentialitate"
+  },
+  {
+   "title": "Termeni și condiții",
+   "url": "https://pet-market.ro/termeni-conditii"
+  },
+  {
+   "title": "Informații livrare",
+   "url": "https://pet-market.ro/livrare"
+  },
+  {
+   "title": "Politică de rambursări și returnări",
+   "url": "https://pet-market.ro/refund_returns/"
+  },
+  {
+   "title": "Contact",
+   "url": "https://pet-market.ro/contact"
+  }
+ ],
+ "_source": "HTML https://pet-market.ro/ (2026-11-23); header «Contact» (#) deschide popup-ul de contact (.open-contacts-right)"
+}

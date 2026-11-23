@@ -23,4 +23,14 @@ class ProductImage extends Model
 
         return $this->source_url;
     }
+
+    /** Miniatura de 400 px pentru liste (sau imaginea mare, daca miniatura nu exista). */
+    public function thumbUrl(): ?string
+    {
+        if ($this->path && str_ends_with($this->path, '.webp')) {
+            return asset('uploads/'.preg_replace('/\.webp$/', '-400.webp', $this->path));
+        }
+
+        return $this->url();
+    }
 }

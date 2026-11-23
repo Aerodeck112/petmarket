@@ -27,30 +27,22 @@ class Seo
 
     public function __construct()
     {
-        $this->title = __(':name – Clinică veterinară în :city', ['name' => Settings::get('clinic.name'), 'city' => __((string) Settings::get('clinic.city'))]);
+        $this->title = Settings::get('shop.name').' '.Settings::get('shop.byline');
         $this->description = __((string) Settings::get('seo.default_description'));
         $this->canonical = self::canonicalUrl(request()->path());
     }
 
-    /** Adresa canonica in limba data (implicit limba curenta): romana la radacina, celelalte cu /en sau /hu. */
-    public static function canonicalUrl(string $path, ?string $locale = null): string
+    /** Adresa canonica, cu slash final ca in WooCommerce. */
+    public static function canonicalUrl(string $path): string
     {
         $path = trim($path, '/');
 
-        return rtrim(config('app.url'), '/').\App\Support\Locales::prefix($locale).'/'.($path === '' ? '' : $path.'/');
-    }
-
-    /** Variantele paginii curente in toate limbile, pentru hreflang. @return array<string, string> */
-    public function alternates(): array
-    {
-        $path = request()->path();
-
-        return collect(\App\Support\Locales::ALL)->mapWithKeys(fn ($l, $code) => [$l['hreflang'] => self::canonicalUrl($path, $code)])->all();
+        return rtrim(config('app.url'), '/').'/'.($path === '' ? '' : $path.'/');
     }
 
     public function page(string $title, ?string $description = null, ?string $image = null): static
     {
-        $this->title = $title.' – '.Settings::get('clinic.name');
+        $this->title = $title.' – '.Settings::get('shop.name');
         if ($description) {
             $this->description = mb_substr(trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags(preg_replace('/<[^>]+>/', ' ', $description)), ENT_QUOTES | ENT_HTML5, 'UTF-8'))), 0, 160);
         }
@@ -81,24 +73,18 @@ class Seo
         return $this;
     }
 
-    /** Schema clinicii, doar cu date confirmate (fara program sau rating inventate). */
-    public static function clinicSchema(): array
+    /** Schema magazinului, doar cu date confirmate din setari. */
+    public static function storeSchema(): array
     {
         $schema = [
-            '@type' => 'VeterinaryCare', '@id' => rtrim(config('app.url'), '/').'/#clinic',
-            'name' => Settings::get('clinic.name'), 'url' => rtrim(config('app.url'), '/').'/',
-            'telephone' => Settings::get('clinic.phone'), 'email' => Settings::get('clinic.email'),
-            'address' => ['@type' => 'PostalAddress', 'streetAddress' => Settings::get('clinic.address'),
-                'addressLocality' => Settings::get('clinic.city'), 'addressRegion' => 'Mureș', 'addressCountry' => 'RO'],
-            'image' => asset('media/2023/05/0h7a9513.webp'),
+            '@type' => 'PetStore', '@id' => rtrim(config('app.url'), '/').'/#store',
+            'name' => Settings::get('shop.name').' '.Settings::get('shop.byline'), 'legalName' => Settings::get('shop.legal_name'),
+            'url' => rtrim(config('app.url'), '/').'/', 'telephone' => Settings::get('shop.phone'), 'email' => Settings::get('shop.email'),
+            'address' => ['@type' => 'PostalAddress', 'streetAddress' => Settings::get('shop.address'),
+                'addressLocality' => Settings::get('shop.city'), 'addressRegion' => Settings::get('shop.county'), 'addressCountry' => 'RO'],
+            'logo' => asset('media/brand/pet-market-logo.png'), 'currenciesAccepted' => 'RON',
         ];
-
-        $hours = array_values(array_filter((array) Settings::get('clinic.hours', [])));
-        if ($hours) {
-            $schema['openingHours'] = $hours;
-        }
-
-        $same = array_values(array_filter([Settings::get('clinic.instagram'), Settings::get('clinic.facebook'), Settings::get('clinic.tiktok')]));
+        $same = array_values(array_filter([Settings::get('shop.instagram'), Settings::get('shop.facebook'), Settings::get('shop.tiktok')]));
         if ($same) {
             $schema['sameAs'] = $same;
         }

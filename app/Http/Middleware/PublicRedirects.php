@@ -34,19 +34,30 @@ class PublicRedirects
             return redirect()->away(str_starts_with($to, 'http') ? $to : site_url($to), $code);
         }
 
-        // WordPress accepta si /?page_id=N in meniul vechi.
-        $legacy = ['2903' => '/servicii/', '2386' => '/echipa/', '2892' => '/hikevet-contact/'];
-        if ($path === '/' && isset($legacy[(string) $request->query('page_id')])) {
-            return redirect()->away(site_url($legacy[(string) $request->query('page_id')]), 301);
+        // Cautarea WordPress (/?s=...&post_type=product) duce la cautarea noua.
+        if ($path === '/' && $request->filled('s')) {
+            return redirect()->away(site_url('/cautare/').'?q='.rawurlencode((string) $request->query('s')), 301);
+        }
+        // Linkurile vechi /?p=ID sau /?product=slug.
+        if ($path === '/' && $request->filled('product')) {
+            return redirect()->away(site_url('/produs/'.rawurlencode((string) $request->query('product')).'/'), 301);
+        }
+        if ($path === '/' && ctype_digit((string) $request->query('p'))) {
+            $product = \App\Models\Product::query()->where('wc_product_id', (int) $request->query('p'))->first();
+            if ($product) {
+                return redirect()->away(site_url($product->path()), 301);
+            }
         }
 
         $raw = $request->getPathInfo();
-        // Doar paginile de continut (un singur segment) au slash final canonic; rutele functionale raman cum sunt.
+        // Paginile publice au slash final canonic, ca in WooCommerce; rutele functionale (JSON, contul) raman cum sunt.
         // (Clientul HTTP din testele automate elimina mereu slash-ul final, deci acolo regula ar produce o bucla.)
-        if (! app()->runningUnitTests() && $raw !== '/' && ! str_ends_with($raw, '/') && ! str_contains(basename($raw), '.') && substr_count(trim($raw, '/'), '/') === 0) {
+        $canonical = substr_count(trim($raw, '/'), '/') === 0 || preg_match('#^/(produs|categorie-produs|brand|eticheta-produs)/#', $raw);
+        if (! app()->runningUnitTests() && $raw !== '/' && ! str_ends_with($raw, '/') && ! str_contains(basename($raw), '.') && $canonical
+            && ! $request->is('cautare/sugestii', 'contul-meu/*')) {
             $query = $request->getQueryString();
 
-            return redirect()->away($request->root().\App\Support\Locales::prefix().$raw.'/'.($query ? '?'.$query : ''), 301);
+            return redirect()->away($request->root().$raw.'/'.($query ? '?'.$query : ''), 301);
         }
 
         return $next($request);

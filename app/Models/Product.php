@@ -26,7 +26,7 @@ class Product extends Model
     protected $casts = [
         'sale_starts_at' => 'datetime', 'sale_ends_at' => 'datetime', 'published_at' => 'datetime',
         'manage_stock' => 'boolean', 'allow_backorders' => 'boolean', 'is_featured' => 'boolean', 'is_visible' => 'boolean', 'on_sale' => 'boolean',
-        'stock_status' => StockStatus::class, 'rating_avg' => 'float', 'vat_rate' => 'float',
+        'stock_status' => StockStatus::class, 'rating_avg' => 'float', 'vat_rate' => 'float', 'sold_online' => 'boolean',
     ];
 
     protected static function booted(): void
@@ -45,7 +45,7 @@ class Product extends Model
             }
         });
         static::saved(function (Product $p) {
-            if ($p->type === 'simple' && $p->wasChanged('price') && $p->price !== null) {
+            if ($p->type === 'simple' && ($p->wasRecentlyCreated || $p->wasChanged('price')) && $p->price !== null) {
                 PriceHistory::record($p->id, null, $p->price);
             }
         });
@@ -133,7 +133,7 @@ class Product extends Model
 
     public function isPurchasable(): bool
     {
-        return $this->status === 'published' && $this->price !== null && $this->stock_status !== StockStatus::OutOfStock;
+        return $this->status === 'published' && $this->sold_online && $this->price !== null && $this->price > 0 && $this->stock_status !== StockStatus::OutOfStock;
     }
 
     public function vatRate(): float

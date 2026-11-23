@@ -32,15 +32,17 @@ class AdminPanelProvider extends PanelProvider
             ->profile(isSimple: false)
             // 2FA cu aplicatie de autentificare (TOTP) si coduri de recuperare pentru personal.
             ->multiFactorAuthentication([AppAuthentication::make()->recoverable()])
-            ->brandName('HiKeVet')
-            ->brandLogo(asset('media/brand/logo-negru.webp'))
+            ->brandName('Pet Market')
+            ->brandLogo(asset('media/brand/pet-market-logo.png'))
             ->brandLogoHeight('3.5rem')
             ->favicon(asset('favicon.svg'))
             ->colors([
-                'primary' => Color::hex('#21b073'),
-                'warning' => Color::hex('#fac44d'),
-                'danger' => Color::hex('#d6402a'),
-                'info' => Color::hex('#3b82c4'),
+                // Paleta HiKeVet (muralul fatadei): cobalt, galben, magenta, mandarina, verde.
+                'primary' => Color::hex('#1e3ba8'),
+                'success' => Color::hex('#13958a'),
+                'warning' => Color::hex('#ffc21f'),
+                'danger' => Color::hex('#e6177a'),
+                'info' => Color::hex('#ff6a1a'),
                 'gray' => Color::Zinc,
             ])
             ->font('Jost Variable', url: asset('fonts/jost.css'), provider: LocalFontProvider::class)
@@ -48,14 +50,17 @@ class AdminPanelProvider extends PanelProvider
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth('full')
-            // Motorul clinicii: CRM (clienti, abonamente, plati), ERP (programari, medical, stocuri, facturare),
-            // Site (continut public, SEO, asistent) si Sistem (setari, personal, actualizari).
+            // Ca in WooCommerce, dar grupat pe ce faci zilnic: vanzari, catalog, clienti, marketing, continut, sistem.
             ->navigationGroups([
-                NavigationGroup::make('CRM'),
-                NavigationGroup::make('ERP'),
-                NavigationGroup::make('Site')->collapsed(),
-                NavigationGroup::make('Sistem')->collapsed(),
+                NavigationGroup::make('Vânzări')->icon('heroicon-o-shopping-bag'),
+                NavigationGroup::make('Catalog')->icon('heroicon-o-cube'),
+                NavigationGroup::make('Clienți')->icon('heroicon-o-users'),
+                NavigationGroup::make('Marketing')->icon('heroicon-o-megaphone')->collapsed(),
+                NavigationGroup::make('Conținut')->icon('heroicon-o-document-text')->collapsed(),
+                NavigationGroup::make('Sistem')->icon('heroicon-o-cog-6-tooth')->collapsed(),
             ])
+            ->databaseNotifications(false)
+            ->spa()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')

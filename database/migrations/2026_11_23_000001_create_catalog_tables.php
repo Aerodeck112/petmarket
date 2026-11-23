@@ -109,6 +109,8 @@ return new class extends Migration
             $table->unsignedSmallInteger('max_qty')->nullable();
             $table->boolean('is_featured')->default(false)->index();
             $table->boolean('is_visible')->default(true);
+            // Produse cu reteta veterinara: pretul se afiseaza, dar nu se pot comanda online (ca in magazinul vechi).
+            $table->boolean('sold_online')->default(true)->index();
             $table->text('purchase_note')->nullable();
             $table->string('badge', 40)->nullable();
             $table->unsignedInteger('sold_count')->default(0);

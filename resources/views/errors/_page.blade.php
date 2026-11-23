@@ -20,8 +20,8 @@
                 @if (! in_array((int) $code, [503], true))
                     <a class="btn btn-ghost" href="{{ site_url('/hikevet-contact/') }}">{{ __('Contact') }}</a>
                 @endif
-                @if (! empty($clinic['phone']))
-                    <a class="btn btn-ghost" href="tel:{{ preg_replace('/[^0-9+]/', '', $clinic['phone']) }}">{{ __('Sună: :phone', ['phone' => $clinic['phone']]) }}</a>
+                @if (! empty($shop['phone']))
+                    <a class="btn btn-ghost" href="tel:{{ preg_replace('/[^0-9+]/', '', $shop['phone']) }}">{{ __('Sună: :phone', ['phone' => $shop['phone']]) }}</a>
                 @endif
             </div>
         </div>

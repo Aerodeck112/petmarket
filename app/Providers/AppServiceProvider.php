@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Enums\Role;
-use App\Support\Booking;
 use App\Support\Settings;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -21,7 +20,6 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->bind(\App\Services\Assistant\AssistantClient::class, \App\Services\Assistant\ClaudeAssistantClient::class);
     }
 
     public function boot(): void
@@ -48,34 +46,32 @@ class AppServiceProvider extends ServiceProvider
             $url = route('password.reset', ['token' => $token, 'email' => $user->email]);
 
             return (new MailMessage)
-                ->subject('Setează parola contului HiKeVet')
-                ->greeting('Bună, '.$user->name.'!')
-                ->line('Ai cerut setarea unei parole noi pentru contul tău HiKeVet.')
+                ->subject('Setează parola contului Pet Market')
+                ->greeting('Bună, '.($user->first_name ?: $user->name).'!')
+                ->line('Ai cerut setarea unei parole noi pentru contul tău Pet Market.')
                 ->action('Setează parola', $url)
                 ->line('Linkul este valabil 60 de minute. Dacă nu ai cerut tu acest lucru, ignoră mesajul.')
-                ->salutation('Echipa HiKeVet');
+                ->salutation('Hiko, Raza și echipa Pet Market');
         });
 
         RateLimiter::for('login', fn (Request $r) => Limit::perMinute(6)->by(mb_strtolower((string) $r->input('email')).'|'.$r->ip()));
         RateLimiter::for('forms', fn (Request $r) => Limit::perMinute(5)->by($r->ip()));
-        RateLimiter::for('contract', fn (Request $r) => Limit::perMinute(4)->by($r->ip()));
-        RateLimiter::for('consent-code', fn (Request $r) => Limit::perMinute(8)->by($r->ip()));
-        RateLimiter::for('booking', fn (Request $r) => Limit::perMinute(6)->by($r->ip()));
-        RateLimiter::for('assistant', fn (Request $r) => Limit::perMinute(10)->by($r->ip()));
+        RateLimiter::for('checkout', fn (Request $r) => Limit::perMinute(6)->by($r->ip()));
 
-        // Datele clinicii sunt disponibile in toate sabloanele publice; se citesc o singura data pe cerere.
-        View::composer(['site.*', 'account.*', 'tablet.*', 'booking.*', 'layouts.*', 'partials.*', 'errors::*'], function ($view) {
-            // Calculat o singura data pe cerere (nu static: un proces poate servi mai multe cereri).
-            $clinic = request()->attributes->get('hv.clinic') ?? [
-                'name' => Settings::get('clinic.name'), 'phone' => Settings::get('clinic.phone'), 'email' => Settings::get('clinic.email'),
-                'address' => Settings::get('clinic.address'), 'city' => Settings::get('clinic.city'), 'tagline' => Settings::get('clinic.tagline'),
-                'instagram' => Settings::get('clinic.instagram'), 'facebook' => Settings::get('clinic.facebook'), 'tiktok' => Settings::get('clinic.tiktok'),
-                'review_url' => Settings::get('clinic.review_url'), 'booking_url' => Booking::url(),
-                'gtm_id' => Settings::get('marketing.gtm_id'), 'ga4_id' => Settings::get('marketing.ga4_id'),
+        // Datele magazinului, meniul de categorii si cosul sunt disponibile in toate sabloanele publice.
+        View::composer(['site.*', 'shop.*', 'account.*', 'layouts.*', 'partials.*', 'errors::*'], function ($view) {
+            $shop = request()->attributes->get('pm.shop') ?? [
+                'name' => Settings::get('shop.name'), 'byline' => Settings::get('shop.byline'), 'legal_name' => Settings::get('shop.legal_name'),
+                'cui' => Settings::get('shop.cui'), 'reg_com' => Settings::get('shop.reg_com'),
+                'phone' => Settings::get('shop.phone'), 'email' => Settings::get('shop.email'), 'hours' => Settings::get('shop.hours'),
+                'address' => Settings::get('shop.address'), 'city' => Settings::get('shop.city'), 'county' => Settings::get('shop.county'), 'tagline' => Settings::get('shop.tagline'),
+                'instagram' => Settings::get('shop.instagram'), 'facebook' => Settings::get('shop.facebook'), 'tiktok' => Settings::get('shop.tiktok'),
+                'announcement' => Settings::get('marketing.announcement'), 'free_shipping' => (int) Settings::get('commerce.free_shipping_threshold'),
+                'gtm_id' => Settings::get('marketing.gtm_id'), 'ga4_id' => Settings::get('marketing.ga4_id'), 'meta_pixel_id' => Settings::get('marketing.meta_pixel_id'),
                 'verification' => Settings::get('marketing.search_console_verification'),
             ];
-            request()->attributes->set('hv.clinic', $clinic);
-            $view->with('clinic', $clinic);
+            request()->attributes->set('pm.shop', $shop);
+            $view->with('shop', $shop);
         });
     }
 }

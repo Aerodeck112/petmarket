@@ -6,14 +6,14 @@
     <div class="wrap split" style="align-items:start">
         <div>
             <ul class="ticks" style="margin-top:0">
-                <li><x-hv-icon name="pin" /> <span>{{ $clinic['address'] }}, {{ $clinic['city'] }}, {{ __('România') }}</span></li>
-                <li><x-hv-icon name="phone" /> <a href="tel:{{ preg_replace('/[^0-9+]/', '', $clinic['phone']) }}" data-track="phone_click">{{ $clinic['phone'] }}</a></li>
-                <li><x-hv-icon name="mail" /> <a href="mailto:{{ $clinic['email'] }}">{{ $clinic['email'] }}</a></li>
-                @if ($clinic['instagram'])<li><x-hv-icon name="heart" /> <a href="{{ $clinic['instagram'] }}" rel="noopener">{{ __(':account pe Instagram', ['account' => 'clinica_veterinara_hikevet']) }}</a></li>@endif
+                <li><x-hv-icon name="pin" /> <span>{{ $shop['address'] }}, {{ $shop['city'] }}, {{ __('România') }}</span></li>
+                <li><x-hv-icon name="phone" /> <a href="tel:{{ preg_replace('/[^0-9+]/', '', $shop['phone']) }}" data-track="phone_click">{{ $shop['phone'] }}</a></li>
+                <li><x-hv-icon name="mail" /> <a href="mailto:{{ $shop['email'] }}">{{ $shop['email'] }}</a></li>
+                @if ($shop['instagram'])<li><x-hv-icon name="heart" /> <a href="{{ $shop['instagram'] }}" rel="noopener">{{ __(':account pe Instagram', ['account' => 'clinica_veterinara_hikevet']) }}</a></li>@endif
             </ul>
-            <p><a class="btn btn-primary" href="{{ $clinic['booking_url'] }}" data-track="booking_click">{{ __('Programează-te') }}</a></p>
+            <p><a class="btn btn-primary" href="{{ $shop['booking_url'] }}" data-track="booking_click">{{ __('Programează-te') }}</a></p>
             <div class="split-media" style="margin-top:2rem;aspect-ratio:4/3">
-                <iframe src="https://maps.google.com/maps?q={{ urlencode(\App\Support\Settings::get('clinic.maps_query')) }}&t=m&z=15&output=embed" title="{{ __('Harta: :address', ['address' => $clinic['address'].', '.$clinic['city']]) }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;border:0"></iframe>
+                <iframe src="https://maps.google.com/maps?q={{ urlencode(\App\Support\Settings::get('clinic.maps_query')) }}&t=m&z=15&output=embed" title="{{ __('Harta: :address', ['address' => $shop['address'].', '.$shop['city']]) }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:100%;border:0"></iframe>
             </div>
         </div>
         <div class="card" id="formular">

@@ -36,7 +36,7 @@ class CheckoutController extends Controller
 
     public function show(Seo $seo)
     {
-        $seo->page('Finalizare comandă')->crumbs([['Acasă', '/'], ['Coș', '/cos/'], ['Finalizare comandă', '/finalizare-comanda/']]);
+        $seo->page('Finalizare comandă')->crumbs([['Acasă', '/'], ['Coș', '/cos/'], ['Finalizare comandă', '/finalizare/']]);
         $seo->noindex = true;
         $quote = $this->cart->quote();
         if ($quote->isEmpty()) {

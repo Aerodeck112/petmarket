@@ -30,15 +30,16 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->prepend(EnsureInstalled::class);
-        $middleware->prepend(\App\Http\Middleware\LocalizeRequest::class);
         $middleware->web(append: [
             SecurityHeaders::class,
             PublicRedirects::class,
         ]);
-        $middleware->redirectGuestsTo(fn () => site_url('/acces-cont/'));
-        // Stripe isi semneaza singur notificarile (verificate in controller); nu are token CSRF.
-        $middleware->validateCsrfTokens(except: ['stripe/webhook']);
-        $middleware->redirectUsersTo(fn () => site_url('/panou-cont/'));
+        $middleware->redirectGuestsTo(fn () => site_url('/contul-meu/autentificare/'));
+        // Procesatorii de plati isi semneaza singuri notificarile (verificate in controller); nu au token CSRF.
+        $middleware->validateCsrfTokens(except: ['plati/*/notificare']);
+        // Cookie-ul cosului nu se cripteaza separat: contine doar un token aleatoriu.
+        $middleware->encryptCookies(except: ['pm_cart']);
+        $middleware->redirectUsersTo(fn () => site_url('/contul-meu/'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

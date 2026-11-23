@@ -3,42 +3,61 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Page;
 use App\Models\Post;
-use App\Models\Service;
+use App\Models\Product;
 use App\Services\Seo\Seo;
 use App\Support\Settings;
 
+/** Sitemap index (ca Yoast / Rank Math): produse impartite pe bucati, categorii si branduri, pagini si articole. */
 class SitemapController extends Controller
 {
+    private const CHUNK = 2000;
+
     public function sitemap()
     {
+        $parts = [];
+        $pages = max(1, (int) ceil(Product::query()->published()->count() / self::CHUNK));
+        for ($i = 1; $i <= $pages; $i++) {
+            $parts[] = site_url('/sitemap-produse-'.$i.'.xml');
+        }
+        $parts[] = site_url('/sitemap-categorii-1.xml');
+        $parts[] = site_url('/sitemap-pagini-1.xml');
+
+        return response()->view('site.sitemap-index', ['parts' => $parts, 'lastmod' => Product::query()->max('updated_at')])
+            ->header('Content-Type', 'application/xml; charset=UTF-8');
+    }
+
+    public function part(string $type, int $page)
+    {
         $urls = [];
-        $add = function (string $path, $updated) use (&$urls) {
-            // Fiecare pagina apare in toate limbile, cu legaturi hreflang intre variante.
-            $alternates = collect(\App\Support\Locales::ALL)->mapWithKeys(fn ($l, $code) => [$l['hreflang'] => Seo::canonicalUrl($path, $code)])->all();
-            foreach (array_keys(\App\Support\Locales::ALL) as $code) {
-                $urls[] = ['loc' => Seo::canonicalUrl($path, $code), 'lastmod' => $updated?->toDateString(), 'alternates' => $alternates];
-            }
+        $add = function (string $path, $updated, ?string $image = null) use (&$urls) {
+            $urls[] = ['loc' => Seo::canonicalUrl($path), 'lastmod' => $updated?->toDateString(), 'image' => $image];
         };
 
-        foreach (Page::published()->where('noindex', false)->get() as $page) {
-            $add($page->path(), $page->updated_at);
+        if ($type === 'produse') {
+            Product::query()->published()->with('mainImage')->orderBy('id')->forPage($page, self::CHUNK)->get(['id', 'slug', 'updated_at'])
+                ->each(fn ($p) => $add($p->path(), $p->updated_at, $p->mainImage?->url()));
+        } elseif ($type === 'categorii') {
+            Category::query()->visible()->orderBy('path')->get()->each(fn ($c) => $add($c->path(), $c->updated_at));
+            Brand::query()->orderBy('name')->get()->each(fn ($b) => $add($b->path(), $b->updated_at));
+        } else {
+            $add('/', null);
+            $add('/magazin/', null);
+            Page::published()->where('noindex', false)->where('slug', '!=', 'home')->get()->each(fn ($p) => $add($p->path(), $p->updated_at));
+            Post::published()->get()->each(fn ($p) => $add($p->path(), $p->updated_at));
         }
-        foreach (Service::published()->get() as $service) {
-            $add($service->path(), $service->updated_at);
-        }
-        foreach (Post::published()->get() as $post) {
-            $add($post->path(), $post->updated_at);
-        }
+        abort_if($urls === [], 404);
 
         return response()->view('site.sitemap', ['urls' => $urls])->header('Content-Type', 'application/xml; charset=UTF-8');
     }
 
     public function robots()
     {
-        $lines = ['User-agent: *', 'Disallow: /admin', 'Disallow: /panou-cont', 'Disallow: /acces-cont', 'Disallow: /consimtamant-tableta',
-            'Disallow: /programare/confirmare', 'Disallow: /install'];
+        $lines = ['User-agent: *', 'Disallow: /admin', 'Disallow: /contul-meu', 'Disallow: /cos', 'Disallow: /finalizare', 'Disallow: /comanda/',
+            'Disallow: /cautare', 'Disallow: /*?*filter_', 'Disallow: /*?*orderby=', 'Disallow: /install'];
 
         if (! app()->isProduction()) {
             $lines = ['User-agent: *', 'Disallow: /'];

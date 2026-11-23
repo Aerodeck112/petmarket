@@ -117,7 +117,7 @@ class Installer
         $key = 'base64:'.base64_encode(random_bytes(32));
 
         $lines = [
-            'APP_NAME=HiKeVet', 'APP_ENV=production', 'APP_KEY='.$key, 'APP_DEBUG=false', 'APP_URL='.$q(rtrim($v['app_url'], '/')),
+            'APP_NAME="Pet Market"', 'APP_ENV=production', 'APP_KEY='.$key, 'APP_DEBUG=false', 'APP_URL='.$q(rtrim($v['app_url'], '/')),
             'APP_LOCALE=ro', 'APP_FALLBACK_LOCALE=ro', 'APP_FAKER_LOCALE=ro_RO', 'APP_TIMEZONE=Europe/Bucharest', '',
             'LOG_CHANNEL=daily', 'LOG_LEVEL=warning', '',
             'DB_CONNECTION=mysql', 'DB_HOST='.$q($v['db_host']), 'DB_PORT='.(int) $v['db_port'], 'DB_DATABASE='.$q($v['db_database']),
@@ -126,8 +126,8 @@ class Installer
             'CACHE_STORE=database', 'QUEUE_CONNECTION=database', 'FILESYSTEM_DISK=local', '',
             'MAIL_MAILER='.(($v['mail_host'] ?? '') !== '' ? 'smtp' : 'log'), 'MAIL_HOST='.$q($v['mail_host'] ?? ''), 'MAIL_PORT='.(int) ($v['mail_port'] ?? 465),
             'MAIL_USERNAME='.$q($v['mail_username'] ?? ''), 'MAIL_PASSWORD='.$q($v['mail_password'] ?? ''), 'MAIL_SCHEME='.(((int) ($v['mail_port'] ?? 465)) === 465 ? 'smtps' : 'smtp'),
-            'MAIL_FROM_ADDRESS='.$q($v['mail_from'] ?? 'contact@hikevet.com'), 'MAIL_FROM_NAME=HiKeVet', '',
-            '# Copia bazei WordPress pentru import (optional, vezi docs/IMPORT_RUNBOOK.md)', 'WP_DB_HOST=127.0.0.1', 'WP_DB_DATABASE=', 'WP_DB_USERNAME=', 'WP_DB_PASSWORD=', 'WP_UPLOADS_PATH=', '',
+            'MAIL_FROM_ADDRESS='.$q($v['mail_from'] ?? 'contact@pet-market.ro'), 'MAIL_FROM_NAME="Pet Market"', '',
+            '# Magazinul vechi, sursa importului de catalog si imagini', 'PETMARKET_LEGACY_URL="https://pet-market.ro"', '',
             '# Cheia publica pentru verificarea pachetelor de actualizare', 'PETMARKET_UPDATE_PUBLIC_KEY='.$q($v['update_public_key'] ?? config('petmarket.update_public_key')), '',
         ];
 

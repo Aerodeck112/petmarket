@@ -1,0 +1,118 @@
+{
+ "_source": "Date publice pet-market.ro extrase 2026-11-23 (footer, pagini legale, popup contact, Store API cart)",
+ "site_name": "PET-MARKET",
+ "tagline": "Pentru că nu e doar un animal — e familie",
+ "description": "Produse de calitate pentru câini și pisici fericite",
+ "brand": "Pet Market by HiKeVet",
+ "company": {
+  "name": "FEST4PETS SRL",
+  "cui": "46349603",
+  "reg_com": "J2022001060265",
+  "euid": "ROONRC.J2022001060265",
+  "founded": "2022-06-22",
+  "address": "Str. Băneasa 23, Spațiu Comercial 2",
+  "city": "Târgu Mureș",
+  "county": "Mureș",
+  "postcode": "540198",
+  "country": "RO"
+ },
+ "contact": {
+  "phone": "+40 771 280 345",
+  "phone_e164": "+40771280345",
+  "email": "office@pet-market.ro",
+  "schedule_footer": {
+   "luni-vineri": "08:00-20:00",
+   "sambata": "10:00-14:00",
+   "duminica": "închis"
+  },
+  "schedule_contact_page": "Zilnic 08:00 - 17:00",
+  "_note": "programul diferă între footer și pagina Contact — de confirmat cu proprietarul"
+ },
+ "social": {
+  "facebook": "https://www.facebook.com/profile.php?id=61591455733059",
+  "instagram": "https://www.instagram.com/petmarket.ro/"
+ },
+ "currency": {
+  "code": "RON",
+  "symbol": "lei",
+  "position": "suffix",
+  "decimal_separator": ",",
+  "thousand_separator": ".",
+  "decimals": 2,
+  "price_suffix": "TVA inclus"
+ },
+ "tax": {
+  "prices_include_tax": true,
+  "observed_rates": [
+   21,
+   11
+  ],
+  "shipping_taxed": false,
+  "_note": "21% (ex. Carnilove Jerky 22,24 = 18,38 + 3,86) și 11% (ex. Atopivet 180cps 1024,87 = 923,31 + 101,56); clasele de taxă exacte nu sunt publice"
+ },
+ "shipping": {
+  "country_default": "RO",
+  "state_default": "MS",
+  "methods": [
+   {
+    "id": "flat_rate:3",
+    "title": "Livrare cu curier rapid",
+    "cost": 23.0,
+    "taxable": false
+   },
+   {
+    "id": "free_shipping:2",
+    "title": "Livrare gratuită",
+    "cost": 0,
+    "min_amount": 1000.0,
+    "min_amount_includes_tax": true,
+    "_note": "când e eligibilă apare împreună cu flat_rate și e preselectată"
+   }
+  ],
+  "estimated_delivery_label": "Livrare estimată: 2–4 zile lucrătoare",
+  "legal_delivery_term": "1–7 zile lucrătoare"
+ },
+ "payment_methods": [
+  {
+   "id": "bacs",
+   "title": "Transfer bancar direct",
+   "description": "Fă plata direct în contul nostru bancar. Te rog să folosești ID-ul comenzii ca referință pentru plată. Comanda ta nu va fi livrată până când fondurile nu vor fi vărsate în contul nostru."
+  },
+  {
+   "id": "cod",
+   "title": "Numerar la livrare",
+   "description": "Plătește cu numerar la livrare."
+  }
+ ],
+ "returns": {
+  "days": 14,
+  "refund_max_days": 30,
+  "return_shipping_paid_by": "client (cu excepția produselor defecte/greșite)",
+  "contact": "office@pet-market.ro"
+ },
+ "legal_links": {
+  "anpc_sal": "https://reclamatiisal.anpc.ro/",
+  "sol": "https://consumer-redress.ec.europa.eu/site-relocation_en?event=main.home2.show&lng=RO"
+ },
+ "marquee": [
+  "Promoții Săptămânale",
+  "Livrare gratuită la comenzi de peste 1000 RON",
+  "Taxă Livrare 23 RON",
+  "Livrare rapidă"
+ ],
+ "prescription_notice": {
+  "title": "Produse ce nu se vand online",
+  "text": [
+   "Acest produs nu se comercializează online. Este un produs pentru care este necesară rețetă medical-veterinară, conform regimului aplicabil.",
+   "Pentru detalii privind disponibilitatea, condițiile de eliberare și pașii următori, vă rugăm să ne contactați telefonic."
+  ],
+  "generic_not_purchasable": "Acest produs nu se comercializează online. Pentru detalii, sunați la +40 771 280 345 sau scrieți la office@pet-market.ro."
+ },
+ "tracking": {
+  "google_ads": "AW-16651227502 (prin Google for WooCommerce / GLA)",
+  "ga4": null,
+  "meta_pixel": null,
+  "tiktok": null
+ },
+ "footer_copyright": "Pet-Market 2026 SC FEST4PETS SRL CUI 46349603 | Powered by VITIM"
+}

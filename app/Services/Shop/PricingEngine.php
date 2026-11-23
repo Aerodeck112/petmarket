@@ -77,7 +77,10 @@ class PricingEngine
         foreach ($lines as $line) {
             $q->vat += self::vatFromGross($line->total(), $line->product->vatRate());
         }
-        $q->vat += self::vatFromGross($q->shipping + $q->fee, $standard);
+        // Livrarea si taxa de ramburs: cu TVA doar daca magazinul o cere (magazinul vechi nu aplica TVA pe livrare).
+        if (Settings::get('commerce.shipping_vat')) {
+            $q->vat += self::vatFromGross($q->shipping + $q->fee, $standard);
+        }
 
         $min = (int) Settings::get('commerce.min_order');
         if ($min > 0 && $q->subtotal < $min && $lines !== []) {

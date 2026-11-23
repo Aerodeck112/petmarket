@@ -25,7 +25,7 @@ class RedirectResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-arrow-uturn-right';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Site';
+    protected static string|UnitEnum|null $navigationGroup = 'Marketing';
 
     protected static ?string $navigationLabel = 'Redirecturi 301';
 

@@ -27,7 +27,7 @@
         <div><label for="mail_password">Parolă</label><input id="mail_password" type="password" name="mail_password" autocomplete="new-password"></div>
     </div>
     <label for="mail_from">Adresa expeditorului</label>
-    <input id="mail_from" type="email" name="mail_from" value="{{ $values['mail_from'] ?? 'contact@hikevet.com' }}">
+    <input id="mail_from" type="email" name="mail_from" value="{{ $values['mail_from'] ?? 'contact@pet-market.ro' }}">
     <button type="submit">Verifică și salvează</button>
 </form>
 @endsection

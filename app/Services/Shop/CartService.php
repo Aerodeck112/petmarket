@@ -68,6 +68,9 @@ class CartService
 
     public function add(Product $product, ?ProductVariant $variant, int $qty): CartItem
     {
+        if (! $product->sold_online) {
+            throw new InvalidArgumentException('Acest produs nu se comercializează online. Sună-ne pentru detalii.');
+        }
         if (! $product->isPurchasable() && ! $variant) {
             throw new InvalidArgumentException('Produsul nu poate fi comandat momentan.');
         }
@@ -145,7 +148,7 @@ class CartService
         $lines = [];
         foreach ($items as $item) {
             $product = $item->product;
-            if (! $product || $product->status !== 'published' || ($product->isVariable() && (! $item->variant || ! $item->variant->is_active))) {
+            if (! $product || $product->status !== 'published' || ! $product->sold_online || ($product->isVariable() && (! $item->variant || ! $item->variant->is_active))) {
                 $item->delete();
 
                 continue;

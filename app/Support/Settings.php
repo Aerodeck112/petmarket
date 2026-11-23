@@ -13,24 +13,26 @@ class Settings
         // Datele magazinului (afisate in subsol, pe facturi si in emailuri).
         'shop.name' => 'Pet Market',
         'shop.byline' => 'by HiKeVet',
-        'shop.legal_name' => 'S.C. FEST4PETS S.R.L.',
-        'shop.cui' => '',
-        'shop.reg_com' => '',
-        'shop.tagline' => 'Hrană, accesorii și grijă pentru animalul tău, alese de medici veterinari.',
+        'shop.legal_name' => 'FEST4PETS SRL',
+        'shop.cui' => '46349603',
+        'shop.reg_com' => 'J2022001060265',
+        'shop.tagline' => 'Pentru că nu e doar un animal — e familie. Hrană, diete veterinare și accesorii alese de medicii HiKeVet.',
         'shop.phone' => '+40 771 280 345',
-        'shop.email' => 'contact@pet-market.ro',
-        'shop.address' => 'Str. Băneasa nr. 23',
+        'shop.email' => 'office@pet-market.ro',
+        'shop.address' => 'Str. Băneasa 23, Spațiu Comercial 2',
+        'shop.postcode' => '540198',
         'shop.city' => 'Târgu Mureș',
         'shop.county' => 'Mureș',
-        'shop.hours' => 'Luni – Vineri 09:00 – 18:00',
-        'shop.instagram' => '',
-        'shop.facebook' => '',
+        'shop.hours' => 'L–V 08:00–20:00 · S 10:00–14:00',
+        'shop.instagram' => 'https://www.instagram.com/petmarket.ro/',
+        'shop.facebook' => 'https://www.facebook.com/profile.php?id=61591455733059',
         'shop.tiktok' => '',
 
         // Reguli comerciale (valorile se confirma din auditul magazinului vechi, docs/AUDIT_SITE.md).
         'commerce.vat_rate' => 21,
         'commerce.prices_include_vat' => true,
-        'commerce.free_shipping_threshold' => 25000, // bani
+        'commerce.free_shipping_threshold' => 100000, // bani; magazinul vechi: livrare gratuita de la 1.000 lei cu TVA
+        'commerce.shipping_vat' => false, // magazinul vechi nu aplica TVA pe livrare
         'commerce.min_order' => 0,
         'commerce.low_stock_threshold' => 3,
         'commerce.allow_backorders' => false,
@@ -45,16 +47,18 @@ class Settings
         'payments.card_enabled' => false,
         'payments.transfer_enabled' => true,
         'payments.transfer_details' => '',
+        'payments.transfer_note' => 'Fă plata direct în contul nostru bancar și folosește numărul comenzii ca referință. Comanda pleacă după ce plata intră în cont.',
         'payments.stripe_public' => '',
 
-        'mail.shop_recipients' => ['contact@pet-market.ro'],
+        'mail.shop_recipients' => ['office@pet-market.ro'],
 
         'marketing.gtm_id' => '',
         'marketing.ga4_id' => '',
         'marketing.meta_pixel_id' => '',
         'marketing.search_console_verification' => '',
-        'marketing.google_ads_id' => '',
-        'marketing.announcement' => 'Livrare gratuită pentru comenzile de peste 250 lei',
+        'marketing.google_ads_id' => 'AW-16651227502',
+        'marketing.announcement' => 'Livrare gratuită la comenzi de peste 1.000 lei · Taxă de livrare 23 lei',
+        'commerce.not_online_notice' => 'Acest produs nu se comercializează online. Este un produs pentru care este necesară rețetă medical-veterinară, conform regimului aplicabil. Pentru disponibilitate și pașii următori, sună-ne.',
 
         'seo.robots_extra' => '',
         'seo.default_description' => 'Pet Market by HiKeVet: hrană, recompense, accesorii și produse de îngrijire pentru câini și pisici, cu livrare în toată țara.',

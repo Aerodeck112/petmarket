@@ -100,7 +100,7 @@ class CatalogController extends Controller
         $q = Product::query()->published()->with('mainImage');
         CatalogQuery::applySearch($q, $term);
         $products = $q->orderByRaw("CASE WHEN stock_status = 'outofstock' THEN 1 ELSE 0 END")->orderByDesc('sold_count')->limit(6)->get()
-            ->map(fn (Product $p) => ['name' => $p->name, 'url' => site_url($p->path()), 'image' => $p->mainImage?->url(),
+            ->map(fn (Product $p) => ['name' => $p->name, 'url' => site_url($p->path()), 'image' => $p->mainImage?->thumbUrl(),
                 'price' => $p->price !== null ? ($p->isVariable() && $p->price_max > $p->price ? 'de la ' : '').money($p->price) : null,
                 'regular' => $p->on_sale && ! $p->isVariable() ? money($p->regular_price) : null, 'stock' => $p->stock_status->value]);
         $like = '%'.str_replace(['%', '_'], ['\%', '\_'], $term).'%';
