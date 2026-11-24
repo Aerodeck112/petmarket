@@ -63,7 +63,9 @@ class CategoryResource extends Resource
         return $schema->columns(3)->components([
             Section::make()->columnSpan(2)->columns(2)->schema([
                 Fields::title('name', 'Nume'),
-                Fields::slug()->helperText('Adresa devine /categorie-produs/{părinte}/{slug}/. Schimbarea mută și subcategoriile: adaugă redirecturi 301.'),
+                \Filament\Forms\Components\TextInput::make('slug')->label('Adresă (slug)')->required()->maxLength(190)->rule('regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/')
+                    ->unique(ignoreRecord: true, modifyRuleUsing: fn (\Illuminate\Validation\Rules\Unique $rule, callable $get) => $rule->where('parent_id', $get('parent_id')))
+                    ->helperText('Adresa devine /categorie-produs/{părinte}/{slug}/. Schimbarea mută și subcategoriile: adaugă redirecturi 301.'),
                 Select::make('parent_id')->label('Categorie părinte')->options(fn (?Category $record) => collect(ProductResource::categoryOptions())->except($record ? $record->descendantIds() : [])->all())->searchable()->placeholder('— nivel principal —'),
                 TextInput::make('sort')->label('Ordine')->numeric()->default(0),
                 Fields::rich('description', 'Descriere (afișată în capul paginii)'),

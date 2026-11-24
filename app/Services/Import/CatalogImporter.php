@@ -3,6 +3,8 @@
 namespace App\Services\Import;
 
 use App\Enums\StockStatus;
+use App\Models\Attribute;
+use App\Models\AttributeValue;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Page;
@@ -30,6 +32,24 @@ class CatalogImporter
     public function __construct(private ?string $dir = null)
     {
         $this->dir ??= database_path('seeders/data/catalog');
+    }
+
+    /** Reorganizarea catalogului (tools/catalog/classify.py): arborele nou, redirecturi, incadrarea produselor. */
+    public function taxonomy(): ?array
+    {
+        $file = $this->dir.'/taxonomy.json';
+
+        return is_file($file) ? json_decode((string) file_get_contents($file), true) : null;
+    }
+
+    /** @return array<string, array{categories:list<string>,species:list<string>,brand:?string,confidence:string}> */
+    public function classification(): array
+    {
+        return Cache::store('array')->rememberForever('import.classification', function () {
+            $file = $this->dir.'/classification.json';
+
+            return is_file($file) ? json_decode((string) file_get_contents($file), true) : [];
+        });
     }
 
     public function available(): bool
@@ -70,6 +90,10 @@ class CatalogImporter
     /** Pasul 1: categorii, branduri, etichete, pagini, redirecturi. Rapid; se poate rula oricand. */
     public function importTaxonomies(): array
     {
+        if ($taxonomy = $this->taxonomy()) {
+            return DB::transaction(fn () => $this->importNewTaxonomy($taxonomy));
+        }
+
         return DB::transaction(function () {
             $stats = ['categorii' => 0, 'branduri' => 0, 'etichete' => 0, 'pagini' => 0];
 
@@ -132,6 +156,72 @@ class CatalogImporter
         });
     }
 
+    /** Arborele nou de categorii, brandurile unificate, atributul „Animal” si redirecturile adreselor vechi. */
+    private function importNewTaxonomy(array $taxonomy): array
+    {
+        $stats = ['categorii' => 0, 'branduri' => 0, 'etichete' => 0, 'pagini' => 0, 'redirecturi' => 0];
+        $icons = ['caini' => 'bone', 'pisici' => 'heart', 'alte-animale' => 'paw', 'cabinet-veterinar' => 'stethoscope'];
+        foreach ($taxonomy['tree'] as $i => $top) {
+            $parent = Category::query()->firstOrNew(['path' => $top['slug']]);
+            $parent->fill(['name' => $top['name'], 'slug' => $top['slug'], 'parent_id' => null, 'sort' => $i + 1, 'is_visible' => true, 'in_menu' => true,
+                'is_featured' => true, 'icon' => $icons[$top['slug']] ?? null])->save();
+            $stats['categorii']++;
+            foreach ($top['children'] as $j => $child) {
+                Category::query()->firstOrNew(['path' => $top['slug'].'/'.$child['slug']])
+                    ->fill(['name' => $child['name'], 'slug' => $child['slug'], 'parent_id' => $parent->id, 'sort' => $j + 1, 'is_visible' => true, 'in_menu' => true])->save();
+                $stats['categorii']++;
+            }
+        }
+
+        // Branduri: cele din taxonomia veche, cu dublurile unificate (Brit Care → Brit) si fara „branduri” care nu sunt branduri.
+        $merge = array_change_key_case($taxonomy['brand_merge'] ?? []);
+        $notBrands = array_map('mb_strtolower', $taxonomy['not_brands'] ?? []);
+        $brands = $this->json('brands.json');
+        $names = collect($brands['wp_product_brand'] ?? $brands['store_brands'] ?? [])->map(fn ($b) => ['name' => self::text($b['name']), 'slug' => $b['slug'], 'description' => $b['description'] ?? null])
+            ->merge(collect($brands['_from_local_attribute_Brand'] ?? [])->map(fn ($b) => ['name' => self::text($b['name']), 'slug' => Str::slug(self::text($b['name'])), 'description' => null]));
+        foreach ($names as $b) {
+            $lower = mb_strtolower($b['name']);
+            if (in_array($lower, $notBrands, true)) {
+                continue;
+            }
+            $canonical = $merge[$lower] ?? $b['name'];
+            $brand = $this->brandByName($canonical) ?? Brand::query()->create(['name' => $canonical, 'slug' => $this->uniqueBrandSlug($canonical), 'description' => $b['description'] ?: null]);
+            if ($b['slug'] && $b['slug'] !== $brand->slug && ! Brand::query()->where('slug', $b['slug'])->exists()) {
+                Redirect::query()->updateOrCreate(['from_path' => '/brand/'.$b['slug'].'/'], ['to_path' => $brand->path(), 'status_code' => 301, 'note' => 'Brand unificat']);
+                $stats['redirecturi']++;
+            }
+        }
+        $stats['branduri'] = Brand::query()->count();
+
+        // Specia: atribut filtrabil „Animal”.
+        $animal = Attribute::query()->updateOrCreate(['slug' => 'animal'], ['name' => 'Animal', 'type' => 'label', 'is_filterable' => true, 'sort' => 0]);
+        foreach (['Câini', 'Pisici', 'Rozătoare', 'Păsări', 'Pești', 'Reptile', 'Cai', 'Animale de fermă', 'Albine'] as $k => $name) {
+            AttributeValue::query()->updateOrCreate(['attribute_id' => $animal->id, 'slug' => Str::slug($name)], ['name' => $name, 'sort' => $k]);
+        }
+
+        foreach ($this->json('tags.json') as $row) {
+            Tag::query()->updateOrCreate(['wc_term_id' => $row['id']], ['name' => self::text($row['name']), 'slug' => $row['slug']]);
+            $stats['etichete']++;
+        }
+
+        // Adresele categoriilor vechi (si varianta doar cu ultimul slug, care raspundea si ea pe site-ul vechi).
+        $newPaths = Category::query()->pluck('path')->map(fn ($p) => '/categorie-produs/'.$p.'/')->all();
+        foreach ($taxonomy['redirects'] ?? [] as $from => $to) {
+            foreach (array_unique([$from, '/categorie-produs/'.basename(rtrim($from, '/')).'/']) as $path) {
+                if (! in_array($path, $newPaths, true) && $path !== $to) {
+                    Redirect::query()->updateOrCreate(['from_path' => $path], ['to_path' => $to, 'status_code' => 301, 'note' => 'Categorie din magazinul WooCommerce']);
+                    $stats['redirecturi']++;
+                }
+            }
+        }
+
+        $stats['pagini'] = $this->importPages();
+        $this->legacyRedirects();
+        Cache::forget('catalog.tree');
+
+        return $stats;
+    }
+
     /** Ordinea categoriilor din meniul principal al magazinului vechi (menus.json), daca exista. */
     private function applyMenuOrder(array $map): void
     {
@@ -190,17 +280,46 @@ class CatalogImporter
         $depths = Category::query()->pluck('depth', 'id');
         $tags = Tag::query()->whereNotNull('wc_term_id')->pluck('id', 'wc_term_id');
         $brandsByTerm = Brand::query()->whereNotNull('wc_term_id')->pluck('id', 'wc_term_id');
+        $classification = $this->classification();
+        $byPath = Category::query()->pluck('id', 'path');
+        $animals = AttributeValue::query()->whereHas('attribute', fn ($q) => $q->where('slug', 'animal'))->pluck('id', 'name');
+        $animalAttr = Attribute::query()->where('slug', 'animal')->value('id');
 
-        DB::transaction(function () use ($batch, $categories, $hidden, $depths, $tags, $brandsByTerm) {
+        DB::transaction(function () use ($batch, $categories, $hidden, $depths, $tags, $brandsByTerm, $classification, $byPath, $animals, $animalAttr) {
             foreach ($batch as $row) {
-                $this->importProduct($row, $categories, $hidden, $depths, $tags, $brandsByTerm);
+                $product = $this->importProduct($row, $categories, $hidden, $depths, $tags, $brandsByTerm);
+                if ($c = $classification[(string) $row['id']] ?? null) {
+                    $this->applyClassification($product, $c, $byPath, $animals, $animalAttr);
+                }
             }
         });
 
         return count($batch);
     }
 
-    private function importProduct(array $row, $categories, array $hidden, $depths, $tags, $brandsByTerm): void
+    /** Categoriile noi (prima este cea principala), brandul unificat si specia, din clasificare. */
+    private function applyClassification(Product $product, array $c, $byPath, $animals, ?int $animalAttr): void
+    {
+        $ids = collect($c['categories'] ?? [])->map(fn ($p) => $byPath[$p] ?? null)->filter()->values();
+        if ($ids->isNotEmpty()) {
+            $product->categories()->sync($ids->mapWithKeys(fn ($id, $i) => [$id => ['is_primary' => $i === 0]])->all());
+        }
+        if (! empty($c['brand'])) {
+            $brand = $this->brandByName($c['brand']) ?? Brand::query()->create(['name' => $c['brand'], 'slug' => $this->uniqueBrandSlug($c['brand'])]);
+            if ($product->brand_id !== $brand->id) {
+                $product->updateQuietly(['brand_id' => $brand->id]);
+            }
+        }
+        $values = collect($c['species'] ?? [])->map(fn ($s) => $animals[$s] ?? null)->filter()->values()->all();
+        if ($animalAttr) {
+            $keep = $product->attributeValues()->where('attribute_id', '!=', $animalAttr)->pluck('attribute_values.id')->all();
+            $product->attributeValues()->sync(array_merge($keep, $values));
+            $values ? $product->attributes()->syncWithoutDetaching([$animalAttr => ['is_visible' => true, 'for_variations' => false, 'sort' => 0]])
+                : $product->attributes()->detach($animalAttr);
+        }
+    }
+
+    private function importProduct(array $row, $categories, array $hidden, $depths, $tags, $brandsByTerm): Product
     {
         $product = Product::withTrashed()->firstOrNew(['wc_product_id' => $row['id']]);
         $prices = $row['prices'] ?? [];
@@ -267,6 +386,8 @@ class CatalogImporter
             $keep[] = $image->id;
         }
         $product->images()->whereNotIn('id', $keep)->delete();
+
+        return $product;
     }
 
     /** Paginile legale si „Despre noi” din magazinul vechi (fara cele generate de WooCommerce / Elementor). */

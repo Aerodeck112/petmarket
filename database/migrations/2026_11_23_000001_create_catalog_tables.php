@@ -30,9 +30,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->string('name');
-            $table->string('slug')->unique();
-            // Calea completa din URL (/categorie-produs/caini/hrana-uscata/), recalculata la salvare.
-            $table->string('path', 500)->index();
+            // Slug-ul este unic doar sub acelasi parinte: /caini/hrana-uscata/ si /pisici/hrana-uscata/.
+            $table->string('slug')->index();
+            // Calea completa din URL (/categorie-produs/caini/hrana-uscata/), recalculata la salvare; unica.
+            $table->string('path', 500)->unique();
             $table->unsignedTinyInteger('depth')->default(0);
             $table->longText('description')->nullable();
             $table->string('image')->nullable();

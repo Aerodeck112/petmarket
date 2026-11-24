@@ -1,0 +1,380 @@
+{
+ "tree": [
+  {
+   "slug": "caini",
+   "name": "Câini",
+   "children": [
+    {
+     "slug": "hrana-uscata",
+     "name": "Hrană uscată"
+    },
+    {
+     "slug": "hrana-umeda",
+     "name": "Hrană umedă"
+    },
+    {
+     "slug": "recompense",
+     "name": "Recompense și gustări"
+    },
+    {
+     "slug": "diete-veterinare",
+     "name": "Diete veterinare"
+    },
+    {
+     "slug": "suplimente",
+     "name": "Suplimente și vitamine"
+    },
+    {
+     "slug": "antiparazitare",
+     "name": "Antiparazitare"
+    },
+    {
+     "slug": "sanatate",
+     "name": "Sănătate"
+    },
+    {
+     "slug": "igiena",
+     "name": "Igienă și îngrijire"
+    },
+    {
+     "slug": "accesorii",
+     "name": "Accesorii"
+    },
+    {
+     "slug": "jucarii",
+     "name": "Jucării"
+    }
+   ]
+  },
+  {
+   "slug": "pisici",
+   "name": "Pisici",
+   "children": [
+    {
+     "slug": "hrana-uscata",
+     "name": "Hrană uscată"
+    },
+    {
+     "slug": "hrana-umeda",
+     "name": "Hrană umedă"
+    },
+    {
+     "slug": "recompense",
+     "name": "Recompense și gustări"
+    },
+    {
+     "slug": "diete-veterinare",
+     "name": "Diete veterinare"
+    },
+    {
+     "slug": "suplimente",
+     "name": "Suplimente și vitamine"
+    },
+    {
+     "slug": "antiparazitare",
+     "name": "Antiparazitare"
+    },
+    {
+     "slug": "sanatate",
+     "name": "Sănătate"
+    },
+    {
+     "slug": "igiena",
+     "name": "Igienă și îngrijire"
+    },
+    {
+     "slug": "nisip-litiera",
+     "name": "Nisip și litiere"
+    },
+    {
+     "slug": "accesorii",
+     "name": "Accesorii"
+    },
+    {
+     "slug": "jucarii",
+     "name": "Jucării"
+    }
+   ]
+  },
+  {
+   "slug": "alte-animale",
+   "name": "Alte animale",
+   "children": [
+    {
+     "slug": "rozatoare",
+     "name": "Rozătoare și iepuri"
+    },
+    {
+     "slug": "pasari",
+     "name": "Păsări"
+    },
+    {
+     "slug": "pesti",
+     "name": "Pești și acvaristică"
+    },
+    {
+     "slug": "reptile",
+     "name": "Reptile și țestoase"
+    },
+    {
+     "slug": "cai",
+     "name": "Cai"
+    },
+    {
+     "slug": "animale-ferma",
+     "name": "Animale de fermă"
+    },
+    {
+     "slug": "albine",
+     "name": "Albine"
+    }
+   ]
+  },
+  {
+   "slug": "cabinet-veterinar",
+   "name": "Cabinet veterinar",
+   "children": [
+    {
+     "slug": "echipamente",
+     "name": "Echipamente medicale"
+    },
+    {
+     "slug": "instrumentar",
+     "name": "Instrumentar chirurgical"
+    },
+    {
+     "slug": "consumabile",
+     "name": "Consumabile medicale"
+    },
+    {
+     "slug": "suturi",
+     "name": "Materiale de sutură"
+    },
+    {
+     "slug": "medicamente",
+     "name": "Medicamente veterinare"
+    },
+    {
+     "slug": "vaccinuri",
+     "name": "Vaccinuri"
+    },
+    {
+     "slug": "identificare",
+     "name": "Identificare animale"
+    },
+    {
+     "slug": "dezinfectie",
+     "name": "Biosecuritate și dezinfecție"
+    },
+    {
+     "slug": "ddd",
+     "name": "Dezinsecție și deratizare"
+    }
+   ]
+  }
+ ],
+ "redirects": {
+  "/categorie-produs/accesorii/": "/categorie-produs/caini/sanatate/",
+  "/categorie-produs/accesorii-pet/": "/categorie-produs/caini/",
+  "/categorie-produs/aditivi/": "/categorie-produs/alte-animale/animale-ferma/",
+  "/categorie-produs/otc/afectiuni-cardiovasculare/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/otc/afectiuni-dermatologice/": "/categorie-produs/caini/",
+  "/categorie-produs/otc/afectiuni-digestive/": "/categorie-produs/caini/",
+  "/categorie-produs/otc/afectiuni-hepatice/": "/categorie-produs/caini/suplimente/",
+  "/categorie-produs/otc/afectiuni-neurologice/": "/categorie-produs/caini/suplimente/",
+  "/categorie-produs/otc/afectiuni-osteo-articulare/": "/categorie-produs/caini/",
+  "/categorie-produs/otc/afectiuni-renale/": "/categorie-produs/caini/sanatate/",
+  "/categorie-produs/afectiuni-renale-2/": "/categorie-produs/caini/suplimente/",
+  "/categorie-produs/otc/afectiuni-stomatologice/": "/categorie-produs/caini/",
+  "/categorie-produs/otc/afectiuni-urinare/": "/categorie-produs/pisici/sanatate/",
+  "/categorie-produs/aminoacizi/": "/categorie-produs/caini/suplimente/",
+  "/categorie-produs/antibiotice-injectabile/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/antibiotice-orale/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/antidiareice/": "/categorie-produs/alte-animale/animale-ferma/",
+  "/categorie-produs/antiemetice/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/antiepileptice/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/otc/antiinflamatoare-pisici-medicamente/": "/categorie-produs/caini/suplimente/",
+  "/categorie-produs/antiinflamator-extern/": "/categorie-produs/caini/",
+  "/categorie-produs/antiinflamator-injectabil/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/antiinflamator-per-os/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/antiinflamator-subcutanat/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/antimicotice/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/otc/antiparazitare-otc/": "/categorie-produs/caini/antiparazitare/",
+  "/categorie-produs/antiparazitare/": "/categorie-produs/caini/antiparazitare/",
+  "/categorie-produs/antiseptice/": "/categorie-produs/alte-animale/animale-ferma/",
+  "/categorie-produs/apicultura/": "/categorie-produs/alte-animale/albine/",
+  "/categorie-produs/echipamente-veterinare/ati-anestezie-si-monitorizare/": "/categorie-produs/cabinet-veterinar/echipamente/",
+  "/categorie-produs/barbiturice/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/biosecuritate/": "/categorie-produs/cabinet-veterinar/dezinfectie/",
+  "/categorie-produs/otc/afectiuni-renale/caine/": "/categorie-produs/caini/sanatate/",
+  "/categorie-produs/otc/afectiuni-osteo-articulare/caine-afectiuni-osteo-articulare/": "/categorie-produs/caini/",
+  "/categorie-produs/otc/afectiuni-digestive/caine-afectiuni-digestive/": "/categorie-produs/caini/sanatate/",
+  "/categorie-produs/diete-2/suport-hepatic/caini-suport-hepatic/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-digestiv/caini-suport-digestiv/": "/categorie-produs/caini/",
+  "/categorie-produs/hrana/caini-hrana/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-urinar/caini-suport-urinar/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/convalescenta-recovery/caini-convalescenta-recovery/": "/categorie-produs/caini/hrana-uscata/",
+  "/categorie-produs/diete-2/slabire-diabet/caini/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-articular/caini-suport-articular/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/caini-suport-dermatologic-hipoalergenic/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-renal/caini-suport-renal/": "/categorie-produs/caini/diete-veterinare/",
+  "/categorie-produs/otc/antiparazitare-otc/caini-externe/": "/categorie-produs/caini/antiparazitare/",
+  "/categorie-produs/otc/antiparazitare-otc/caini-intern-extern/": "/categorie-produs/caini/antiparazitare/",
+  "/categorie-produs/otc/antiparazitare-otc/caini-interne/": "/categorie-produs/caini/antiparazitare/",
+  "/categorie-produs/cardiovascular/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/cheag/": "/categorie-produs/alte-animale/animale-ferma/",
+  "/categorie-produs/echipamente-veterinare/chirurgie/": "/categorie-produs/cabinet-veterinar/echipamente/",
+  "/categorie-produs/echipamente-veterinare/chirurgie-electrocauter-si-sigilare-vasculara/": "/categorie-produs/cabinet-veterinar/echipamente/",
+  "/categorie-produs/diete-2/convalescenta-recovery/": "/categorie-produs/pisici/",
+  "/categorie-produs/cosmetice-pentru-animale/": "/categorie-produs/caini/igiena/",
+  "/categorie-produs/echipamente-veterinare/custi-internare-contentie/": "/categorie-produs/cabinet-veterinar/echipamente/",
+  "/categorie-produs/echipamente-veterinare/custi-internare-si-contentie/": "/categorie-produs/cabinet-veterinar/echipamente/",
+  "/categorie-produs/derma/": "/categorie-produs/caini/",
+  "/categorie-produs/dezinfectanti/": "/categorie-produs/cabinet-veterinar/dezinfectie/",
+  "/categorie-produs/dieta-umeda/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/dieta-uscata/": "/categorie-produs/pisici/",
+  "/categorie-produs/dieta-veterinara/": "/categorie-produs/caini/diete-veterinare/",
+  "/categorie-produs/diete-2/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-veterinare/": "/categorie-produs/caini/diete-veterinare/",
+  "/categorie-produs/diuretice/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/diverse/": "/categorie-produs/cabinet-veterinar/",
+  "/categorie-produs/echipamente-veterinare/": "/categorie-produs/cabinet-veterinar/echipamente/",
+  "/categorie-produs/enzime/": "/categorie-produs/caini/suplimente/",
+  "/categorie-produs/equine/": "/categorie-produs/alte-animale/",
+  "/categorie-produs/hrana/fara-categorie/": "/magazin/",
+  "/categorie-produs/furaje-complementare/": "/categorie-produs/alte-animale/pasari/",
+  "/categorie-produs/hepatoprotectoare/": "/categorie-produs/caini/suplimente/",
+  "/categorie-produs/hormonale/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/hrana/": "/categorie-produs/caini/",
+  "/categorie-produs/hrana/caini-hrana/hrana-monoproteica/": "/categorie-produs/caini/hrana-umeda/",
+  "/categorie-produs/hrana/pisici-hrana/hrana-monoproteica-pisici-hrana/": "/categorie-produs/pisici/",
+  "/categorie-produs/hrana-pasari/": "/categorie-produs/alte-animale/pasari/",
+  "/categorie-produs/hrana-rozatoare/": "/categorie-produs/alte-animale/rozatoare/",
+  "/categorie-produs/hrana-umeda-2/": "/categorie-produs/caini/hrana-umeda/",
+  "/categorie-produs/hrana/caini-hrana/hrana-umeda-caini-hrana/": "/categorie-produs/caini/hrana-umeda/",
+  "/categorie-produs/hrana/pisici-hrana/hrana-umeda-pisici-hrana/": "/categorie-produs/pisici/hrana-umeda/",
+  "/categorie-produs/hrana/caini-hrana/hrana-uscata-caini-hrana/": "/categorie-produs/caini/hrana-uscata/",
+  "/categorie-produs/hrana/pisici-hrana/hrana-uscata-pisici-hrana/": "/categorie-produs/pisici/hrana-uscata/",
+  "/categorie-produs/igiena/": "/categorie-produs/caini/igiena/",
+  "/categorie-produs/insecticide/": "/categorie-produs/cabinet-veterinar/ddd/",
+  "/categorie-produs/instrumentar-2/": "/categorie-produs/cabinet-veterinar/",
+  "/categorie-produs/echipamente-veterinare/instrumentar/": "/categorie-produs/cabinet-veterinar/echipamente/",
+  "/categorie-produs/echipamente-veterinare/instrumentar-si-consumabile/": "/categorie-produs/cabinet-veterinar/consumabile/",
+  "/categorie-produs/jucarii/": "/categorie-produs/pisici/",
+  "/categorie-produs/lapte-praf/": "/categorie-produs/alte-animale/animale-ferma/",
+  "/categorie-produs/mastite-si-metrite/": "/categorie-produs/cabinet-veterinar/consumabile/",
+  "/categorie-produs/materiale-de-sutura/": "/categorie-produs/cabinet-veterinar/suturi/",
+  "/categorie-produs/medicina-interna/": "/categorie-produs/pisici/sanatate/",
+  "/categorie-produs/echipamente-veterinare/mobilier-si-inox/": "/categorie-produs/cabinet-veterinar/echipamente/",
+  "/categorie-produs/nutraceutice/": "/categorie-produs/caini/",
+  "/categorie-produs/otc/": "/categorie-produs/caini/",
+  "/categorie-produs/otc/afectiuni-dermatologice/otice/": "/categorie-produs/caini/",
+  "/categorie-produs/echipamente-veterinare/oxigenoterapie-si-icu/": "/categorie-produs/cabinet-veterinar/echipamente/",
+  "/categorie-produs/pet-food-cat/": "/categorie-produs/pisici/",
+  "/categorie-produs/pet-food-dog/": "/categorie-produs/caini/hrana-uscata/",
+  "/categorie-produs/otc/afectiuni-osteo-articulare/pisica-afectiuni-osteo-articulare/": "/categorie-produs/pisici/",
+  "/categorie-produs/otc/afectiuni-digestive/pisica-afectiuni-digestive/": "/categorie-produs/caini/",
+  "/categorie-produs/otc/afectiuni-renale/pisica/": "/categorie-produs/caini/sanatate/",
+  "/categorie-produs/otc/afectiuni-urinare/pisica-afectiuni-urinare/": "/categorie-produs/pisici/sanatate/",
+  "/categorie-produs/diete-2/convalescenta-recovery/pisici-convalescenta-recovery/": "/categorie-produs/pisici/hrana-uscata/",
+  "/categorie-produs/diete-2/slabire-diabet/pisici/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-articular/pisici-suport-articular/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/hrana/pisici-hrana/": "/categorie-produs/pisici/",
+  "/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/pisici-suport-dermatologic-hipoalergenic/": "/categorie-produs/pisici/",
+  "/categorie-produs/diete-2/suport-renal/pisici-suport-renal/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-hepatic/pisici-suport-hepatic/": "/categorie-produs/pisici/",
+  "/categorie-produs/diete-2/suport-digestiv/pisici-suport-digestiv/": "/categorie-produs/pisici/",
+  "/categorie-produs/diete-2/suport-urinar/pisici-suport-urinar/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/otc/antiparazitare-otc/pisici-externe/": "/categorie-produs/pisici/antiparazitare/",
+  "/categorie-produs/prebiotice/": "/categorie-produs/alte-animale/animale-ferma/",
+  "/categorie-produs/prescription-diet-canine/": "/categorie-produs/caini/hrana-umeda/",
+  "/categorie-produs/prescription-diet-feline/": "/categorie-produs/pisici/hrana-umeda/",
+  "/categorie-produs/recompense-2/": "/categorie-produs/caini/recompense/",
+  "/categorie-produs/hrana/caini-hrana/recompense-caini-hrana/": "/categorie-produs/caini/recompense/",
+  "/categorie-produs/hrana/pisici-hrana/recompense-pisici-hrana/": "/categorie-produs/pisici/recompense/",
+  "/categorie-produs/rodenticide/": "/categorie-produs/cabinet-veterinar/ddd/",
+  "/categorie-produs/science-plan-canine/": "/categorie-produs/caini/hrana-umeda/",
+  "/categorie-produs/diete-2/slabire-diabet/": "/categorie-produs/caini/",
+  "/categorie-produs/solutii-oftalmice/": "/categorie-produs/caini/sanatate/",
+  "/categorie-produs/solutii-otice/": "/categorie-produs/caini/sanatate/",
+  "/categorie-produs/otc/afectiuni-dermatologice/spot-on/": "/categorie-produs/caini/antiparazitare/",
+  "/categorie-produs/spray/": "/categorie-produs/caini/sanatate/",
+  "/categorie-produs/diete-2/suport-articular/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-digestiv/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-hepatic/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-renal/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-urinar/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/otc/afectiuni-dermatologice/tablete-capsule/": "/categorie-produs/caini/sanatate/",
+  "/categorie-produs/tranchilizante/": "/categorie-produs/cabinet-veterinar/medicamente/",
+  "/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/caini-suport-dermatologic-hipoalergenic/umeda-caini-suport-dermatologic-hipoalergenic/": "/categorie-produs/caini/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-urinar/pisici-suport-urinar/umeda-pisici-suport-urinar/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-renal/caini-suport-renal/umeda-caini-suport-renal/": "/categorie-produs/caini/diete-veterinare/",
+  "/categorie-produs/diete-2/convalescenta-recovery/pisici-convalescenta-recovery/umeda-pisici-convalescenta-recovery/": "/categorie-produs/pisici/",
+  "/categorie-produs/diete-2/suport-hepatic/caini-suport-hepatic/umeda-caini-suport-hepatic/": "/categorie-produs/caini/suplimente/",
+  "/categorie-produs/diete-2/slabire-diabet/pisici/umeda-pisici/": "/categorie-produs/pisici/hrana-umeda/",
+  "/categorie-produs/diete-2/suport-digestiv/caini-suport-digestiv/umeda-caini-suport-digestiv/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-articular/pisici-suport-articular/umeda-pisici-suport-articular/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-urinar/caini-suport-urinar/umeda-caini-suport-urinar/": "/categorie-produs/caini/hrana-umeda/",
+  "/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/pisici-suport-dermatologic-hipoalergenic/umeda-pisici-suport-dermatologic-hipoalergenic/": "/categorie-produs/pisici/",
+  "/categorie-produs/diete-2/convalescenta-recovery/caini-convalescenta-recovery/umeda-caini-convalescenta-recovery/": "/categorie-produs/caini/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-renal/pisici-suport-renal/umeda-pisici-suport-renal/": "/categorie-produs/pisici/",
+  "/categorie-produs/diete-2/slabire-diabet/caini/umeda-caini/": "/categorie-produs/caini/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-hepatic/pisici-suport-hepatic/umeda-pisici-suport-hepatic/": "/categorie-produs/pisici/hrana-umeda/",
+  "/categorie-produs/diete-2/suport-articular/caini-suport-articular/umeda-caini-suport-articular/": "/categorie-produs/caini/hrana-umeda/",
+  "/categorie-produs/diete-2/suport-digestiv/pisici-suport-digestiv/umeda-pisici-suport-digestiv/": "/categorie-produs/pisici/",
+  "/categorie-produs/unguente/": "/categorie-produs/alte-animale/animale-ferma/",
+  "/categorie-produs/diete-2/suport-hepatic/pisici-suport-hepatic/uscata-pisici-suport-hepatic/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-articular/caini-suport-articular/uscata-caini-suport-articular/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-digestiv/pisici-suport-digestiv/uscata-pisici-suport-digestiv/": "/categorie-produs/pisici/",
+  "/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/caini-suport-dermatologic-hipoalergenic/uscata-caini-suport-dermatologic-hipoalergenic/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-urinar/pisici-suport-urinar/uscata-pisici-suport-urinar/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-renal/caini-suport-renal/uscata-caini-suport-renal/": "/categorie-produs/caini/diete-veterinare/",
+  "/categorie-produs/diete-2/convalescenta-recovery/pisici-convalescenta-recovery/uscata-pisici-convalescenta-recovery/": "/categorie-produs/pisici/hrana-uscata/",
+  "/categorie-produs/diete-2/suport-hepatic/caini-suport-hepatic/uscata-caini-suport-hepatic/": "/categorie-produs/caini/hrana-uscata/",
+  "/categorie-produs/diete-2/slabire-diabet/pisici/uscata-pisici/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-digestiv/caini-suport-digestiv/uscata-caini-suport-digestiv/": "/categorie-produs/caini/",
+  "/categorie-produs/diete-2/suport-articular/pisici-suport-articular/uscata-pisici-suport-articular/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-urinar/caini-suport-urinar/uscata-caini-suport-urinar/": "/categorie-produs/caini/diete-veterinare/",
+  "/categorie-produs/diete-2/suport-dermatologic-hipoalergenic/pisici-suport-dermatologic-hipoalergenic/uscata-pisici-suport-dermatologic-hipoalergenic/": "/categorie-produs/pisici/",
+  "/categorie-produs/diete-2/convalescenta-recovery/caini-convalescenta-recovery/uscata-caini-convalescenta-recovery/": "/categorie-produs/caini/hrana-uscata/",
+  "/categorie-produs/diete-2/suport-renal/pisici-suport-renal/uscata-pisici-suport-renal/": "/categorie-produs/pisici/diete-veterinare/",
+  "/categorie-produs/diete-2/slabire-diabet/caini/uscata/": "/categorie-produs/caini/",
+  "/categorie-produs/vaccinuri/": "/categorie-produs/cabinet-veterinar/vaccinuri/",
+  "/categorie-produs/vitamine/": "/categorie-produs/alte-animale/",
+  "/categorie-produs/vitamine-caini-si-pisici/": "/categorie-produs/caini/suplimente/",
+  "/categorie-produs/vitamine-injectabile/": "/categorie-produs/alte-animale/",
+  "/categorie-produs/vitamine-per-os/": "/categorie-produs/alte-animale/animale-ferma/",
+  "/categorie-produs/vitamine-perfuzabile/": "/categorie-produs/alte-animale/animale-ferma/",
+  "/categorie-produs/vitamine-si-minerale/": "/categorie-produs/alte-animale/pasari/"
+ },
+ "brand_merge": {
+  "brit care": "Brit",
+  "josera petfood": "Josera",
+  "elanco animal health": "Elanco",
+  "elanco": "Elanco",
+  "hill's pet nutrition": "Hill's",
+  "intervet msd": "MSD Animal Health",
+  "msd": "MSD Animal Health",
+  "maravet pet": "Maravet",
+  "maravet vet": "Maravet",
+  "maravet identificare animale": "Maravet",
+  "nature's protection superior care": "Nature's Protection",
+  "puffins naturals": "Puffins",
+  "bayer ah": "Bayer",
+  "mitzy": "Mitzy",
+  "virbac": "Virbac",
+  "zoetis": "Zoetis",
+  "ceva": "Ceva",
+  "bioiberica": "Bioiberica",
+  "artu": "Artu",
+  "aditi": "Aditi",
+  "antibiotice iasi": "Antibiotice Iași"
+ },
+ "not_brands": [
+  "cat food",
+  "cheag",
+  "dog food",
+  "servicii publice"
+ ]
+}

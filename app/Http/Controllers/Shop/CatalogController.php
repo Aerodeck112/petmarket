@@ -27,6 +27,10 @@ class CatalogController extends Controller
     public function category(Request $request, Seo $seo, string $path)
     {
         $path = trim($path, '/');
+        // Paginarea WooCommerce (/categorie-produs/x/page/2/) devine ?page=2, cu redirect permanent.
+        if (preg_match('#^(.+)/page/(\d+)$#', $path, $m)) {
+            return redirect()->away(site_url('/categorie-produs/'.$m[1].'/').($m[2] > 1 ? '?page='.$m[2] : ''), 301);
+        }
         $category = Category::query()->visible()->where('path', $path)->first();
         if (! $category) {
             // Adresa veche doar cu slug-ul ultimei categorii: redirect permanent la calea completa.

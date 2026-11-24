@@ -25,6 +25,11 @@
 - Magazinul vechi rămas în `public_html_vechi` este găsit automat: imaginile se copiază de pe disc, iar prețurile, reducerile, stocul exact și starea produselor se citesc din baza WooCommerce (`wp-config.php`).
 - Cheie nouă de semnare a actualizărilor, inclusă în pachet.
 
+### Catalog reorganizat
+- Arbore nou pe animal și nevoie (Câini, Pisici, Alte animale, Cabinet veterinar), 41 de categorii; toate cele 5.724 de produse încadrate, inclusiv cele 1.176 fără categorie.
+- Filtrul „Animal” și brandurile unificate (161); redirect 301 pentru adresele vechi ale categoriilor și brandurilor.
+- Paginarea veche `/categorie-produs/…/page/N/` duce la pagina corespunzătoare.
+
 ### Administrare
 - Panou cu vânzări azi / 7 / 30 de zile, grafic, comenzi recente, stoc redus.
 - Comenzi: tab-uri pe status, filtre, export CSV, pagina comenzii cu schimbare de status (cu restituirea stocului), AWB și link de urmărire, încasare, note interne sau către client, proformă și listă de picking.

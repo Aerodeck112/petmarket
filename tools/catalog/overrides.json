@@ -1,0 +1,287 @@
+{
+ "29768": {
+  "categories": [
+   "alte-animale/reptile"
+  ],
+  "species": [
+   "Reptile"
+  ]
+ },
+ "29828": {
+  "categories": [
+   "pisici/hrana-uscata"
+  ],
+  "species": [
+   "Pisici"
+  ]
+ },
+ "14836": {
+  "categories": [
+   "caini/hrana-umeda"
+  ],
+  "species": [
+   "Câini"
+  ]
+ },
+ "27784": {
+  "categories": [
+   "cabinet-veterinar/medicamente",
+   "alte-animale/animale-ferma"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "26586": {
+  "categories": [
+   "alte-animale/animale-ferma"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "6836": {
+  "categories": [
+   "caini/igiena",
+   "pisici/igiena"
+  ],
+  "species": [
+   "Câini",
+   "Pisici"
+  ]
+ },
+ "17593": {
+  "categories": [
+   "caini/recompense"
+  ],
+  "species": [
+   "Câini"
+  ]
+ },
+ "16249": {
+  "categories": [
+   "caini/jucarii"
+  ],
+  "species": [
+   "Câini"
+  ]
+ },
+ "17038": {
+  "categories": [
+   "pisici/hrana-uscata"
+  ],
+  "species": [
+   "Pisici"
+  ]
+ },
+ "26976": {
+  "categories": [
+   "cabinet-veterinar/consumabile"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "27850": {
+  "categories": [
+   "alte-animale/animale-ferma"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "26982": {
+  "categories": [
+   "cabinet-veterinar/consumabile"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "28230": {
+  "categories": [
+   "cabinet-veterinar/instrumentar"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "27032": {
+  "categories": [
+   "cabinet-veterinar/instrumentar"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "28434": {
+  "categories": [
+   "cabinet-veterinar/instrumentar"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "26092": {
+  "categories": [
+   "cabinet-veterinar/instrumentar"
+  ],
+  "species": []
+ },
+ "31494": {
+  "categories": [
+   "cabinet-veterinar/instrumentar"
+  ],
+  "species": []
+ },
+ "25782": {
+  "categories": [
+   "alte-animale/animale-ferma"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "26804": {
+  "categories": [
+   "cabinet-veterinar/instrumentar"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "5183": {
+  "categories": [
+   "caini/hrana-uscata"
+  ],
+  "species": [
+   "Câini"
+  ]
+ },
+ "30058": {
+  "categories": [
+   "pisici/sanatate"
+  ],
+  "species": [
+   "Pisici"
+  ]
+ },
+ "27928": {
+  "categories": [
+   "caini/igiena",
+   "pisici/igiena"
+  ],
+  "species": [
+   "Câini",
+   "Pisici"
+  ]
+ },
+ "17302": {
+  "categories": [
+   "caini/hrana-uscata"
+  ],
+  "species": [
+   "Câini"
+  ]
+ },
+ "24764": {
+  "categories": [
+   "alte-animale/animale-ferma",
+   "alte-animale/pasari",
+   "cabinet-veterinar/medicamente"
+  ],
+  "species": [
+   "Păsări"
+  ]
+ },
+ "27750": {
+  "categories": [
+   "alte-animale/animale-ferma"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "24830": {
+  "categories": [
+   "alte-animale/animale-ferma",
+   "cabinet-veterinar/medicamente"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "27190": {
+  "categories": [
+   "alte-animale/animale-ferma"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "28200": {
+  "categories": [
+   "cabinet-veterinar/consumabile",
+   "caini/igiena",
+   "pisici/igiena"
+  ],
+  "species": [
+   "Câini",
+   "Pisici"
+  ]
+ },
+ "31626": {
+  "categories": [
+   "pisici/sanatate"
+  ],
+  "species": [
+   "Pisici"
+  ]
+ },
+ "24828": {
+  "categories": [
+   "alte-animale/animale-ferma",
+   "cabinet-veterinar/medicamente"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "26588": {
+  "categories": [
+   "alte-animale/animale-ferma",
+   "cabinet-veterinar/consumabile"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "26712": {
+  "categories": [
+   "alte-animale/animale-ferma",
+   "cabinet-veterinar/consumabile"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "30474": {
+  "categories": [
+   "alte-animale/animale-ferma",
+   "cabinet-veterinar/medicamente"
+  ],
+  "species": [
+   "Animale de fermă"
+  ]
+ },
+ "26698": {
+  "categories": [
+   "caini/igiena",
+   "pisici/igiena"
+  ],
+  "species": [
+   "Câini",
+   "Pisici"
+  ]
+ }
+}
