@@ -29,6 +29,30 @@ copiază imaginile și ia prețurile și stocul la zi; revenirea durează un min
 
 Revenire la WordPress, oricând: `cd ~ && rm public_html && mv public_html_vechi public_html`.
 
+### Puțin spațiu pe găzduire
+
+Noul magazin ocupă aproximativ 160 MB (plus 44 MB arhiva ZIP, care se șterge după dezarhivare) și o bază de
+date de câteva zeci de MB. Copierea imaginilor (pasul 3) mai adaugă câteva sute de MB, pentru că imaginile
+există deja în magazinul vechi. Dacă nu e spațiu:
+
+1. Backupul de la pasul 1 se descarcă pe calculator și apoi se șterge de pe găzduire (un backup lăsat
+   în contul cPanel ocupă cât tot site-ul). Backupurile JetBackup ale firmei de găzduire nu intră în spațiul contului.
+2. cPanel → *Disk Usage* arată ce ocupă loc. Se pot șterge fără grijă: arhivele `.zip` / `.tar.gz` vechi din
+   `/home/UTILIZATOR`, fișierele `error_log`, `public_html_vechi/wp-content/cache`, backupurile pluginurilor
+   (`wp-content/updraft`, `wp-content/ai1wm-backups`, `wp-content/backups*`) și fișierele de import
+   `wp-content/uploads/wpallimport`. Nu se șterg `wp-content/uploads` (imaginile) și baza de date WordPress.
+3. **Pasul 3 (copierea imaginilor) se sare.** În loc, imaginile vechi se leagă direct în noul magazin, fără
+   să ocupe spațiu în plus (cPanel → *Terminal*, după comutare):
+
+   ```bash
+   mkdir -p ~/petmarket/public/wp-content && ln -s ~/public_html_vechi/wp-content/uploads ~/petmarket/public/wp-content/uploads
+   ```
+
+   Produsele afișează atunci imaginile de la adresele vechi (`/wp-content/uploads/…`), care continuă să
+   funcționeze, inclusiv în Google Imagini. Pe server nu se execută niciun script din acel director.
+   Când se eliberează spațiu, se rulează pasul 3; după copiere, legătura nu mai este necesară.
+   `public_html_vechi` nu se șterge cât timp imaginile sunt luate de acolo.
+
 ## Ghidul complet
 
 **Ce a fost verificat:** instalarea completă din pachet, în browser, pe Apache 2.4 + PHP 8.3

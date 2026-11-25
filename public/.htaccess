@@ -18,6 +18,8 @@ Options -Indexes
 
     # In directorul de incarcari nu se executa niciun script.
     RewriteRule ^uploads/.*\.(php\d?|phtml|phar|pl|py|cgi|sh)$ - [F,L,NC]
+    # La fel in imaginile magazinului vechi, cand sunt legate aici (wp-content/uploads -> public_html_vechi).
+    RewriteRule ^wp-content/.*\.(php\d?|phtml|phar|pl|py|cgi|sh|htaccess)$ - [F,L,NC]
 
     # ATENTIE: regula implicita Laravel care elimina slash-ul final lipseste intentionat.
     # Adresele publice pastreaza forma din WordPress, cu slash la sfarsit (/servicii/);
