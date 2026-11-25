@@ -14,9 +14,9 @@
 | | |
 |---|---|
 | Fișier | `petmarket-install-0.1.0.zip` |
-| Dimensiune | 46 460 104 octeți (aproximativ 44 MB) |
+| Dimensiune | 46 446 141 octeți (aproximativ 44 MB) |
 | Fișiere | 16 689 |
-| SHA-256 | `a1272599a717667379ad4be104665151af8aa1fd574653a83697d543923bca9a` |
+| SHA-256 | `d8f7c330205813b79bac4d75b63a89994b2297fd8822f31da700e2c2471c3588` |
 | Verificare | instalare directă simulată (PHP 8.3 + MariaDB 10.11, WordPress mutat în `public_html_vechi`): instalator complet, import 5.724 de produse, prețuri și stoc din baza WooCommerce, imagini copiate de pe disc; pachet de actualizare 0.1.1 semnat cu cheia nouă acceptat, pachet modificat respins; catalogul curățat reimportat integral (5.724 de produse, 137 de categorii, 0 fără categorie); 25.11: import din exportul CSV (5.823 de produse: 5.724 publicate, 99 ciorne) cu cele 4 pachete de imagini dezarhivate, 8.289 din 8.289 imagini locale, fără nicio legătură la site-ul vechi (pe SQLite; instalatorul nu a fost rerulat pe MariaDB pentru această reconstruire) |
 
 Pachetul **nu este în Git** (fișier binar mare). Amprenta se schimbă la fiecare reconstruire.
