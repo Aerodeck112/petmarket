@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | Versiune | 0.1.0 (de probă; neinstalată în producție) |
-| Data | 24.11.2026 (catalog reorganizat) |
+| Data | 25.11.2026 (catalog pe structura veche, curățată) |
 | Cod sursă | ramura `claude/confident-gauss-9ogkxt` |
 | PHP minim | 8.3.0 |
 | Bază de date | MySQL 8 / MariaDB 10.6+ (testat pe MariaDB 10.11 și SQLite) |
@@ -14,10 +14,10 @@
 | | |
 |---|---|
 | Fișier | `petmarket-install-0.1.0.zip` |
-| Dimensiune | 46 363 392 octeți (aproximativ 44 MB) |
+| Dimensiune | 46 369 295 octeți (aproximativ 44 MB) |
 | Fișiere | 16 687 |
-| SHA-256 | `28de703640dc5f640e27641c7f667d82484b48b608509e9014cefabafaaa025c` |
-| Verificare | instalare directă simulată (PHP 8.3 + MariaDB 10.11, WordPress mutat în `public_html_vechi`): instalator complet, import 5.724 de produse, prețuri și stoc din baza WooCommerce, imagini copiate de pe disc; pachet de actualizare 0.1.1 semnat cu cheia nouă acceptat, pachet modificat respins |
+| SHA-256 | `3dc58b146ef987f999750d35efd8061b9d7811d6d0d28759a46a1fea782b6bbc` |
+| Verificare | instalare directă simulată (PHP 8.3 + MariaDB 10.11, WordPress mutat în `public_html_vechi`): instalator complet, import 5.724 de produse, prețuri și stoc din baza WooCommerce, imagini copiate de pe disc; pachet de actualizare 0.1.1 semnat cu cheia nouă acceptat, pachet modificat respins; catalogul curățat reimportat integral (5.724 de produse, 137 de categorii, 0 fără categorie) |
 
 Pachetul **nu este în Git** (fișier binar mare). Amprenta se schimbă la fiecare reconstruire.
 
