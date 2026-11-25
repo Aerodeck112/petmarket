@@ -54,6 +54,29 @@ Reconstruire după modificarea regulilor sau a corecturilor:
 python3 -I tools/catalog/classify.py
 ```
 
+## Exportul CSV din WooCommerce (25.11.2026)
+
+Exportul din *Produse → Export* (toate coloanele, cu meta) completează exportul public:
+
+```bash
+python3 -I tools/catalog/merge_wc_csv.py wc-product-export.csv
+```
+
+```bash
+python3 -I tools/catalog/classify.py
+```
+
+Scrie `wc-export.json` (preț, promoție, stoc exact, comenzi în avans, greutate, EAN, cota de TVA redusă,
+marcajul „nu se vinde online” / „necesită rețetă”) și `products-002.json` (produsele nepublicate, importate ca
+ciorne). La import, datele din CSV au prioritate față de cele publice; baza WordPress nu mai este necesară.
+
+## Pachetul de imagini
+
+Imaginile produselor (7.700) sunt descărcate și optimizate dinainte (WebP, 1000 px și miniatură 400 px) în
+`petmarket-imagini-*.zip`, cu structura `petmarket/public/uploads/products/wp/<calea din wp-content/uploads>.webp`.
+Dacă arhivele sunt dezarhivate înainte de import, imaginile devin locale chiar la import; dacă sunt
+dezarhivate după, pasul „Copiază imaginile” le leagă fără nicio descărcare.
+
 ## Ce nu se poate vedea public (de confirmat)
 
 - Cota de TVA pe produs: exportul are prețuri finale; s-au observat 21% și 11%. Implicit se aplică 21%;

@@ -189,6 +189,8 @@ def old_paths(p, byid):
             chain.append(norm(x['name']))
             x = byid.get(x['parent'])
         out.append(' > '.join(reversed(chain)))
+    # Ciornele din exportul CSV au categoriile doar ca text („Echipamente Veterinare > Laborator”).
+    out += [norm(c) for c in p.get('csv_categories', [])]
     return out
 
 
@@ -442,7 +444,7 @@ PARA_BOTH = [r'\bintern(a|e)? ?(si|/|&|-) ?extern', r'\bstronghold', r'\badvocat
 EQUIP_SUBS = [
     ('custi-internare-contentie', 'Cuști / internare / contenție', [r'\bcusc', r'\bcusti\b', r'\binternare', r'\bcontentie', r'\bmodul']),
     ('oxigenoterapie-si-icu', 'Oxigenoterapie și ICU', [r'\boxigen', r'\bconcentrator', r'\bicu\b', r'\bincubator', r'\bnebuliz']),
-    ('ati-anestezie-si-monitorizare', 'ATI, anestezie și monitorizare', [r'\bmonitor', r'\banestez', r'\bvaporizator', r'\bpulsoxim', r'\blaringoscop', r'\binfuziomat', r'\binjectomat', r'\bpomp(a|e) (de )?(infuzie|perfuzie)',
+    ('ati-anestezie-si-monitorizare', 'ATI, anestezie și monitorizare', [r'\bnibp', r'\bendotrah', r'\bmonitor', r'\banestez', r'\bvaporizator', r'\bpulsoxim', r'\blaringoscop', r'\binfuziomat', r'\binjectomat', r'\bpomp(a|e) (de )?(infuzie|perfuzie)',
                                                                          r'\bdefibril', r'\bcapnograf', r'\bventilator', r'\bcircuit', r'\bincalz', r'\btermometru']),
     ('iluminare-operatorie-si-examinare', 'Iluminare operatorie și examinare', [r'\blamp', r'\biluminare', r'\bscialitic', r'\blupa\b', r'\bfrontal']),
     ('stomatologie', 'Stomatologie', [r'\bdentar', r'\bdental', r'\bscaler', r'\bstomatolog', r'\bdetartr', r'\belevator', r'\bextractor', r'\bdinti']),
@@ -705,6 +707,11 @@ def to_old(r, p, old_slug_paths, index):
                 add('farmacie-veterinara/insecticide-rodenticide')
             elif sub == 'medicamente':
                 add('farmacie-veterinara/' + rx_sub())
+    if p.get('csv_categories') and all(norm(c).startswith('echipamente veterinare') for c in p['csv_categories']):
+        out = [o for o in out if o.startswith('echipamente-veterinare/')]  # ciornele din catalogul de echipamente raman acolo
+    if not out and 'echipamente veterinare' in oldj:
+        s = next((s for s, _, pats in EQUIP_SUBS if has(name, *pats)), None)
+        out.append('echipamente-veterinare/' + (s or ('consumabile' if has(name, *PRO_CONS, *CONS_FIRST) else 'instrumentar' if has(name, *PRO_INSTR) else 'cabinete-clinici-veterinare')))
     return list(dict.fromkeys(out))
 
 

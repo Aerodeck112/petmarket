@@ -270,6 +270,46 @@ class CatalogImporter
         Category::query()->each(fn (Category $c) => $c->updateQuietly(['product_count' => count(array_unique($collect($c->id)))]));
     }
 
+    /**
+     * Exportul CSV din WooCommerce (wc-export.json, scris de tools/catalog/merge_wc_csv.py): preturile, stocul exact,
+     * greutatea, EAN-ul, cota de TVA si marcajul „nu se vinde online”, la data exportului. Are prioritate fata de Store API.
+     *
+     * @return array<string, array>
+     */
+    public function wcExport(): array
+    {
+        return Cache::store('array')->rememberForever('import.wc-export.'.md5($this->dir), function () {
+            $file = $this->dir.'/wc-export.json';
+
+            return is_file($file) ? (json_decode((string) file_get_contents($file), true) ?: []) : [];
+        });
+    }
+
+    private function applyWcExport(Product $product, array $wc): void
+    {
+        $regular = $wc['regular_price'] ?? $product->regular_price;
+        $sale = $wc['sale_price'] ?? null;
+        $manage = ($wc['stock_qty'] ?? null) !== null;
+        $product->fill([
+            'status' => $wc['status'] ?? 'published',
+            'regular_price' => $regular,
+            'sale_price' => $sale !== null && $regular !== null && $sale < $regular ? $sale : null,
+            'sale_starts_at' => ! empty($wc['sale_from']) ? \Illuminate\Support\Carbon::parse($wc['sale_from']) : null,
+            'sale_ends_at' => ! empty($wc['sale_to']) ? \Illuminate\Support\Carbon::parse($wc['sale_to']) : null,
+            'manage_stock' => $manage,
+            'stock_qty' => $manage ? (int) $wc['stock_qty'] : null,
+            'allow_backorders' => (bool) ($wc['backorder'] ?? false),
+            'weight_grams' => ! empty($wc['weight_kg']) ? (int) round($wc['weight_kg'] * 1000) : $product->weight_grams,
+            'gtin' => $wc['gtin'] ?? $product->gtin,
+            'vat_rate' => $wc['vat_rate'] ?? null,
+            'sold_online' => empty($wc['no_online_sale']),
+            'purchase_note' => $wc['purchase_note'] ?? $product->purchase_note,
+        ]);
+        if (! $manage) {
+            $product->stock_status = ! empty($wc['backorder']) ? StockStatus::OnBackorder : (! empty($wc['in_stock']) ? StockStatus::InStock : StockStatus::OutOfStock);
+        }
+    }
+
     /** Pasul 2: un lot de produse. Returneaza cate au fost procesate (0 = gata). */
     public function importProducts(int $offset, int $limit): int
     {
@@ -342,7 +382,7 @@ class CatalogImporter
 
         $brandId = null;
         foreach ($row['brands'] ?? [] as $b) {
-            $brandId ??= $brandsByTerm[$b['id']] ?? null;
+            $brandId ??= $brandsByTerm[$b['id'] ?? 0] ?? null;
         }
         if (! $brandId) {
             foreach ($row['attributes'] ?? [] as $attr) {
@@ -365,6 +405,11 @@ class CatalogImporter
             // Fara stoc gestionat, statusul vine direct din sursa (hook-ul modelului nu il recalculeaza).
             $product->stock_status = $status;
         }
+        if ($wc = $this->wcExport()[(string) $row['id']] ?? null) {
+            $this->applyWcExport($product, $wc);
+        } elseif (($row['status'] ?? 'published') !== 'published') {
+            $product->status = $row['status'];
+        }
         $product->deleted_at = null;
         // Store API nu publica data produsului: ordinea „cele mai noi” urmeaza ID-ul WooCommerce, fara eticheta „Nou”.
         $product->published_at = \Illuminate\Support\Carbon::parse('2025-06-01 00:00:00')->addMinutes((int) $row['id']);
@@ -384,7 +429,13 @@ class CatalogImporter
                 continue;
             }
             $image = $existing[$src] ?? new ProductImage(['product_id' => $product->id, 'source_url' => $src]);
-            $image->fill(['alt' => self::text($img['alt'] ?: $row['name']), 'sort' => $i])->save();
+            $image->fill(['alt' => self::text($img['alt'] ?: $row['name']), 'sort' => $i]);
+            // Pachetul de imagini (petmarket-imagini.zip) dezarhivat inainte de import: imaginea e locala imediat.
+            if (! $image->path && ($rel = ImageDownloader::packPath($src))) {
+                $image->path = $rel;
+                [$image->width, $image->height] = @getimagesize(public_path('uploads/'.$rel)) ?: [null, null];
+            }
+            $image->save();
             $keep[] = $image->id;
         }
         $product->images()->whereNotIn('id', $keep)->delete();

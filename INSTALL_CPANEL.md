@@ -2,58 +2,44 @@
 
 Ghidul descrie instalarea Pet Market dintr-un pachet ZIP, fără linie de comandă.
 
-## Pe scurt: instalarea directă pe pet-market.ro
+## Pe scurt: instalarea de la zero pe pet-market.ro
 
-Varianta aleasă: noul magazin ia locul celui vechi pe același cont cPanel. Site-ul este indisponibil
-aproximativ 20–30 de minute. WordPress nu se șterge: rămâne în `public_html_vechi`, de unde noul magazin
-copiază imaginile și ia prețurile și stocul la zi; revenirea durează un minut.
+Pachetul conține tot catalogul (5.724 de produse publicate și 99 de ciorne, cu prețurile, stocul, greutatea,
+EAN-ul și cota de TVA din exportul WooCommerce din 25.11.2026), iar imaginile vin într-un pachet separat,
+deja optimizate. Noul magazin **nu mai are nevoie de site-ul vechi**: WordPress și baza lui se pot șterge
+după ce există backup pe calculator. Site-ul este indisponibil cât durează pașii 2–6 (aproximativ o oră).
 
-1. **Backup complet** din cPanel (JetBackup sau *Backup Wizard*): fișiere și baza WordPress.
-2. **Bază nouă**: cPanel → *MySQL Databases* → bază goală + utilizator cu *All Privileges* (§3.2).
-3. **Pachetul**: în `/home/UTILIZATOR` încarci `petmarket-install-0.1.0.zip` și îl dezarhivezi → `petmarket/`.
-4. **Comutarea** (cPanel → *Terminal*), după ce verifici că niciun alt domeniu nu stă în `public_html` (§4):
+Spațiu necesar: aproximativ 160 MB aplicația, 300–350 MB imaginile, câteva zeci de MB baza de date.
+Arhivele ZIP se șterg după dezarhivare.
+
+1. **Backup pe calculator** (o singură dată, înainte de orice ștergere): folderul `wp-content/uploads`,
+   fișierul `wp-config.php` și baza WordPress (cPanel → *Backup* → *Download a MySQL Database Backup*).
+   Backupurile vechi lăsate în contul cPanel se descarcă și se șterg.
+2. **Ștergerea site-ului vechi**: cPanel → *File Manager* → se șterge folderul `public_html` cu tot conținutul
+   (dacă în el stă și alt domeniu, vezi §4), plus arhivele vechi și fișierele `error_log` din folderul principal.
+   Baza WordPress se poate șterge din *MySQL Databases* după ce backupul ei e pe calculator.
+3. **Bază nouă**: cPanel → *MySQL Databases* → bază goală + utilizator cu *All Privileges* (§3.2).
+4. **Pachetele**: în folderul principal al contului (`/home/UTILIZATOR`) se încarcă și se dezarhivează, pe rând,
+   `petmarket-install-0.1.0.zip` și pachetele de imagini `petmarket-imagini-*.zip` (toate creează / completează
+   folderul `petmarket`). După fiecare dezarhivare, arhiva se șterge.
+5. **Legătura site-ului** (cPanel → *Terminal*):
 
    ```bash
-   cd ~ && mv public_html public_html_vechi && ln -s petmarket/public public_html
+   cd ~ && ln -s petmarket/public public_html
    ```
 
-5. **Instalatorul**: deschizi `https://pet-market.ro/install`, codul e în `petmarket/storage/app/install-code.txt` (§3.4).
+6. **Instalatorul**: `https://pet-market.ro/install`, codul e în `petmarket/storage/app/install-code.txt` (§3.4).
    La SMTP pui datele căsuței `office@pet-market.ro`.
-6. **Catalogul**: `/admin` → *Sistem → Import catalog*: pașii 1 și 2 (categorii, produse), apoi pasul 4
-   „Prețuri și stoc din WooCommerce” (citește baza veche, găsită automat în `public_html_vechi/wp-config.php`)
-   și pasul 3 „Copiază imaginile” (de pe disc, câteva minute).
-7. **Setări**: *Sistem → Setări magazin* → tabul *Ecolet* (Client ID, Client Secret, email și parolă Ecolet),
+7. **Catalogul**: `/admin` → *Sistem → Import catalog*: pașii 1 și 2 (categorii, produse). Imaginile se leagă
+   singure din pachetul de imagini; pasul 3 este necesar doar dacă rămân imagini necopiate, iar pasul 4 (baza
+   WordPress) nu mai este necesar.
+8. **Setări**: *Sistem → Setări magazin* → tabul *Ecolet* (Client ID, Client Secret, email și parolă Ecolet),
    apoi „Testează Ecolet”. IBAN-ul și datele firmei sunt deja completate.
-8. **Cron** la fiecare minut (§3.5) și o comandă de test cap-coadă (plasare, email, trimitere la Ecolet).
-9. **Google**: în Search Console trimiți `https://pet-market.ro/sitemap.xml`.
+9. **Cron** la fiecare minut (§3.5) și o comandă de test cap-coadă (plasare, email, trimitere la Ecolet).
+10. **Google**: în Search Console trimiți `https://pet-market.ro/sitemap.xml`.
 
-Revenire la WordPress, oricând: `cd ~ && rm public_html && mv public_html_vechi public_html`.
-
-### Puțin spațiu pe găzduire
-
-Noul magazin ocupă aproximativ 160 MB (plus 44 MB arhiva ZIP, care se șterge după dezarhivare) și o bază de
-date de câteva zeci de MB. Din magazinul vechi noul magazin are nevoie doar de trei lucruri:
-`wp-config.php`, directorul `wp-content/uploads` (imaginile) și baza de date WordPress. Restul (nucleul
-WordPress, pluginuri, teme, cache, backupuri vechi) se poate șterge, după ce există backup pe calculator.
-Fără aceste fișiere, revenirea la WordPress înseamnă reinstalarea lui din backup, nu un minut.
-
-1. **Backup pe calculator**: `wp-content/uploads`, `wp-config.php` și baza WordPress (cPanel → *Backup* →
-   *Download a MySQL Database Backup*). Un backup lăsat în contul cPanel ocupă spațiu: se descarcă și se șterge.
-2. **Eliberare spațiu**: `public_html` se redenumește în `public_html_vechi` (File Manager → *Rename*); în el se
-   șterge tot, **în afară de** `wp-config.php` și `wp-content/uploads`. Se mai pot șterge arhivele `.zip` /
-   `.tar.gz` vechi din `/home/UTILIZATOR` și fișierele `error_log`. Baza de date WordPress **nu** se șterge.
-3. Instalarea continuă cu pașii 2, 3 și 5–9 de mai sus; la pasul 4 rămâne doar legătura
-   (`cd ~ && ln -s petmarket/public public_html`), pentru că redenumirea s-a făcut deja.
-4. **Imaginile se leagă, nu se copiază**: la pasul 6 se sare „Copiază imaginile”; în cPanel → *Terminal*:
-
-   ```bash
-   mkdir -p ~/petmarket/public/wp-content && ln -s ~/public_html_vechi/wp-content/uploads ~/petmarket/public/wp-content/uploads
-   ```
-
-   Produsele afișează imaginile de la adresele vechi (`/wp-content/uploads/…`), care continuă să
-   funcționeze, inclusiv în Google Imagini. Din acel director nu se execută niciun script.
-   Când se eliberează spațiu, se rulează „Copiază imaginile”; după copiere, legătura și `public_html_vechi`
-   nu mai sunt necesare.
+Ciornele (99 de echipamente din catalogul în lucru) se găsesc în admin la *Produse*, tabul *Ciorne*; se
+publică de acolo când sunt gata.
 
 ## Ghidul complet
 

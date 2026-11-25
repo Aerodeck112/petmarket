@@ -74,9 +74,17 @@ class CatalogImportTest extends TestCase
     public function test_new_taxonomy_species_brands_and_old_category_redirects(): void
     {
         $this->seedShop();
+        // Pachetul de imagini dezarhivat inainte de import: imaginea produsului devine locala direct la import.
+        $pack = public_path('uploads/products/wp/2026/04/118.jpg.webp');
+        @mkdir(dirname($pack), 0755, true);
+        $gd = imagecreatetruecolor(20, 10);
+        imagewebp($gd, $pack);
         $importer = new CatalogImporter(base_path('tests/Fixtures/catalog-v2'));
         $stats = $importer->importTaxonomies();
         $importer->importProducts(0, 100);
+        $image = Product::query()->where('wc_product_id', 4640)->first()->images()->first();
+        @unlink($pack);
+        $this->assertSame(['products/wp/2026/04/118.jpg.webp', 20, 10], [$image->path, $image->width, $image->height]);
         $importer->refreshCounts();
 
         // Structura magazinului vechi, curatata: meniul de pe pet-market.ro plus „Farmacie veterinara” pentru categoriile razlete.
@@ -104,6 +112,15 @@ class CatalogImportTest extends TestCase
         $this->get('/categorie-produs/hrana/fara-categorie/')->assertRedirect(site_url('/categorie-produs/hrana/'));
         $this->get('/categorie-produs/antibiotice-orale/')->assertRedirect(site_url('/categorie-produs/farmacie-veterinara/antibiotice-orale/'));
         $this->get('/categorie-produs/hrana/page/2/')->assertRedirect(site_url('/categorie-produs/hrana/').'?page=2');
+
+        // Exportul CSV din WooCommerce are prioritate: pret, promotie, stoc exact, greutate, EAN, TVA, vanzare online, ciorne.
+        $p = Product::query()->where('wc_product_id', 4640)->first();
+        $this->assertSame([12345, 9900, 9900, 7, 2500, '8009470012345', 11.0], [$p->regular_price, $p->sale_price, $p->price, $p->stock_qty, $p->weight_grams, $p->gtin, $p->vat_rate]);
+        $this->assertTrue($p->manage_stock);
+        $this->assertFalse(Product::query()->where('wc_product_id', 3586)->value('sold_online'));
+        $draft = Product::query()->where('wc_product_id', 3591)->first();
+        $this->assertSame('draft', $draft->status);
+        $this->assertSame(\App\Enums\StockStatus::OnBackorder, $draft->stock_status);
 
         // Filtrul „Animal” apare in catalog.
         $this->get('/categorie-produs/otc/')->assertOk()->assertSee('Animal');

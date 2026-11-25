@@ -58,6 +58,37 @@ class ImageDownloader
         return [$ok, $failed, false];
     }
 
+    /**
+     * Imaginea din pachetul de imagini pregatit dinainte (petmarket-imagini.zip, dezarhivat in public/uploads/products/wp),
+     * deja optimizata WebP: aceeasi cale ca in wp-content/uploads, cu .webp adaugat. Returneaza calea relativa la uploads/.
+     */
+    public static function packPath(?string $url): ?string
+    {
+        if (! $url || ! preg_match('#/wp-content/uploads/(.+)$#', (string) parse_url($url, PHP_URL_PATH), $m) || str_contains($m[1], '..')) {
+            return null;
+        }
+        $rel = 'products/wp/'.rawurldecode($m[1]).'.webp';
+
+        return is_file(public_path('uploads/'.$rel)) ? $rel : null;
+    }
+
+    /** Leaga imaginile care exista deja in pachet; returneaza cate au fost legate. */
+    public function linkPack(): int
+    {
+        $n = 0;
+        ProductImage::query()->whereNull('path')->whereNotNull('source_url')->orderBy('id')->chunkById(500, function ($images) use (&$n) {
+            foreach ($images as $image) {
+                if ($rel = self::packPath($image->source_url)) {
+                    [$w, $h] = @getimagesize(public_path('uploads/'.$rel)) ?: [null, null];
+                    $image->update(['path' => $rel, 'width' => $w, 'height' => $h]);
+                    $n++;
+                }
+            }
+        });
+
+        return $n;
+    }
+
     /** Fisierul corespunzator din wp-content/uploads, daca directorul vechi este pe acelasi server. */
     private function localFile(string $url): ?string
     {
@@ -72,6 +103,12 @@ class ImageDownloader
 
     private function download(ProductImage $image): void
     {
+        if ($rel = self::packPath($image->source_url)) {
+            [$w, $h] = @getimagesize(public_path('uploads/'.$rel)) ?: [null, null];
+            $image->update(['path' => $rel, 'width' => $w, 'height' => $h]);
+
+            return;
+        }
         if ($local = $this->localFile($image->source_url)) {
             $body = (string) file_get_contents($local);
         } else {

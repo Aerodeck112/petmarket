@@ -25,6 +25,10 @@
 - Magazinul vechi rămas în `public_html_vechi` este găsit automat: imaginile se copiază de pe disc, iar prețurile, reducerile, stocul exact și starea produselor se citesc din baza WooCommerce (`wp-config.php`).
 - Cheie nouă de semnare a actualizărilor, inclusă în pachet.
 
+### Instalare fără site-ul vechi
+- Exportul CSV din WooCommerce (25.11.2026) e inclus: prețuri, promoții, stoc exact, greutate (pentru Ecolet), EAN, TVA redus (118 produse), produsele care nu se vând online (78) și cele 99 de ciorne.
+- Pachet separat cu imaginile produselor, gata optimizate; se leagă automat la import. WordPress și baza lui nu mai sunt necesare.
+
 ### Catalog curățat, pe structura veche
 - Se păstrează categoriile și adresele de pe pet-market.ro (Hrană, Diete, Suplimente, Accesorii, Igienă, Echipamente veterinare); categoriile veterinare razlețe sunt strânse în „Farmacie veterinară”.
 - Dublurile unite, „Fără categorie” eliminat: toate cele 5.724 de produse încadrate (137 de categorii), cu animalul (filtrul „Animal”) și brandul (161 de branduri unificate).
