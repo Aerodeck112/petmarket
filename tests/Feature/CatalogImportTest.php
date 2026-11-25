@@ -84,6 +84,9 @@ class CatalogImportTest extends TestCase
         $importer->importProducts(0, 100);
         $image = Product::query()->where('wc_product_id', 4640)->first()->images()->first();
         @unlink($pack);
+        foreach (['/2026/04', '/2026', ''] as $dir) {
+            @rmdir(public_path('uploads/products/wp'.$dir));
+        }
         $this->assertSame(['products/wp/2026/04/118.jpg.webp', 20, 10], [$image->path, $image->width, $image->height]);
         $importer->refreshCounts();
 
