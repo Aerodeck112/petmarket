@@ -67,7 +67,7 @@ class Settings
         'marketing.gtm_id' => '',
         'marketing.ga4_id' => '',
         'marketing.meta_pixel_id' => '',
-        'marketing.search_console_verification' => '',
+        'marketing.search_console_verification' => 'Nmi3g_K1aueIq-uEn5Yh-4BUJqez7297a_xu0fxoM2g', // meta-tagul de pe site-ul vechi: Search Console ramane verificat
         'marketing.google_ads_id' => 'AW-16651227502',
         'marketing.announcement' => 'Livrare gratuită la comenzi de peste 1.000 lei · Taxă de livrare 23 lei',
         'commerce.not_online_notice' => 'Acest produs nu se comercializează online. Este un produs pentru care este necesară rețetă medical-veterinară, conform regimului aplicabil. Pentru disponibilitate și pașii următori, sună-ne.',
