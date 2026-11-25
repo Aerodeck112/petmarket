@@ -25,9 +25,10 @@
 - Magazinul vechi rămas în `public_html_vechi` este găsit automat: imaginile se copiază de pe disc, iar prețurile, reducerile, stocul exact și starea produselor se citesc din baza WooCommerce (`wp-config.php`).
 - Cheie nouă de semnare a actualizărilor, inclusă în pachet.
 
-### Catalog reorganizat
-- Arbore nou pe animal și nevoie (Câini, Pisici, Alte animale, Cabinet veterinar), 41 de categorii; toate cele 5.724 de produse încadrate, inclusiv cele 1.176 fără categorie.
-- Filtrul „Animal” și brandurile unificate (161); redirect 301 pentru adresele vechi ale categoriilor și brandurilor.
+### Catalog curățat, pe structura veche
+- Se păstrează categoriile și adresele de pe pet-market.ro (Hrană, Diete, Suplimente, Accesorii, Igienă, Echipamente veterinare); categoriile veterinare razlețe sunt strânse în „Farmacie veterinară”.
+- Dublurile unite, „Fără categorie” eliminat: toate cele 5.724 de produse încadrate (137 de categorii), cu animalul (filtrul „Animal”) și brandul (161 de branduri unificate).
+- Redirect 301 pentru adresele categoriilor unite și ale brandurilor dublate; redirecturile răspund și la cererile HEAD.
 - Paginarea veche `/categorie-produs/…/page/N/` duce la pagina corespunzătoare.
 
 ### Administrare

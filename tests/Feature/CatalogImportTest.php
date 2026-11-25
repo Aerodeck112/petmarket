@@ -79,9 +79,11 @@ class CatalogImportTest extends TestCase
         $importer->importProducts(0, 100);
         $importer->refreshCounts();
 
-        $this->assertSame(['Câini', 'Pisici', 'Alte animale', 'Cabinet veterinar'], Category::query()->whereNull('parent_id')->orderBy('sort')->pluck('name')->all());
-        $this->assertTrue(Category::query()->where('path', 'caini/hrana-uscata')->exists());
-        $this->assertTrue(Category::query()->where('path', 'pisici/hrana-uscata')->exists());
+        // Structura magazinului vechi, curatata: meniul de pe pet-market.ro plus „Farmacie veterinara” pentru categoriile razlete.
+        $this->assertSame(['Hrană', 'Diete', 'Suplimente', 'Accesorii', 'Igienă', 'Echipamente veterinare', 'Farmacie veterinară'],
+            Category::query()->whereNull('parent_id')->orderBy('sort')->pluck('name')->all());
+        $this->assertTrue(Category::query()->where('path', 'hrana/caini-hrana/hrana-uscata-caini-hrana')->exists());
+        $this->assertTrue(Category::query()->where('path', 'diete-2/suport-renal/pisici-suport-renal/uscata-pisici-suport-renal')->exists());
         $this->assertSame(0, Product::query()->doesntHave('categories')->count());
         $this->assertFalse(Category::query()->where('slug', 'fara-categorie')->exists());
 
@@ -95,11 +97,15 @@ class CatalogImportTest extends TestCase
         }
 
         // Adresele vechi ale categoriilor duc permanent la cele noi.
-        $this->assertGreaterThan(100, $stats['redirecturi']);
-        $this->get('/categorie-produs/echipamente-veterinare/')->assertRedirect(site_url('/categorie-produs/cabinet-veterinar/echipamente/'));
+        // Adresele vechi care raman in arbore merg direct; dublurile unite si „Fara categorie” au redirect permanent.
+        $this->assertGreaterThan(50, $stats['redirecturi']);
+        $this->get('/categorie-produs/echipamente-veterinare/')->assertOk();
+        $this->get('/categorie-produs/pet-food-dog/')->assertRedirect(site_url('/categorie-produs/hrana/caini-hrana/'));
+        $this->get('/categorie-produs/hrana/fara-categorie/')->assertRedirect(site_url('/categorie-produs/hrana/'));
+        $this->get('/categorie-produs/antibiotice-orale/')->assertRedirect(site_url('/categorie-produs/farmacie-veterinara/antibiotice-orale/'));
         $this->get('/categorie-produs/hrana/page/2/')->assertRedirect(site_url('/categorie-produs/hrana/').'?page=2');
 
         // Filtrul „Animal” apare in catalog.
-        $this->get('/categorie-produs/caini/')->assertOk()->assertSee('Animal');
+        $this->get('/categorie-produs/otc/')->assertOk()->assertSee('Animal');
     }
 }

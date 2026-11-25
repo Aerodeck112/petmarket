@@ -16,36 +16,42 @@ Nu se importă: comenzile vechi, clienții, cupoanele și recenziile (nu sunt pu
 export al bazei WordPress, când îl primim (parolele clienților se păstrează: la prima autentificare sunt
 trecute pe algoritmul nou).
 
-## Reorganizarea catalogului (24.11.2026)
+## Reorganizarea catalogului (25.11.2026) – structura veche, curățată
 
-Structura veche (173 de categorii amestecate, 1.176 de produse fără categorie) este înlocuită la import
-cu un arbore nou, pe animal și pe nevoie:
+La cererea magazinului se păstrează structura de categorii de pe pet-market.ro (meniul principal), cu
+aceleași adrese. Ce era în neregulă se curăță la import:
 
-| Secțiune | Subcategorii |
+| Secțiune (adresă) | Ce conține |
 |---|---|
-| Câini | Hrană uscată, Hrană umedă, Recompense și gustări, Diete veterinare, Suplimente și vitamine, Antiparazitare, Sănătate, Igienă și îngrijire, Accesorii, Jucării |
-| Pisici | aceleași, plus Nisip și litiere |
-| Alte animale | Rozătoare și iepuri, Păsări, Pești și acvaristică, Reptile și țestoase, Cai, Animale de fermă, Albine |
-| Cabinet veterinar | Echipamente medicale, Instrumentar chirurgical, Consumabile medicale, Materiale de sutură, Medicamente veterinare, Vaccinuri, Identificare animale, Biosecuritate și dezinfecție, Dezinsecție și deratizare |
+| Hrană (`hrana`) | Câini și Pisici › Hrană uscată, Hrană umedă, Recompense, Hrană monoproteică; Rozătoare; Păsări; Pești și reptile |
+| Diete (`diete-2`) | Slăbire / diabet, Suport urinar, renal, hepatic, digestiv, dermatologic / hipoalergenic, articular, Convalescență › Câini / Pisici › Umedă / Uscată |
+| Suplimente (`otc`) | Antiparazitare (Câini / Pisici – interne, externe, intern/extern), Vitamine și suplimente, Afecțiuni (osteo-articulare, urinare, renale, hepatice, cardiovasculare, stomatologice, oftalmice, dermatologice, digestive), Comportament și stres |
+| Accesorii (`accesorii`) | Câini, Pisici, Jucării, Nisip și litiere, Alte animale |
+| Igienă (`igiena`) | Câini, Pisici |
+| Echipamente veterinare (`echipamente-veterinare`) | subcategoriile din meniul vechi + Instrumentar, Consumabile, Materiale de sutură, Identificare animale |
+| Farmacie veterinară (`farmacie-veterinara`) | categoriile veterinare care stăteau separat, în afara meniului: vaccinuri, antibiotice, antiinflamatoare, anestezice, hormonale, mastite, antiparazitare de fermă, vitamine și perfuzii, furaje, medicină internă, dermatologie, biosecuritate, insecticide, animale de fermă |
 
-- Fiecare produs are o categorie principală (prima) și, unde e cazul, secundare: un produs pentru câini și
-  pisici apare în ambele, un medicament de fermă apare și la Cabinet veterinar.
+- „Fără categorie” dispare; toate cele 5.724 de produse au categorie (prima este cea principală).
+- Dublurile se unesc: „Accesorii Pet” → Accesorii, „Pet Food Dog / Cat” → Hrană › Câini / Pisici,
+  „Diete veterinare”, „Dieta veterinară”, „Dieta umedă / uscată” → Diete, „Custi, internare si contenție” →
+  „Cuști / internare / contenție”, „Instrumentar” (1.301 produse în afara meniului) → Echipamente veterinare etc.
+- Subcategoriile rămase fără niciun produs nu se mai creează; adresa lor duce la părinte.
+- Toate adresele vechi care nu mai există au redirect 301 (77 de categorii, plus variantele scurte).
 - Atributul filtrabil **Animal** (Câini, Pisici, Rozătoare, Păsări, Pești, Reptile, Cai, Animale de fermă, Albine).
 - Brandurile dublate sunt unificate (Brit Care → Brit, Josera Petfood → Josera, Hill's Pet Nutrition → Hill's,
-  ELANCO / Elanco Animal Health → Elanco, Maravet Pet / Vet / Identificare → Maravet etc.); adresele vechi ale
-  brandurilor și ale tuturor celor 173 de categorii au redirect 301 către cele noi.
+  ELANCO / Elanco Animal Health → Elanco, Maravet Pet / Vet / Identificare → Maravet etc.), cu redirect 301.
 
-Încadrarea este făcută de `tools/catalog/classify.py` (reguli pe nume, descriere, categoria veche și brand)
-și scrisă în `database/seeders/data/catalog/classification.json`; arborele și redirecturile în `taxonomy.json`.
-Corecturile manuale stau în `tools/catalog/overrides.json` (ID WooCommerce → categorii, animal, brand) și au
-prioritate. Precizia a fost verificată pe două eșantioane aleatorii (600 + 400 de produse) de un evaluator
+Încadrarea este făcută de `tools/catalog/classify.py` (reguli pe nume, descriere, categoria veche și brand:
+întâi animalul și tipul produsului, apoi traducerea în categoriile de mai sus) și scrisă în `database/seeders/data/catalog/classification.json`; arborele și redirecturile în `taxonomy.json`.
+Corecturile manuale stau în `tools/catalog/overrides.json` (ID WooCommerce → categorii, animal, brand; cheia
+`old_categories` fixează direct căile din arborele de mai sus) și au prioritate. Precizia a fost verificată pe două eșantioane aleatorii (600 + 400 de produse) de un evaluator
 independent: 89–93% înainte de ultimele corecturi, peste 97% după; produsele marcate „de verificat” în
 fișierul Excel de control sunt cele cu încredere medie.
 
 Reconstruire după modificarea regulilor sau a corecturilor:
 
 ```bash
-python3 tools/catalog/classify.py
+python3 -I tools/catalog/classify.py
 ```
 
 ## Ce nu se poate vedea public (de confirmat)

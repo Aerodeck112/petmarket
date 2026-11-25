@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Reorganizarea catalogului Pet Market: categorie noua, animal (specie) si brand pentru fiecare produs.
+"""Curatarea catalogului Pet Market: categorie, animal (specie) si brand pentru fiecare produs.
 
-Intrare: database/seeders/data/catalog/products-*.json (exportul Store API) si brandurile importate.
-Iesire:  database/seeders/data/catalog/taxonomy.json (arborele nou + redirecturi de la categoriile vechi)
+Pas 1: fiecare produs primeste animalul si tipul (hrana uscata, dieta, antiparazitar, consumabil...), intr-un arbore
+       intermediar pe specie (TREE). Pas 2: tipul se traduce in structura veche a magazinului, curatata (OLD_TREE).
+Intrare: database/seeders/data/catalog/products-*.json (exportul Store API), categories.json si brandurile importate.
+Iesire:  database/seeders/data/catalog/taxonomy.json (arborele final + redirecturi de la categoriile vechi)
          database/seeders/data/catalog/classification.json (wc_id -> categorii, specii, brand, incredere)
 Reguli: semnalele explicite din nume au prioritate, apoi categoria veche, apoi descrierea.
-Rulare (din radacina proiectului): python3 tools/catalog/classify.py
+Rulare (din radacina proiectului): python3 -I tools/catalog/classify.py
 """
 import collections, html, json, os, re, sys, unicodedata
 
@@ -25,7 +27,7 @@ def has(text, *patterns):
     return any(re.search(p, text) for p in patterns)
 
 
-# ---------------- Arborele nou ----------------
+# ---------------- Arborele intermediar (specie / tip), folosit doar la clasificare ----------------
 SPECIES = {'caini': 'Câini', 'pisici': 'Pisici'}
 PET_SUBS = [
     ('hrana-uscata', 'Hrană uscată'), ('hrana-umeda', 'Hrană umedă'), ('recompense', 'Recompense și gustări'),
@@ -400,6 +402,313 @@ def classify(p, byid, brand_of):
     return {'categories': list(dict.fromkeys(cats)), 'species': species, 'segment': seg, 'confidence': conf, 'reasons': reasons, 'old': olds, 'brand': brand}
 
 
+# ---------------- Structura veche a magazinului, curatata ----------------
+# Clientul a ales sa pastreze categoriile de pe pet-market.ro (meniul principal: Hrana, Diete, Suplimente, Accesorii,
+# Echipamente veterinare, Igiena). Clasificarea de mai sus (specie + segment) se traduce in caile vechi; dublurile se unesc,
+# „Fara categorie” dispare, iar categoriile veterinare care stateau razlete (antibiotice, vaccinuri...) se strang in „Farmacie veterinara”.
+NEEDS = [  # (slug Diete, nume, cuvinte cheie)
+    ('slabire-diabet', 'Slăbire / diabet', [r'\bobesit', r'\bobezit', r'\bdiabet', r'\bweight', r'\bslabire', r'\bsatiety', r'\bmetabolic', r'\br/d\b', r'\bw/d\b', r'\blight\b.*\bvet', r'\bglycemic']),
+    ('suport-urinar', 'Suport urinar', [r'\burinar', r'\burinary', r'\bstruvit', r'\boxalat', r'\burolog', r'\bc/d\b', r'\bs/o\b', r'\bcistit']),
+    ('suport-renal', 'Suport renal', [r'\brenal', r'\bkidney', r'\bk/d\b', r'\brinichi']),
+    ('suport-hepatic', 'Suport hepatic', [r'\bhepat', r'\bliver', r'\bl/d\b', r'\bficat']),
+    ('suport-digestiv', 'Suport digestiv', [r'\bgastro', r'\bdigesti', r'\bintestin', r'\bi/d\b', r'\blow fat', r'\bsensitivity\b', r'\bfibre response', r'\bpancrea']),
+    ('suport-dermatologic-hipoalergenic', 'Suport dermatologic / hipoalergenic', [r'\bhypoallergen', r'\bhipoalergen', r'\banallergen', r'\bdermat', r'\bskin\b', r'\bz/d\b', r'\bd/d\b', r'\bhydroly', r'\bhidroliz', r'\batop']),
+    ('suport-articular', 'Suport articular', [r'\bmobility', r'\bjoint', r'\barticul', r'\bj/d\b', r'\bosteo']),
+    ('convalescenta-recovery', 'Convalescență / recovery', [r'\brecovery', r'\bconvalesc', r'\ba/d\b', r'\bcritical', r'\bintensive', r'\brecuperare']),
+]
+AILMENTS = [  # (slug sub Suplimente, nume, cuvinte cheie, subcategorii pe specie)
+    ('afectiuni-osteo-articulare', 'Afecțiuni osteo-articulare', [r'\barticul', r'\bcondro', r'\bglucozamin', r'\bjoint', r'\bmobil', r'\bflexadin', r'\bsynoquin', r'\bcosequin', r'\bcolagen', r'\bosteo', r'\bcartilaj', r'\bartro', r'\bartic'],
+     {'caini': ('caine-afectiuni-osteo-articulare', 'Câine'), 'pisici': ('pisica-afectiuni-osteo-articulare', 'Pisică')}),
+    ('afectiuni-urinare', 'Afecțiuni urinare', [r'\burinar', r'\burinary', r'\bvezic', r'\bcystophan', r'\bcistit', r'\bcranberry', r'\bmerisor', r'\bstruvit'],
+     {'caini': ('caine-afectiuni-urinare', 'Câine'), 'pisici': ('pisica-afectiuni-urinare', 'Pisică')}),
+    ('afectiuni-renale', 'Afecțiuni renale', [r'\brenal', r'\brinichi', r'\bkidney', r'\bipakitine', r'\bazodyl', r'\bnefro'], {'caini': ('caine', 'Câine'), 'pisici': ('pisica', 'Pisică')}),
+    ('afectiuni-hepatice', 'Afecțiuni hepatice', [r'\bhepat', r'\bficat', r'(?<!cod )\bliver(?! oil)', r'\bsilimarin', r'\bsilymarin', r'\bdenamarin', r'\bsamylin'], {}),
+    ('afectiuni-cardiovasculare', 'Afecțiuni cardiovasculare', [r'\bcardi', r'\binima\b', r'\bheart\b'], {}),
+    ('afectiuni-neurologice', 'Afecțiuni neurologice', [r'\bneuro', r'\bcognit', r'\bsenilit', r'\bepilep'], {}),
+    ('afectiuni-stomatologice', 'Afecțiuni stomatologice', [r'\bdentar', r'\bdinti', r'\bdental\b', r'\bgingi', r'\boral', r'\bstomat', r'\bplaqueoff', r'\bplackoff', r'\bhalitoz', r'\btartru', r'\bperiuta', r'\bpasta de dinti'], {}),
+    ('afectiuni-oftalmice', 'Afecțiuni oftalmice', [r'\bocular', r'\boftalm', r'\bochi', r'\beye\b', r'\blacrima', r'\btear\b', r'\bconjunctiv'], {}),
+    ('afectiuni-dermatologice', 'Afecțiuni dermatologice', [r'\baural', r'\bscarpin', r'\botic', r'\bureche', r'\bear\b', r'\bdermat', r'\bderma\b', r'\bpiele', r'\bblan', r'\bskin\b', r'\bcoat\b', r'\batop', r'\bprurit', r'\bmancarim',
+                                                           r'\balergi', r'\brani\b', r'\brana\b', r'\bplagi', r'\bwound', r'\bcicatriz', r'\bunguent', r'\bessential 6', r'\bomega', r'\bbiotin', r'\bpyo', r'\bhexidin', r'\bclorhexidin', r'\bmanuka'], {}),
+    ('afectiuni-digestive', 'Afecțiuni digestive', [r'\bdigesti', r'\bdiare', r'\bantidiare', r'\bintestin', r'\bprobiotic', r'\bprebiotic', r'\bgastr', r'\bconstipat', r'\bmalt\b', r'\bfortiflora',
+                                                   r'\bpro-?kolin', r'\bcarbune', r'\bsynbiotic', r'\benterogel', r'\bhairball', r'\bghemotoace', r'\bvoma'],
+     {'caini': ('caine-afectiuni-digestive', 'Câine'), 'pisici': ('pisica-afectiuni-digestive', 'Pisică')}),
+    ('comportament-stres', 'Comportament și stres', [r'\bcomportament', r'\banxiet', r'\bstres', r'\bcalm', r'\bferomon', r'\badaptil', r'\bfeliway', r'\bzylkene', r'\brelax', r'\bantistres'], {}),
+]
+DERMA_FORMS = [('otice', 'Otice', [r'\baural', r'\botic', r'\bureche', r'\bear\b']), ('spot-on', 'Spot-on', [r'\bspot[ -]?on', r'\bpipet', r'\bessential 6']),
+               ('tablete-capsule', 'Tablete / capsule', [r'\btablet', r'\bcapsul', r'\bcps\b', r'\btbl\b', r'\bcomprimat'])]
+PARA_INT = [r'\bintern(e|a)?\b(?!.*extern)', r'\bvierm', r'\bmilbemax', r'\bmilprazon', r'\bdrontal', r'\bcestal', r'\bcaniverm', r'\bprazi', r'\bfenbendazol', r'\bpanacur',
+            r'\bprocox', r'\bdehinel', r'\bpratel', r'\bmilpro', r'\bendogard', r'\bcestem', r'\bcaniquantel', r'\bvanbendazol', r'\bascacid', r'\bdronspot', r'\bprofender', r'\bdeparazitare interna', r'\bfebantel', r'\bpyrantel', r'\bpirantel']
+PARA_BOTH = [r'\bintern(a|e)? ?(si|/|&|-) ?extern', r'\bstronghold', r'\badvocate', r'\bbroadline', r'\bnexgard spectra', r'\bsimparica trio', r'\bcredelio plus', r'\bselehold', r'\bselamectin', r'\bmoxidectin', r'\bendectocid']
+EQUIP_SUBS = [
+    ('custi-internare-contentie', 'Cuști / internare / contenție', [r'\bcusc', r'\bcusti\b', r'\binternare', r'\bcontentie', r'\bmodul']),
+    ('oxigenoterapie-si-icu', 'Oxigenoterapie și ICU', [r'\boxigen', r'\bconcentrator', r'\bicu\b', r'\bincubator', r'\bnebuliz']),
+    ('ati-anestezie-si-monitorizare', 'ATI, anestezie și monitorizare', [r'\bmonitor', r'\banestez', r'\bvaporizator', r'\bpulsoxim', r'\blaringoscop', r'\binfuziomat', r'\binjectomat', r'\bpomp(a|e) (de )?(infuzie|perfuzie)',
+                                                                         r'\bdefibril', r'\bcapnograf', r'\bventilator', r'\bcircuit', r'\bincalz', r'\btermometru']),
+    ('iluminare-operatorie-si-examinare', 'Iluminare operatorie și examinare', [r'\blamp', r'\biluminare', r'\bscialitic', r'\blupa\b', r'\bfrontal']),
+    ('stomatologie', 'Stomatologie', [r'\bdentar', r'\bdental', r'\bscaler', r'\bstomatolog', r'\bdetartr', r'\belevator', r'\bextractor', r'\bdinti']),
+    ('chirurgie', 'Chirurgie', [r'\belectrocauter', r'\bsigilat', r'\bchirurg', r'\baspirator', r'\bbisturiu electric', r'\boperat']),
+    ('mobilier-si-inox', 'Mobilier și inox', [r'\bmas(a|i)\b', r'\bdulap', r'\bchiuvet', r'\binox', r'\bmobilier', r'\bcarucior', r'\bstand\b', r'\braft', r'\bscaun', r'\btarga', r'\bcadă', r'\bcada\b']),
+]
+RX_SUBS = [  # (slug sub Farmacie veterinara, nume, cuvinte cheie, categorii vechi care duc aici)
+    ('vaccinuri', 'Vaccinuri', VACCINE, ['vaccinuri']),
+    ('antibiotice-injectabile', 'Antibiotice injectabile', [], ['antibiotice-injectabile']),
+    ('antibiotice-orale', 'Antibiotice orale', [], ['antibiotice-orale']),
+    ('antiinflamatoare', 'Antiinflamatoare și analgezice', [r'\bantiinflam', r'\bmeloxicam', r'\bcarprofen', r'\bmetacam', r'\bloxicom', r'\brimadyl', r'\bcimalgex', r'\bgalliprant', r'\bprevicox',
+        r'\bnorocarp', r'\bcarporal', r'\brycarfa', r'\bmelovem', r'\bdexafort', r'\bdexametazon', r'\bcorticoid', r'\bonsior', r'\blibrela', r'\bsolensia', r'\bflunixin', r'\bketoprofen',
+        r'\bvetaflumex', r'\banalgez', r'\bmetamizol', r'\btolfedin', r'\bfirocoxib', r'\bprednis', r'\bmetilprednis', r'\bbutorfanol'],
+        ['antiinflamator-extern', 'antiinflamator-injectabil', 'antiinflamator-per-os', 'antiinflamator-subcutanat', 'antiinflamatoare-pisici-medicamente']),
+    ('anestezice-tranchilizante', 'Anestezice și tranchilizante', [r'\banestez', r'\btranchiliz', r'\bsedativ', r'\bketamin', r'\bxylazin', r'\bpropofol', r'\bisofluran', r'\bbarbitur', r'\beutanas',
+        r'\bmedetomidin', r'\bdexmedetomidin', r'\bdiazepam', r'\bacepromazin', r'\batipamezol', r'\balfaxan', r'\bzoletil', r'\bdomitor', r'\bsedator', r'\bxylasol', r'\bnarketan'],
+        ['tranchilizante', 'barbiturice']),
+    ('hormonale', 'Hormonale și reproducție', [r'\bhormon', r'\bprostaglandin', r'\boxitocin', r'\boxytocin', r'\bgonadotrop', r'\bestrumate', r'\bcloprostenol', r'\breceptal', r'\bovarelin',
+        r'\bprogest', r'\baltrenogest', r'\bregumate', r'\bgnrh', r'\bsuprelorin', r'\bdeslorelin', r'\bdinoprost', r'\bcabergolin', r'\bgalastop', r'\binseminare'], ['hormonale']),
+    ('mastite-si-metrite', 'Mastite și metrite', [r'\bmastit', r'\bmetrit', r'\bintramamar', r'\buter', r'\bmamelon', r'\buger', r'\bpesar'], ['mastite-si-metrite']),
+    ('antiparazitare', 'Antiparazitare', PARASITE, ['antiparazitare']),
+    ('vitamine-minerale', 'Vitamine, minerale și perfuzii', [r'\bvitamin', r'\bperfuzabil', r'\bser fiziologic', r'\bringer', r'\bglucoz', r'\bborogluconat', r'\bcalci', r'\baminoaci', r'\bminera',
+        r'\belectroli', r'\bcatosal', r'\bfosfor', r'\bphosph', r'\bselen', r'\bfier\b', r'\bb-?complex', r'\bad3e', r'\bvit\b'],
+        ['vitamine-injectabile', 'vitamine-per-os', 'vitamine-perfuzabile', 'vitamine', 'vitamine-si-minerale', 'aminoacizi']),
+    ('furaje-aditivi', 'Furaje, aditivi și lapte praf', [r'\blapte', r'\bfuraj', r'\baditiv', r'\bcheag', r'\bpremix', r'\bconcentrat', r'\bnutret', r'\bmilk'],
+        ['aditivi', 'furaje-complementare', 'lapte-praf', 'cheag', 'enzime', 'prebiotice']),
+    ('medicina-interna', 'Medicină internă', [], ['cardiovascular', 'diuretice', 'antiemetice', 'antiepileptice', 'medicina-interna', 'hepatoprotectoare', 'antimicotice', 'antidiareice', 'afectiuni-renale-2']),
+    ('dermatologie-antiseptice', 'Dermatologie și antiseptice', [r'\bunguent', r'\bantisept', r'\bdermat', r'\bspray\b', r'\bcicatriz', r'\bplag', r'\brani\b', r'\biod', r'\bjod'],
+        ['derma', 'unguente', 'antiseptice', 'spray', 'solutii-otice', 'solutii-oftalmice']),
+    ('biosecuritate', 'Biosecuritate și dezinfecție', DISINF, ['biosecuritate', 'dezinfectanti']),
+    ('insecticide-rodenticide', 'Insecticide și rodenticide', PEST, ['insecticide', 'rodenticide']),
+    ('animale-ferma', 'Animale de fermă și cabaline', [], ['equine', 'apicultura']),
+]
+RXP = {s: pats for s, _, pats, _ in RX_SUBS}
+ANTIBIO = [r'\bantibiot', r'\bamoxi', r'\benroflox', r'\bdoxi', r'\btetracic', r'\bpenicil', r'\bgentam', r'\bcefal', r'\bceft', r'\bcefq', r'\bmetronid', r'\bmarboflox', r'\bclindam', r'\bsulfa',
+           r'\btiloz', r'\btyloz', r'\bflorfen', r'\boxitetrac', r'\boxytetrac', r'\bcolist', r'\bsynulox', r'\bkesium', r'\bclavaseptin', r'\bbaytril', r'\benroxil', r'\bmarbocyl', r'\bdoxylin',
+           r'\bronaxan', r'\bconvenia', r'\bmetrobactin', r'\bstomorgyl', r'\bantirobe', r'\bclindaseptin', r'\bzodon', r'\bstreptomic', r'\blincomic', r'\bspiramic', r'\btrimetoprim', r'\bflumequin',
+           r'\btulathro', r'\bdraxxin', r'\btilmicos', r'\bgenta', r'\bclav', r'\bpen-?strep', r'\bbetamox', r'\bshotapen', r'\bamoxi', r'\bcobactan', r'\bnaxcel', r'\bexcenel', r'\bmicotil', r'\bzactran']
+
+OLD_TREE = [  # arborele final: (slug, nume, copii); slugurile vechi raman, ca adresele de pe site-ul vechi sa mearga in continuare
+    ('hrana', 'Hrană', [
+        ('caini-hrana', 'Câini', [('hrana-uscata-caini-hrana', 'Hrană uscată', []), ('hrana-umeda-caini-hrana', 'Hrană umedă', []), ('recompense-caini-hrana', 'Recompense', []),
+                                 ('hrana-monoproteica', 'Hrană monoproteică', [])]),
+        ('pisici-hrana', 'Pisici', [('hrana-uscata-pisici-hrana', 'Hrană uscată', []), ('hrana-umeda-pisici-hrana', 'Hrană umedă', []), ('recompense-pisici-hrana', 'Recompense', []),
+                                   ('hrana-monoproteica-pisici-hrana', 'Hrană monoproteică', [])]),
+        ('hrana-rozatoare', 'Rozătoare', []), ('hrana-pasari', 'Păsări', []), ('hrana-pesti-reptile', 'Pești și reptile', []),
+    ]),
+    ('diete-2', 'Diete', [(slug, name, [(sp, sn, [('umeda', 'Umedă', []), ('uscata', 'Uscată', [])]) for sp, sn in (('caini', 'Câini'), ('pisici', 'Pisici'))]) for slug, name, _ in NEEDS]),
+    ('otc', 'Suplimente', [('antiparazitare-otc', 'Antiparazitare', [(f'{sp}-{t}', f'{sn} – {tn}', []) for sp, sn in (('caini', 'Câini'), ('pisici', 'Pisici'))
+                                                                      for t, tn in (('interne', 'interne'), ('externe', 'externe'), ('intern-extern', 'intern/extern'))]),
+                           ('vitamine-suplimente', 'Vitamine și suplimente', [])]
+                          + [(slug, name, ([(s, n, []) for s, n, _ in DERMA_FORMS] if slug == 'afectiuni-dermatologice' else [subs[k] + ([],) for k in ('caini', 'pisici') if k in subs]))
+                             for slug, name, _, subs in AILMENTS]),
+    ('accesorii', 'Accesorii', [('caini-accesorii', 'Câini', []), ('pisici-accesorii', 'Pisici', []), ('jucarii', 'Jucării', []), ('nisip-litiere', 'Nisip și litiere', []),
+                                ('alte-animale-accesorii', 'Alte animale', [])]),
+    ('igiena', 'Igienă', [('caini-igiena', 'Câini', []), ('pisici-igiena', 'Pisici', [])]),
+    ('echipamente-veterinare', 'Echipamente veterinare', [('cabinete-clinici-veterinare', 'Cabinete / clinici veterinare', [])] + [(s, n, []) for s, n, _ in EQUIP_SUBS]
+     + [('instrumentar', 'Instrumentar', []), ('consumabile', 'Consumabile', []), ('materiale-de-sutura', 'Materiale de sutură', []), ('identificare-animale', 'Identificare animale', [])]),
+    ('farmacie-veterinara', 'Farmacie veterinară', [(s, n, []) for s, n, _, _ in RX_SUBS]),
+]
+# Slugurile din diete-2 nu urmeaza o regula pe site-ul vechi; se iau exact cum erau (ex. slabire-diabet/caini/uscata).
+OLD_EXPLICIT_MERGE = {  # categorie veche (cale) -> categorie din arborele final, cand au acelasi continut
+    'accesorii-pet': 'accesorii', 'jucarii': 'accesorii/jucarii', 'cosmetice-pentru-animale': 'igiena',
+    'hrana-umeda-2': 'hrana', 'pet-food-dog': 'hrana/caini-hrana', 'pet-food-cat': 'hrana/pisici-hrana', 'recompense-2': 'hrana',
+    'science-plan-canine': 'hrana/caini-hrana', 'prescription-diet-canine': 'diete-2', 'prescription-diet-feline': 'diete-2',
+    'diete-veterinare': 'diete-2', 'dieta-veterinara': 'diete-2', 'dieta-umeda': 'diete-2', 'dieta-uscata': 'diete-2',
+    'hrana-rozatoare': 'hrana/hrana-rozatoare', 'hrana-pasari': 'hrana/hrana-pasari', 'hrana/fara-categorie': 'hrana',
+    'echipamente-veterinare/custi-internare-si-contentie': 'echipamente-veterinare/custi-internare-contentie',
+    'echipamente-veterinare/instrumentar-si-consumabile': 'echipamente-veterinare/instrumentar',
+    'echipamente-veterinare/chirurgie-electrocauter-si-sigilare-vasculara': 'echipamente-veterinare/chirurgie',
+    'instrumentar-2': 'echipamente-veterinare', 'materiale-de-sutura': 'echipamente-veterinare/materiale-de-sutura',
+    'vitamine-caini-si-pisici': 'otc/vitamine-suplimente', 'nutraceutice': 'otc/vitamine-suplimente', 'antiparazitare': 'farmacie-veterinara/antiparazitare',
+    'otc/antiinflamatoare-pisici-medicamente': 'farmacie-veterinara/antiinflamatoare', 'afectiuni-renale-2': 'otc/afectiuni-renale',
+    'solutii-otice': 'otc/afectiuni-dermatologice/otice', 'solutii-oftalmice': 'otc/afectiuni-oftalmice', 'antidiareice': 'otc/afectiuni-digestive',
+    'hepatoprotectoare': 'otc/afectiuni-hepatice', 'derma': 'otc/afectiuni-dermatologice', 'diverse': 'farmacie-veterinara',
+}
+for s, n, _, olds_ in RX_SUBS:
+    for o in olds_:
+        OLD_EXPLICIT_MERGE.setdefault(o, 'farmacie-veterinara/' + s)
+
+
+def build_old_tree(cats):
+    """Arborele final ca lista de noduri {slug, name, children}; la Diete slugurile reale vin din exportul vechi."""
+    byid = {c['id']: c for c in cats}
+
+    def path(c):
+        p = []
+        while c:
+            p.append(c['slug']); c = byid.get(c['parent'])
+        return '/'.join(reversed(p))
+    existing = {path(c) for c in cats}
+    # diete-2/<nevoie>/<specie>/<textura>: cauta slugul vechi dupa numele afisat (Câini/Pisici, Umedă/Uscată)
+    old_kids = collections.defaultdict(dict)
+    for c in cats:
+        par = byid.get(c['parent'])
+        if par:
+            old_kids[path(par)][norm(c['name'])] = c['slug']
+
+    def node(prefix, slug, name, children):
+        here = f'{prefix}/{slug}' if prefix else slug
+        if prefix.startswith('diete-2/') and slug in ('caini', 'pisici', 'umeda', 'uscata'):
+            label = norm(name)
+            real = old_kids.get(prefix, {}).get(label)
+            parent_tail = prefix.split('/')[-1]
+            slug = real or (f'{slug}-{parent_tail}' if slug in ('caini', 'pisici') else f'{slug}-{parent_tail}')
+            here = f'{prefix}/{slug}'
+        return {'slug': slug, 'name': name, 'path': here, 'existed': here in existing,
+                'children': [node(here, *ch) for ch in children]}
+    return [node('', *t) for t in OLD_TREE]
+
+
+def flatten(tree):
+    for n in tree:
+        yield n
+        yield from flatten(n['children'])
+
+
+def texture(name, oldj, desc):
+    if has(name, r'\bhrana uscata', r'\buscat(a|e)\b', r'\bdry\b', r'\b\d+([.,]\d+)? ?kg\b', r'\bsemiumed'):
+        return 'uscata'
+    if has(name, *FOOD_WET[:-3], r'\bcaserol', r'\btray', r'\b\d+ ?buc\b', r'\bsaculet'):
+        return 'umeda'
+    if 'umed' in oldj and 'uscat' not in oldj:
+        return 'umeda'
+    if 'uscat' in oldj:
+        return 'uscata'
+    if has(name, r'\b\d{2,3} ?(g|gr)\b') and not has(name, r'\b(300|400|500|700|750|800|900) ?(g|gr)\b'):
+        return 'umeda'
+    if has(desc, r'\bhrana umeda', r'\bconserv', r'\bpliculet', r'\bpate\b') and not has(desc, r'\bhrana uscata', r'\bgranule', r'\bcrochet', r'\bkibble'):
+        return 'umeda'
+    return 'uscata'
+
+
+def to_old(r, p, old_slug_paths, index):
+    """Traduce rezultatul clasificarii (specie + segment) in caile din arborele vechi curatat."""
+    name = norm(p['name'])
+    desc = norm((p.get('short_description') or '') + ' ' + (p.get('description') or ''))[:1500]
+    oldj = ' | '.join(r['old'])
+    olds = set(old_slug_paths)
+    seg = r['segment']
+    newc = r['categories']
+    out = []
+
+    def add(path):
+        if path not in index:
+            raise KeyError(path)
+        out.append(path)
+
+    def dpath(need, sp, tex):
+        base = f'diete-2/{need}'
+        spn = next(c for c in index[base]['children'] if norm(c['name']) == ('caini' if sp == 'caini' else 'pisici'))
+        txn = next(c for c in spn['children'] if norm(c['name']) == tex)
+        return txn['path']
+
+    def ailment():
+        for slug, _, pats, subs in AILMENTS:
+            if has(name, *pats):
+                return slug, subs
+        for slug, _, pats, subs in AILMENTS:  # categoria veche din Suplimente, daca numele nu spune nimic
+            if any(o.startswith('otc/' + slug) for o in olds):
+                return slug, subs
+        return None, {}
+
+    def rx_sub():
+        if seg == 'vaccine':
+            return 'vaccinuri'
+        if has(name, *ANTIBIO) or any(o.startswith('antibiotice') for o in olds):
+            return 'antibiotice-injectabile' if has(name, r'\binj', r'\bml\b', r'\bflacon', r'\bsol(utie)? inj') and not has(name, r'\btablet', r'\btbl', r'\bcp\b', r'\bpulbere orala', r'\bsolutie orala', r'\bwsp\b') else 'antibiotice-orale'
+        for s, _, pats, olds_ in RX_SUBS:
+            if s in ('vaccinuri', 'antibiotice-injectabile', 'antibiotice-orale', 'medicina-interna', 'animale-ferma'):
+                continue
+            if pats and has(name, *pats):
+                return s
+        for s, _, _, olds_ in RX_SUBS:
+            if any(o.split('/')[-1] in olds_ for o in olds):
+                return s
+        return 'medicina-interna'
+
+    for c in newc:
+        top, sub = c.split('/')
+        if top in ('caini', 'pisici'):
+            hr = 'caini-hrana' if top == 'caini' else 'pisici-hrana'
+            sfx = hr
+            if sub in ('hrana-uscata', 'hrana-umeda'):
+                add(f'hrana/{hr}/{sub}-{sfx}')
+                if has(name, r'mono ?prote', r'single protein', r'\bmonoprot') or any('monoproteica' in o for o in olds):
+                    add(f'hrana/{hr}/' + ('hrana-monoproteica' if top == 'caini' else 'hrana-monoproteica-pisici-hrana'))
+            elif sub == 'recompense':
+                add(f'hrana/{hr}/recompense-{sfx}')
+            elif sub == 'diete-veterinare':
+                needs = [s for s, _, pats in NEEDS if has(name, *pats)]  # „Kidney & Joint” intra si la renal, si la articular
+                if not needs:
+                    needs = [o.split('/')[1] for o in olds if o.startswith('diete-2/')][:1]
+                tex = texture(name, oldj, desc)
+                for need in needs or [None]:
+                    add(dpath(need, top, tex) if need else 'diete-2')
+            elif sub == 'antiparazitare':
+                kind = 'intern-extern' if has(name, *PARA_BOTH) else 'interne' if has(name, *PARA_INT) else 'externe'
+                add(f'otc/antiparazitare-otc/{top}-{kind}')
+            elif sub in ('suplimente', 'sanatate') and has(name, r'\bteste?\b', r'\bcapsator', r'\bcvet\b'):
+                add('echipamente-veterinare/consumabile')  # teste si consumabile de cabinet ajunse la „sanatate”
+            elif sub in ('suplimente', 'sanatate'):
+                slug, subs = ailment()
+                if slug == 'afectiuni-dermatologice':
+                    form = next((s for s, _, pats in DERMA_FORMS if has(name, *pats)), None)
+                    add(f'otc/{slug}/{form}' if form else f'otc/{slug}')
+                elif slug:
+                    add(f'otc/{slug}/{subs[top][0]}' if top in subs else f'otc/{slug}')
+                else:
+                    add('otc/vitamine-suplimente' if sub == 'suplimente' or seg in ('suppl', 'milk') else 'otc')
+            elif sub == 'igiena':
+                add(f'igiena/{top}-igiena')
+            elif sub == 'accesorii':
+                add(f'accesorii/{top}-accesorii')
+            elif sub == 'jucarii':
+                add('accesorii/jucarii')
+            elif sub == 'nisip-litiera':
+                add('accesorii/nisip-litiere')
+        elif top == 'alte-animale':
+            if sub in ('rozatoare', 'pasari', 'pesti', 'reptile'):
+                if seg == 'toy':
+                    add('accesorii/jucarii')
+                elif seg in ('hygiene',) or (seg == 'access' and has(name, r'\bcusc', r'\bcoliv', r'\bacvariu', r'\bterariu', r'\bhranitoare', r'\badapator', r'\bbol\b', r'\bcasut', r'\btransport', r'\bnisip', r'\basternut', r'\brumegus', r'\btalaj')):
+                    add('accesorii/alte-animale-accesorii')
+                else:
+                    add({'rozatoare': 'hrana/hrana-rozatoare', 'pasari': 'hrana/hrana-pasari'}.get(sub, 'hrana/hrana-pesti-reptile'))
+            else:  # ferma, cai, albine
+                if seg in ('rx', 'parasite', 'vaccine', 'suppl', 'milk', 'disinf', 'pest', 'other', 'health'):
+                    s = 'antiparazitare' if seg == 'parasite' else rx_sub() if seg in ('rx', 'vaccine', 'other', 'health') else None
+                    if seg in ('suppl', 'milk'):
+                        s = 'furaje-aditivi' if seg == 'milk' or (has(name, *RXP['furaje-aditivi']) and not has(name, *RXP['vitamine-minerale'])) else 'vitamine-minerale'
+                    if seg == 'disinf':
+                        s = 'biosecuritate'
+                    if seg == 'pest':
+                        s = 'insecticide-rodenticide'
+                    if s and s != 'medicina-interna':
+                        add('farmacie-veterinara/' + s)
+                add('farmacie-veterinara/animale-ferma')
+        elif top == 'cabinet-veterinar':
+            if sub == 'echipamente':
+                s = next((s for s, _, pats in EQUIP_SUBS if has(name, *pats)), None)
+                if not s:
+                    s = next((o.split('/')[1] for o in olds if o.startswith('echipamente-veterinare/') and o.split('/')[1] in [x[0] for x in EQUIP_SUBS]), 'cabinete-clinici-veterinare')
+                add('echipamente-veterinare/' + s)
+            elif sub == 'instrumentar':
+                add('echipamente-veterinare/instrumentar')
+                if has(name, *EQUIP_SUBS[4][2]):
+                    add('echipamente-veterinare/stomatologie')
+            elif sub == 'consumabile':
+                add('echipamente-veterinare/consumabile')
+            elif sub == 'suturi':
+                add('echipamente-veterinare/materiale-de-sutura')
+            elif sub == 'identificare':
+                add('echipamente-veterinare/identificare-animale')
+            elif sub == 'vaccinuri':
+                add('farmacie-veterinara/vaccinuri')
+            elif sub == 'dezinfectie':
+                add('farmacie-veterinara/biosecuritate')
+            elif sub == 'ddd':
+                add('farmacie-veterinara/insecticide-rodenticide')
+            elif sub == 'medicamente':
+                add('farmacie-veterinara/' + rx_sub())
+    return list(dict.fromkeys(out))
+
+
+
 def main():
     products = []
     for f in sorted(os.listdir(D)):
@@ -432,6 +741,14 @@ def main():
                 return canonical(b)
         return None
 
+    def slug_path(cid):
+        chain, x = [], byid.get(cid)
+        while x:
+            chain.append(x['slug']); x = byid.get(x['parent'])
+        return '/'.join(reversed(chain))
+
+    tree = build_old_tree(cats)
+    index = {n['path']: n for n in flatten(tree)}
     overrides = json.load(open(OVERRIDES)) if os.path.exists(OVERRIDES) else {}
     result = {}
     for p in products:
@@ -440,14 +757,36 @@ def main():
         if o:
             r.update({k: v for k, v in o.items() if k in ('categories', 'species', 'brand')})
             r['confidence'] = 'manual'
+        r['segment_categories'] = r['categories']
+        r['categories'] = to_old(r, p, [slug_path(c['id']) for c in p['categories']], index)
+        if o and o.get('old_categories'):
+            r['categories'] = o['old_categories']
         r['name'] = html.unescape(p['name'])
         result[str(p['id'])] = r
 
-    # Redirecturi: fiecare categorie veche duce la categoria noua in care au ajuns cele mai multe produse ale ei.
+    # Categoriile fara niciun produs (nici in subcategorii) nu intra in arbore; adresa lor duce la parinte.
+    used = collections.Counter()
+    for v in result.values():
+        for k in v['categories']:
+            parts = k.split('/')
+            for i in range(1, len(parts) + 1):
+                used['/'.join(parts[:i])] += 1
+
+    def prune(nodes):
+        return [dict(n, children=prune(n['children'])) for n in nodes if used[n['path']]]
+    tree = prune(tree)
+    index = {n['path']: n for n in flatten(tree)}
+
+    def ancestor(path):
+        while path and path not in index:
+            path = path.rpartition('/')[0]
+        return path or None
+
+    # Redirecturi: categoriile vechi care nu mai exista (dubluri unite, „Fara categorie”, categorii razlete) duc la categoria
+    # in care au ajuns produsele lor; cele care raman in arbore isi pastreaza adresa.
     votes = collections.defaultdict(collections.Counter)
     for p in products:
         for c in p['categories']:
-            # Votul urca si la toti parintii: o categorie veche fara produse directe ia destinatia copiilor ei.
             x = byid.get(c['id'])
             while x:
                 for nc in result[str(p['id'])]['categories'][:1]:
@@ -455,23 +794,32 @@ def main():
                 x = byid.get(x['parent'])
     redirects = {}
     for c in cats:
-        chain, x = [], c
-        while x:
-            chain.append(x['slug']); x = byid.get(x['parent'])
-        old = '/categorie-produs/' + '/'.join(reversed(chain)) + '/'
-        v = votes[c['id']]
-        if v:
-            total = sum(v.values())
-            t, n = v.most_common(1)[0]
-            # Categoria veche era larga (produsele ei s-au impartit in mai multe subcategorii noi):
-            # redirectul merge la sectiunea dominanta (Caini, Pisici...), nu la o subcategorie la intamplare.
-            if n / total < 0.6:
-                t = collections.Counter(k.split('/')[0] for k in v.elements()).most_common(1)[0][0]
-            redirects[old] = '/categorie-produs/' + t + '/'
+        old = slug_path(c['id'])
+        if old in index:
+            continue
+        if old.startswith('diete-2/'):  # subcategorie de dieta ramasa goala: duce la nevoia/specia parinte
+            target = ancestor(old)
+        elif old in OLD_EXPLICIT_MERGE:
+            target = ancestor(OLD_EXPLICIT_MERGE[old])
+        elif votes[c['id']]:
+            v = votes[c['id']]
+            target, n = v.most_common(1)[0]
+            if n / sum(v.values()) < 0.6:  # produsele s-au impartit: duce la sectiunea comuna
+                parts = [k.split('/') for k in v.elements()]
+                common = []
+                for seg_ in zip(*parts):
+                    if len(set(seg_)) > 1:
+                        break
+                    common.append(seg_[0])
+                target = '/'.join(common) or collections.Counter(k.split('/')[0] for k in v.elements()).most_common(1)[0][0]
         else:
-            redirects[old] = '/magazin/'
+            target = ancestor(old)
+        redirects['/categorie-produs/' + old + '/'] = '/categorie-produs/' + target + '/' if target else '/magazin/'
+    assert all(t == '/magazin/' or t.strip('/').split('/', 1)[1] in index for t in redirects.values()), 'redirect catre o categorie inexistenta'
 
-    tree = [{'slug': t['slug'], 'name': t['name'], 'children': [{'slug': s, 'name': n} for s, n in t['children']]} for t in TREE]
+    def strip(nodes):
+        return [{'slug': n['slug'], 'name': n['name'], 'children': strip(n['children'])} for n in nodes]
+    tree = strip(tree)
     json.dump({'tree': tree, 'redirects': redirects, 'brand_merge': BRAND_MERGE, 'not_brands': sorted(NOT_BRANDS)},
               open(os.path.join(D, 'taxonomy.json'), 'w'), ensure_ascii=False, indent=1)
     json.dump({k: {kk: v[kk] for kk in ('categories', 'species', 'brand', 'confidence')} for k, v in result.items()},

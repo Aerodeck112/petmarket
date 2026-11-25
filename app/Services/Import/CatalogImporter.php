@@ -160,18 +160,20 @@ class CatalogImporter
     private function importNewTaxonomy(array $taxonomy): array
     {
         $stats = ['categorii' => 0, 'branduri' => 0, 'etichete' => 0, 'pagini' => 0, 'redirecturi' => 0];
-        $icons = ['caini' => 'bone', 'pisici' => 'heart', 'alte-animale' => 'paw', 'cabinet-veterinar' => 'stethoscope'];
-        foreach ($taxonomy['tree'] as $i => $top) {
-            $parent = Category::query()->firstOrNew(['path' => $top['slug']]);
-            $parent->fill(['name' => $top['name'], 'slug' => $top['slug'], 'parent_id' => null, 'sort' => $i + 1, 'is_visible' => true, 'in_menu' => true,
-                'is_featured' => true, 'icon' => $icons[$top['slug']] ?? null])->save();
-            $stats['categorii']++;
-            foreach ($top['children'] as $j => $child) {
-                Category::query()->firstOrNew(['path' => $top['slug'].'/'.$child['slug']])
-                    ->fill(['name' => $child['name'], 'slug' => $child['slug'], 'parent_id' => $parent->id, 'sort' => $j + 1, 'is_visible' => true, 'in_menu' => true])->save();
+        $icons = ['hrana' => 'bowl', 'diete-2' => 'heart', 'otc' => 'shield', 'accesorii' => 'paw', 'igiena' => 'drop', 'echipamente-veterinare' => 'stethoscope',
+            'farmacie-veterinara' => 'syringe', 'caini' => 'bone', 'pisici' => 'heart', 'alte-animale' => 'paw', 'cabinet-veterinar' => 'stethoscope'];
+        // Arborele poate avea oricate niveluri (ex. Diete › Suport renal › Câini › Uscată); calea ramane cea de pe site-ul vechi.
+        $save = function (array $nodes, ?Category $parent) use (&$save, &$stats, $icons): void {
+            foreach ($nodes as $i => $node) {
+                $path = $parent ? $parent->path.'/'.$node['slug'] : $node['slug'];
+                $category = Category::query()->firstOrNew(['path' => $path]);
+                $category->fill(['name' => $node['name'], 'slug' => $node['slug'], 'parent_id' => $parent?->id, 'sort' => $i + 1, 'is_visible' => true, 'in_menu' => true]
+                    + ($parent ? [] : ['is_featured' => true, 'icon' => $icons[$node['slug']] ?? null]))->save();
                 $stats['categorii']++;
+                $save($node['children'] ?? [], $category);
             }
-        }
+        };
+        $save($taxonomy['tree'], null);
 
         // Branduri: cele din taxonomia veche, cu dublurile unificate (Brit Care → Brit) si fara „branduri” care nu sunt branduri.
         $merge = array_change_key_case($taxonomy['brand_merge'] ?? []);

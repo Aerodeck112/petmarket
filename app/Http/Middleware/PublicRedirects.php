@@ -13,7 +13,7 @@ class PublicRedirects
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->isMethod('GET') || $request->is('admin*', 'livewire*', 'install*', 'build/*', 'media/*', 'uploads/*')) {
+        if (! in_array($request->getMethod(), ['GET', 'HEAD'], true) || $request->is('admin*', 'livewire*', 'install*', 'build/*', 'media/*', 'uploads/*')) {
             return $next($request);
         }
 
