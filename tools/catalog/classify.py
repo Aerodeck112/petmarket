@@ -665,7 +665,18 @@ def to_old(r, p, old_slug_paths, index):
                 add('accesorii/nisip-litiere')
         elif top == 'alte-animale':
             if sub in ('rozatoare', 'pasari', 'pesti', 'reptile'):
-                if seg == 'toy':
+                if seg in ('instr', 'cons', 'equip', 'suture') or any(x.startswith('cabinet-veterinar/') for x in newc):
+                    continue  # instrumentarul pentru rozatoare ramane doar la Echipamente veterinare
+                if has(name, r'\binstrument', r'\bexaminare', r'\bspecul', r'\bdepartator'):
+                    add('echipamente-veterinare/instrumentar')
+                    if has(name, *EQUIP_SUBS[4][2], r'\boral'):
+                        add('echipamente-veterinare/stomatologie')
+                    continue
+                if seg == 'parasite':
+                    add('farmacie-veterinara/antiparazitare')
+                elif seg == 'rx':
+                    add('farmacie-veterinara/' + rx_sub())
+                elif seg == 'toy':
                     add('accesorii/jucarii')
                 elif seg in ('hygiene',) or (seg == 'access' and has(name, r'\bcusc', r'\bcoliv', r'\bacvariu', r'\bterariu', r'\bhranitoare', r'\badapator', r'\bbol\b', r'\bcasut', r'\btransport', r'\bnisip', r'\basternut', r'\brumegus', r'\btalaj')):
                     add('accesorii/alte-animale-accesorii')

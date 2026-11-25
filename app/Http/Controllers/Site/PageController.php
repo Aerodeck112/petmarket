@@ -17,6 +17,30 @@ use Illuminate\Support\Facades\Cache;
 
 class PageController extends Controller
 {
+    /**
+     * Dalele „Ce cauți azi?”: toate sectiunile meniului, plus cele mai mari subcategorii ale primelor sectiuni.
+     * Subcategoriile numite doar „Câini” / „Pisici” primesc numele sectiunii („Hrană pentru câini”).
+     */
+    private static function homeTiles()
+    {
+        $extra = [2, 1, 1, 1];
+        $tops = Category::query()->visible()->where('in_menu', true)->whereNull('parent_id')->where('product_count', '>', 0)->orderBy('sort')->orderBy('name')->get();
+        $room = max(0, 12 - $tops->count());
+
+        return $tops->values()->flatMap(function (Category $c, int $i) use ($extra, &$room) {
+            $take = min($extra[$i] ?? 0, $room);
+            $room -= $take;
+            $children = $take ? $c->children()->visible()->where('product_count', '>', 0)->orderByDesc('product_count')->limit($take)->get() : collect();
+            foreach ($children as $child) {
+                if (in_array($child->name, ['Câini', 'Pisici', 'Câine', 'Pisică'], true)) {
+                    $child->name = $c->name.' pentru '.mb_strtolower(str_replace(['Câine', 'Pisică'], ['Câini', 'Pisici'], $child->name));
+                }
+            }
+
+            return $children->prepend($c);
+        })->values();
+    }
+
     public function home(Seo $seo)
     {
         $page = Page::query()->where('slug', 'home')->first();
@@ -36,8 +60,11 @@ class PageController extends Controller
                 ? $with(Product::query())->inStock()->orderByDesc('sold_count')->orderByDesc('rating_avg')->limit(12)->get()
                 : $with(Product::query())->inStock()->whereNotNull('brand_id')->whereHas('images')
                     ->whereIn('id', fn ($q) => $q->select('product_id')->from('category_product')->whereIn('category_id',
-                        Category::query()->where('in_menu', true)->whereNull('parent_id')->orderBy('sort')->first()?->descendantIds() ?? [0]))
-                    ->orderByDesc('published_at')->limit(12)->get(),
+                        // hrana pentru caini si pisici: cele mai mari doua subcategorii ale primului raft
+                        Category::query()->where('parent_id', Category::query()->where('in_menu', true)->whereNull('parent_id')->orderBy('sort')->value('id'))
+                            ->orderByDesc('product_count')->limit(2)->get()->flatMap->descendantIds()->all() ?: [0]))
+                    // cate un produs de la branduri diferite, ca raftul sa nu repete „Proaspat sosite”
+                    ->orderByDesc('published_at')->limit(600)->get()->unique('brand_id')->take(12)->values(),
             'newest' => $with(Product::query())->inStock()->orderByDesc('published_at')->limit(12)->get(),
             'featured' => $with(Product::query())->inStock()->where('is_featured', true)->limit(12)->get(),
         ]);
@@ -46,8 +73,7 @@ class PageController extends Controller
             'seo' => $seo, 'page' => $page, 'b' => $page?->blocks ?? [],
             'slides' => Banner::query()->live('hero')->get(),
             'promos' => Banner::query()->live('promo')->limit(3)->get(),
-            'categories' => Category::query()->visible()->where('in_menu', true)->whereNull('parent_id')->orderBy('sort')->orderBy('name')->get()
-                ->flatMap(fn (Category $c) => $c->children()->visible()->where('product_count', '>', 0)->orderByDesc('product_count')->limit(2)->get()->prepend($c))->take(12)->values(),
+            'categories' => self::homeTiles(),
             'brands' => Brand::query()->whereNotNull('logo')->orderByDesc('is_featured')->orderBy('sort')->limit(18)->get(),
             'posts' => Post::published()->latest('published_at')->limit(3)->get(),
         ]);
