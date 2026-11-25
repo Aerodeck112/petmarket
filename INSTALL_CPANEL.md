@@ -32,26 +32,28 @@ Revenire la WordPress, oricând: `cd ~ && rm public_html && mv public_html_vechi
 ### Puțin spațiu pe găzduire
 
 Noul magazin ocupă aproximativ 160 MB (plus 44 MB arhiva ZIP, care se șterge după dezarhivare) și o bază de
-date de câteva zeci de MB. Copierea imaginilor (pasul 3) mai adaugă câteva sute de MB, pentru că imaginile
-există deja în magazinul vechi. Dacă nu e spațiu:
+date de câteva zeci de MB. Din magazinul vechi noul magazin are nevoie doar de trei lucruri:
+`wp-config.php`, directorul `wp-content/uploads` (imaginile) și baza de date WordPress. Restul (nucleul
+WordPress, pluginuri, teme, cache, backupuri vechi) se poate șterge, după ce există backup pe calculator.
+Fără aceste fișiere, revenirea la WordPress înseamnă reinstalarea lui din backup, nu un minut.
 
-1. Backupul de la pasul 1 se descarcă pe calculator și apoi se șterge de pe găzduire (un backup lăsat
-   în contul cPanel ocupă cât tot site-ul). Backupurile JetBackup ale firmei de găzduire nu intră în spațiul contului.
-2. cPanel → *Disk Usage* arată ce ocupă loc. Se pot șterge fără grijă: arhivele `.zip` / `.tar.gz` vechi din
-   `/home/UTILIZATOR`, fișierele `error_log`, `public_html_vechi/wp-content/cache`, backupurile pluginurilor
-   (`wp-content/updraft`, `wp-content/ai1wm-backups`, `wp-content/backups*`) și fișierele de import
-   `wp-content/uploads/wpallimport`. Nu se șterg `wp-content/uploads` (imaginile) și baza de date WordPress.
-3. **Pasul 3 (copierea imaginilor) se sare.** În loc, imaginile vechi se leagă direct în noul magazin, fără
-   să ocupe spațiu în plus (cPanel → *Terminal*, după comutare):
+1. **Backup pe calculator**: `wp-content/uploads`, `wp-config.php` și baza WordPress (cPanel → *Backup* →
+   *Download a MySQL Database Backup*). Un backup lăsat în contul cPanel ocupă spațiu: se descarcă și se șterge.
+2. **Eliberare spațiu**: `public_html` se redenumește în `public_html_vechi` (File Manager → *Rename*); în el se
+   șterge tot, **în afară de** `wp-config.php` și `wp-content/uploads`. Se mai pot șterge arhivele `.zip` /
+   `.tar.gz` vechi din `/home/UTILIZATOR` și fișierele `error_log`. Baza de date WordPress **nu** se șterge.
+3. Instalarea continuă cu pașii 2, 3 și 5–9 de mai sus; la pasul 4 rămâne doar legătura
+   (`cd ~ && ln -s petmarket/public public_html`), pentru că redenumirea s-a făcut deja.
+4. **Imaginile se leagă, nu se copiază**: la pasul 6 se sare „Copiază imaginile”; în cPanel → *Terminal*:
 
    ```bash
    mkdir -p ~/petmarket/public/wp-content && ln -s ~/public_html_vechi/wp-content/uploads ~/petmarket/public/wp-content/uploads
    ```
 
-   Produsele afișează atunci imaginile de la adresele vechi (`/wp-content/uploads/…`), care continuă să
-   funcționeze, inclusiv în Google Imagini. Pe server nu se execută niciun script din acel director.
-   Când se eliberează spațiu, se rulează pasul 3; după copiere, legătura nu mai este necesară.
-   `public_html_vechi` nu se șterge cât timp imaginile sunt luate de acolo.
+   Produsele afișează imaginile de la adresele vechi (`/wp-content/uploads/…`), care continuă să
+   funcționeze, inclusiv în Google Imagini. Din acel director nu se execută niciun script.
+   Când se eliberează spațiu, se rulează „Copiază imaginile”; după copiere, legătura și `public_html_vechi`
+   nu mai sunt necesare.
 
 ## Ghidul complet
 
