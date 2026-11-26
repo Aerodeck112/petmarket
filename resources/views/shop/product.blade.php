@@ -66,8 +66,8 @@
 
             @if (! $product->sold_online)
                 <div class="rx-box">
-                    <h2 class="h-sm"><x-hv-icon name="stethoscope" width="22" height="22" /> Produs care nu se vinde online</h2>
-                    <p>{{ \App\Support\Settings::get('commerce.not_online_notice') }}</p>
+                    <h2 class="h-sm"><x-hv-icon name="stethoscope" width="22" height="22" /> {{ $product->sale_restriction === 'location' ? 'Disponibil doar la sediu' : 'Produs care nu se vinde online' }}</h2>
+                    <p>{{ $product->restrictionNotice() }}</p>
                     <p class="rx-actions"><a class="btn btn-primary btn-sm" href="tel:{{ preg_replace('/[^0-9+]/', '', $shop['phone']) }}" data-track="phone_click"><x-hv-icon name="phone" width="18" height="18" /> {{ $shop['phone'] }}</a>
                         <a class="btn btn-ghost btn-sm" href="mailto:{{ $shop['email'] }}?subject={{ rawurlencode('Despre '.$product->name) }}">{{ $shop['email'] }}</a></p>
                 </div>

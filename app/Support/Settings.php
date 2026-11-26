@@ -70,7 +70,9 @@ class Settings
         'marketing.search_console_verification' => 'Nmi3g_K1aueIq-uEn5Yh-4BUJqez7297a_xu0fxoM2g', // meta-tagul de pe site-ul vechi: Search Console ramane verificat
         'marketing.google_ads_id' => 'AW-16651227502',
         'marketing.announcement' => 'Livrare gratuită la comenzi de peste 1.000 lei · Taxă de livrare 23 lei',
-        'commerce.not_online_notice' => 'Acest produs nu se comercializează online. Este un produs pentru care este necesară rețetă medical-veterinară, conform regimului aplicabil. Pentru disponibilitate și pașii următori, sună-ne.',
+        'commerce.not_online_notice' => 'Acest produs este un medicament veterinar care se eliberează doar pe bază de rețetă medical-veterinară, așa că legea nu permite vânzarea lui online. Îl poți ridica de la sediul nostru (:adresa), cu rețeta de la medicul veterinar. Sună-ne pentru disponibilitate.',
+        'commerce.not_online_notice_vet' => 'Produs de uz exclusiv veterinar (anestezic, sedativ sau similar), administrat doar de medicul veterinar. Nu se vinde online și nu se eliberează proprietarilor; medicii veterinari îl pot comanda telefonic sau de la sediu (:adresa).',
+        'commerce.not_online_notice_location' => 'Acest produs se comercializează doar la sediul nostru (:adresa), nu online. Sună-ne pentru ofertă, disponibilitate și livrare.',
 
         'seo.robots_extra' => '',
         'seo.default_description' => 'Pet Market by HiKeVet: hrană, recompense, accesorii și produse de îngrijire pentru câini și pisici, cu livrare în toată țara.',

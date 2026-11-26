@@ -186,6 +186,8 @@ class ProductResource extends Resource
                     Grid::make(4)->schema([
                         Toggle::make('sold_online')->label('Se vinde online')->default(true)->inline(false)
                             ->helperText('Oprit pentru produsele cu rețetă: prețul apare, dar nu se poate comanda.'),
+                        Select::make('sale_restriction')->label('Restricție de vânzare')->options(Product::RESTRICTIONS)->placeholder('Fără restricție')
+                            ->helperText('Cu restricție, produsul nu se poate pune în coș; pe site apare motivul și telefonul.'),
                         Toggle::make('is_featured')->label('Recomandat pe prima pagină')->inline(false),
                         Toggle::make('is_visible')->label('Vizibil în catalog și căutare')->default(true)->inline(false),
                         TextInput::make('badge')->label('Etichetă proprie')->maxLength(40)->placeholder('Bestseller'),
@@ -237,6 +239,7 @@ class ProductResource extends Resource
                 SelectFilter::make('status')->label('Stare')->options(Product::STATUSES),
                 TernaryFilter::make('on_sale')->label('La reducere'),
                 TernaryFilter::make('sold_online')->label('Se vinde online'),
+                \Filament\Tables\Filters\SelectFilter::make('sale_restriction')->label('Restricție de vânzare')->options(Product::RESTRICTIONS),
                 Filter::make('low')->label('Stoc redus')->query(fn (Builder $query) => $query->where('manage_stock', true)->where('stock_qty', '<=', (int) Settings::get('commerce.low_stock_threshold'))),
                 Filter::make('no_image')->label('Fără imagine')->query(fn (Builder $query) => $query->whereDoesntHave('images')),
                 Filter::make('no_category')->label('Fără categorie')->query(fn (Builder $query) => $query->whereDoesntHave('categories')),

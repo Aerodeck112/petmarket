@@ -15,7 +15,7 @@
         @if ($p->isNew())<span class="sticker sticker--new">Nou</span>@endif
         @if ($p->badge)<span class="sticker sticker--custom">{{ $p->badge }}</span>@endif
         @if ($out)<span class="sticker sticker--out">Stoc epuizat</span>@endif
-        @if (! $p->sold_online)<span class="sticker sticker--rx">Cu rețetă</span>@endif
+        @if (! $p->sold_online)<span class="sticker sticker--rx">{{ $p->restrictionSticker() }}</span>@endif
     </div>
     <button type="button" class="card-p-fav" @click="toggleFav({{ $p->id }}, $el)" aria-label="Adaugă la favorite: {{ $p->name }}" aria-pressed="false"><x-hv-icon name="heart-o" width="20" height="20" /></button>
     <div class="card-p-body">
@@ -35,7 +35,7 @@
                 @endif
             </p>
             @if (! $p->sold_online)
-                <a class="add-btn add-btn--info" href="{{ site_url($p->path()) }}" aria-label="Detalii: {{ $p->name }}"><x-hv-icon name="phone" width="18" height="18" /><span>Rețetă</span></a>
+                <a class="add-btn add-btn--info" href="{{ site_url($p->path()) }}" aria-label="Detalii: {{ $p->name }}"><x-hv-icon name="phone" width="18" height="18" /><span>{{ $p->sale_restriction === 'location' ? 'Detalii' : 'Rețetă' }}</span></a>
             @elseif (! $out && $p->price !== null)
                 @if ($variable)
                     <a class="add-btn" href="{{ site_url($p->path()) }}" aria-label="Alege varianta: {{ $p->name }}"><x-hv-icon name="chevron" width="20" height="20" /><span>Alege</span></a>

@@ -346,6 +346,12 @@ class CatalogImporter
         if ($ids->isNotEmpty()) {
             $product->categories()->sync($ids->mapWithKeys(fn ($id, $i) => [$id => ['is_primary' => $i === 0]])->all());
         }
+        // Restrictia de vanzare (reteta, uz veterinar, doar la sediu): produsul ramane vizibil, dar nu se poate pune in cos.
+        if (array_key_exists('restriction', $c) && $product->sale_restriction !== $c['restriction']) {
+            $product->sale_restriction = $c['restriction'];
+            $product->sold_online = $c['restriction'] ? false : $product->sold_online;
+            $product->saveQuietly();
+        }
         if (! empty($c['brand'])) {
             $brand = $this->brandByName($c['brand']) ?? Brand::query()->create(['name' => $c['brand'], 'slug' => $this->uniqueBrandSlug($c['brand'])]);
             if ($product->brand_id !== $brand->id) {

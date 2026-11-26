@@ -25,6 +25,11 @@
 - Magazinul vechi rămas în `public_html_vechi` este găsit automat: imaginile se copiază de pe disc, iar prețurile, reducerile, stocul exact și starea produselor se citesc din baza WooCommerce (`wp-config.php`).
 - Cheie nouă de semnare a actualizărilor, inclusă în pachet.
 
+### Produse care nu se vând online
+- Toate produsele scanate după statutul legal: online se vând doar medicamentele veterinare fără rețetă (Legea 160/1998, art. 37; Regulamentul (UE) 2019/6). 598 de produse nu se mai pot pune în coș (pe site-ul vechi erau marcate doar 78): antibiotice, vaccinuri, hormoni, antiinflamatoare, injectabile, medicamente pentru animale de fermă și cai, antiparazitarele cu rețetă (Bravecto, NexGard, Simparica, Credelio, Stronghold, Advocate...).
+- Motivul se vede pe site: „Cu rețetă” (se ridică de la sediu, cu rețeta), „Uz veterinar” (anestezice, sedative, eutanasiante) sau „Doar la sediu”; textele se editează din Setări magazin → Reguli comerciale.
+- În admin: câmpul „Restricție de vânzare” pe fiecare produs și filtrul cu același nume în lista de produse.
+
 ### Instalare fără site-ul vechi
 - Exportul CSV din WooCommerce (25.11.2026) e inclus: prețuri, promoții, stoc exact, greutate (pentru Ecolet), EAN, TVA redus (118 produse), produsele care nu se vând online (78) și cele 99 de ciorne.
 - Pachet separat cu imaginile produselor, gata optimizate; se leagă automat la import. WordPress și baza lui nu mai sunt necesare.

@@ -40,6 +40,10 @@ class Product extends Model
                     $p->stock_status = $p->stock_qty > 0 ? StockStatus::InStock : ($p->allow_backorders ? StockStatus::OnBackorder : StockStatus::OutOfStock);
                 }
             }
+            // Un produs cu restrictie (reteta, uz veterinar, doar la sediu) nu poate fi pus in cos.
+            if ($p->sale_restriction) {
+                $p->sold_online = false;
+            }
             if ($p->status === 'published' && ! $p->published_at) {
                 $p->published_at = now();
             }
@@ -134,6 +138,35 @@ class Product extends Model
     public function isPurchasable(): bool
     {
         return $this->status === 'published' && $this->sold_online && $this->price !== null && $this->price > 0 && $this->stock_status !== StockStatus::OutOfStock;
+    }
+
+    public const RESTRICTIONS = [
+        'rx' => 'Medicament cu rețetă veterinară',
+        'vet' => 'Uz exclusiv al medicului veterinar',
+        'location' => 'Se vinde doar la sediu',
+    ];
+
+    /** Eticheta scurta de pe cardul produsului. */
+    public function restrictionSticker(): string
+    {
+        return match ($this->sale_restriction) {
+            'vet' => 'Uz veterinar',
+            'location' => 'Doar la sediu',
+            default => 'Cu rețetă',
+        };
+    }
+
+    /** Textul explicativ de pe pagina produsului (editabil din Setări magazin). */
+    public function restrictionNotice(): string
+    {
+        $key = match ($this->sale_restriction) {
+            'vet' => 'commerce.not_online_notice_vet',
+            'location' => 'commerce.not_online_notice_location',
+            default => 'commerce.not_online_notice',
+        };
+        $address = trim(Settings::get('shop.address').', '.Settings::get('shop.city'), ', ');
+
+        return str_replace(':adresa', $address, (string) Settings::get($key));
     }
 
     public function vatRate(): float

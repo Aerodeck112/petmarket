@@ -727,6 +727,58 @@ def to_old(r, p, old_slug_paths, index):
 
 
 
+
+# ---------------- Restrictii de vanzare ----------------
+# Legea 160/1998 (art. 37) si Regulamentul (UE) 2019/6: online se pot vinde doar medicamentele veterinare care se elibereaza
+# FARA reteta. Cu reteta sunt, intre altele: antibioticele, vaccinurile, hormonii, antiinflamatoarele, injectabilele,
+# medicamentele pentru animalele de ferma (specii de la care se obtin alimente, inclusiv caii) si antiparazitarele autorizate
+# centralizat (Bravecto, NexGard, Simparica, Credelio, Stronghold, Advocate, Broadline, Profender...).
+# Anestezicele, sedativele si eutanasiantele sunt de uz exclusiv al medicului veterinar.
+VET_ONLY = [r'ketam', r'\bnarketan', r'\bnarcostart', r'\bisoflu', r'\bisothesia', r'\bsevoflu', r'\bpropofol', r'\bdomosedan', r'\bdomitor', r'\bdexdomitor',
+            r'\bsedadex', r'\bsedator', r'\bzenalpha', r'\bmedetomid', r'\bxyla', r'\bvetaxyl', r'\bstresnil', r'\bazaperon', r'\beutha', r'\bpentobarb', r'\bexagon',
+            r'\bdolethal', r'\bzoletil', r'\balfaxan', r'\bbutorf', r'\btorbugesic', r'\bbupren', r'\bmetadon', r'\bfentan', r'\bmorfin', r'\bmidazol', r'\bdiazepam', r'\bacepromaz']
+RX_PARASITES = [r'\bbravecto', r'\bnexgard', r'\bsimparica', r'\bcredelio', r'\badtab\b', r'\bstronghold', r'\bselehold', r'\bselamectin', r'\bevicto', r'\badvocate\b',
+                r'\bmoxiclear', r'\bbroadline', r'\bprofender', r'\brevolution\b',
+                # ferma, cai, porumbei si pasari de curte
+                r'\balbenda', r'\bascacid', r'\bbimectin', r'\bbiomec', r'\bbulmectin', r'\bbutox', r'\bbyemite', r'\bdectomax', r'\bdouvistome', r'\bendectocid',
+                r'\beprizero pour', r'\bgardal', r'\bhalocur', r'\bintermectin', r'\bivomec', r'\blevaverm', r'\blevoplix', r'\bpanacur 10', r'\brombendazol',
+                r'\bromoxibendazol', r'\bromparasect', r'\bzooactiv', r'\bdimpilat', r'\bsebacil', r'\bstozzon', r'\bvermitan', r'\bnoromectin', r'\bhorse\b', r'\bcolumboviofort', r'\bimizol']
+RX_NAMES = [r'\balamycin', r'\baurizon', r'\bmirataz', r'\bneptra', r'\boptimmune', r'\bosurnia', r'\bposatex', r'\bsurolan', r'\bterramycin', r'\boxyvet',
+            r'\bamoxineovit', r'\bveraflox', r'\buniferon', r'\bintrafer', r'\bcalciject', r'\bcalcikel', r'\bcalciveyxol', r'\bglucorom', r'\bvitamina b1 plus b6',
+            r'\bveyfo vit b', r'\bveyxol b-phos', r'\btheranekron', r'\boxifuran', r'\bnovacoc', r'\bflumax', r'\basocilin', r'\bbisolvon', r'\bbuscopan', r'\bcafeina',
+            r'\bdilaterol', r'\bhemosilate', r'\brompil', r'\barentor', r'\bmetrosept', r'\bpinox', r'\bpneumoguard', r'\beasotic', r'\bcortotic', r'\bdaxocox',
+            r'\bmometamax', r'\bapoquel', r'\bcytopoint', r'\blibrela', r'\bsolensia', r'\bzycortal', r'\bvetoryl', r'\bvetmedin', r'\bfortekor', r'\bcardalis',
+            r'\bisemid', r'\bzelys', r'\bamodip', r'\bprid delta', r'\bpg 600',
+            # seringi intramamare si alte medicamente pentru ferma clasificate ca „consumabile” dupa forma
+            r'\bcefa-?safe', r'\bcepravin', r'\bcobactan', r'\bmastijet', r'\bmetricure', r'\bnoroclox', r'\bnoroseal', r'\borbenin', r'\borbeseal',
+            r'\bpathozone', r'\bubrolexin', r'\blevoplix', r'\bvanoxi', r'\bnoredon']
+NOT_A_DRUG = [r'\bantipoux van plant', r'\baplicator', r'\bfiltru', r'\bmasca de fata', r'\bpump\b', r'\bpompa', r'\bseringue', r'\bdispozitiv', r'\bpensa', r'\bpieptene', r'\btickless',
+              r'\bzgarda antiparazitara bio', r'\bcalmdown', r'\bmenforsan', r'\bdermoscent', r'\ballerderm', r'\bvanprotect']
+
+
+def restriction(r, p):
+    """Motivul pentru care produsul nu se vinde online: 'vet', 'rx' sau None."""
+    name = norm(p['name'])
+    seg = r['segment']
+    if seg == 'vaccine':
+        return 'rx'
+    if has(name, *NOT_A_DRUG):
+        return None
+    if has(name, *VET_ONLY):
+        return 'vet'
+    if has(name, *RX_NAMES):
+        return 'rx'
+    if seg == 'rx':
+        return 'rx'
+    if seg == 'parasite' and has(name, *RX_PARASITES):
+        return 'rx'
+    # medicamentele pentru animalele de ferma si cai (specii producatoare de alimente) se elibereaza pe reteta
+    if 'Animale de fermă' in r['species'] or 'Cai' in r['species']:
+        if seg in ('parasite', 'rx', 'other') and not has(name, r'\bcheag', r'\bfromase', r'\bherba', r'\bcolumbo vit'):
+            return 'rx'
+    return None
+
+
 def main():
     products = []
     for f in sorted(os.listdir(D)):
@@ -768,6 +820,8 @@ def main():
     tree = build_old_tree(cats)
     index = {n['path']: n for n in flatten(tree)}
     overrides = json.load(open(OVERRIDES)) if os.path.exists(OVERRIDES) else {}
+    wc_file = os.path.join(D, 'wc-export.json')
+    wc = json.load(open(wc_file)) if os.path.exists(wc_file) else {}
     result = {}
     for p in products:
         r = classify(p, byid, brand_of)
@@ -780,6 +834,11 @@ def main():
         if o and o.get('old_categories'):
             r['categories'] = o['old_categories']
         r['name'] = html.unescape(p['name'])
+        r['restriction'] = restriction(r, p)
+        if wc.get(str(p['id']), {}).get('no_online_sale') and not r['restriction']:
+            r['restriction'] = 'location'  # marcat „nu se vinde online” in magazinul vechi, fara sa fie medicament cu reteta
+        if o and 'restriction' in o:
+            r['restriction'] = o['restriction']
         result[str(p['id'])] = r
 
     # Categoriile fara niciun produs (nici in subcategorii) nu intra in arbore; adresa lor duce la parinte.
@@ -840,7 +899,7 @@ def main():
     tree = strip(tree)
     json.dump({'tree': tree, 'redirects': redirects, 'brand_merge': BRAND_MERGE, 'not_brands': sorted(NOT_BRANDS)},
               open(os.path.join(D, 'taxonomy.json'), 'w'), ensure_ascii=False, indent=1)
-    json.dump({k: {kk: v[kk] for kk in ('categories', 'species', 'brand', 'confidence')} for k, v in result.items()},
+    json.dump({k: {kk: v[kk] for kk in ('categories', 'species', 'brand', 'confidence', 'restriction')} for k, v in result.items()},
               open(os.path.join(D, 'classification.json'), 'w'), ensure_ascii=False)
 
     # Rezumat

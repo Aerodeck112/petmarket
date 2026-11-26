@@ -119,6 +119,11 @@ class ShopSettings extends Page implements HasForms
                         Toggle::make($f('commerce.reviews_enabled'))->label('Recenzii activate'),
                         Toggle::make($f('commerce.reviews_need_approval'))->label('Recenziile se aprobă înainte de publicare'),
                     ]),
+                    Section::make('Produse care nu se vând online')->description('Textul afișat pe pagina produsului, după restricția din fișa lui. „:adresa” se înlocuiește cu adresa magazinului.')->schema([
+                        Textarea::make($f('commerce.not_online_notice'))->label('Medicament cu rețetă veterinară')->rows(3),
+                        Textarea::make($f('commerce.not_online_notice_vet'))->label('Uz exclusiv al medicului veterinar')->rows(3),
+                        Textarea::make($f('commerce.not_online_notice_location'))->label('Se vinde doar la sediu')->rows(3),
+                    ]),
                 ]),
                 Tab::make('Plăți')->icon('heroicon-o-credit-card')->schema([
                     Section::make('Plată la livrare (ramburs)')->columns(2)->schema([

@@ -70,6 +70,16 @@ Scrie `wc-export.json` (preț, promoție, stoc exact, comenzi în avans, greutat
 marcajul „nu se vinde online” / „necesită rețetă”) și `products-002.json` (produsele nepublicate, importate ca
 ciorne). La import, datele din CSV au prioritate față de cele publice; baza WordPress nu mai este necesară.
 
+## Restricții de vânzare (26.11.2026)
+
+`tools/catalog/classify.py` stabilește pentru fiecare produs câmpul `restriction` din `classification.json`:
+`rx` (medicament cu rețetă veterinară), `vet` (uz exclusiv al medicului veterinar) sau `location` (marcat „nu se
+vinde online” în magazinul vechi, fără să fie medicament cu rețetă). Regulile: vaccinurile și medicamentele
+(injectabile, antibiotice, hormoni, antiinflamatoare, cardiologie...), lista de antiparazitare cu rețetă, medicamentele
+pentru animale de fermă și cai, plus o listă de denumiri comerciale (`RX_NAMES`, `RX_PARASITES`, `VET_ONLY`).
+La import, produsul primește `sale_restriction` și nu mai poate fi pus în coș. Corecturile individuale se pun în
+`tools/catalog/overrides.json` cu cheia `restriction` (`null` = se vinde online) sau direct în admin.
+
 ## Pachetul de imagini
 
 Imaginile produselor (7.700) sunt descărcate și optimizate dinainte (WebP, 1000 px și miniatură 400 px) în

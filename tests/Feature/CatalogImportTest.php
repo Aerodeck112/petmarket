@@ -121,6 +121,17 @@ class CatalogImportTest extends TestCase
         $this->assertSame([12345, 9900, 9900, 7, 2500, '8009470012345', 11.0], [$p->regular_price, $p->sale_price, $p->price, $p->stock_qty, $p->weight_grams, $p->gtin, $p->vat_rate]);
         $this->assertTrue($p->manage_stock);
         $this->assertFalse(Product::query()->where('wc_product_id', 3586)->value('sold_online'));
+
+        // Restrictiile de vanzare: medicament cu reteta (Stronghold) si echipament vandut doar la sediu.
+        $rx = Product::query()->where('wc_product_id', 3586)->first();
+        $this->assertSame('rx', $rx->sale_restriction);
+        $this->assertSame('location', Product::query()->where('wc_product_id', 3186)->value('sale_restriction'));
+        $this->get($rx->path())->assertOk()->assertSee('rețetă medical-veterinară')->assertSee('Str. Băneasa 23')->assertDontSee('btn-buy');
+        $this->postJson('/cos/adauga', ['product_id' => $rx->id, 'qty' => 1])->assertStatus(422);
+        // Din admin: o restrictie pusa pe un produs il scoate automat de la vanzarea online.
+        $food = Product::query()->where('wc_product_id', 4640)->first();
+        $food->update(['sale_restriction' => 'vet']);
+        $this->assertFalse($food->fresh()->sold_online);
         $draft = Product::query()->where('wc_product_id', 3591)->first();
         $this->assertSame('draft', $draft->status);
         $this->assertSame(\App\Enums\StockStatus::OnBackorder, $draft->stock_status);
