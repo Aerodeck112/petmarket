@@ -45,3 +45,4 @@ Thumbs.db
 # Episoadele video se livreaza separat (pachet media), nu prin Git sau prin actualizari
 /public/media/episoade/*.mp4
 /tools/import/cache/
+/public/uploads/products/wp
