@@ -55,7 +55,6 @@ class LegalDocuments
 
         return [
             'termeni-conditii' => ['Termeni și condiții', <<<HTML
-<p><em>Versiune în vigoare din :versiune.</em></p>
 <h2>1. Cine suntem</h2>
 <p>Site-ul :site (denumit în continuare „site-ul”) este administrat de:</p>
 $firma
@@ -120,7 +119,6 @@ $firma
 HTML],
 
             'politica-de-retur' => ['Politica de retur', <<<HTML
-<p><em>Versiune în vigoare din :versiune.</em></p>
 <h2>1. Dreptul de retragere în 14 zile</h2>
 <p>Ai dreptul să te retragi din contract, fără a preciza motivul, în termen de <strong>14 zile</strong>. Termenul expiră după 14 zile de la ziua în care tu sau o persoană desemnată de tine (alta decât curierul) intră în posesia fizică a produselor; dacă o comandă se livrează în mai multe colete, termenul curge de la primirea ultimului colet.</p>
 <p>Pentru a-ți exercita dreptul de retragere, trebuie să ne informezi printr-o declarație neechivocă (de exemplu un e-mail la <a href="mailto::email">:email</a> sau o scrisoare la adresa de mai jos). Poți folosi <a href="/formular-retragere/">formularul de retragere</a>, dar nu este obligatoriu. Este suficient să trimiți comunicarea înainte de expirarea termenului.</p>
@@ -178,7 +176,6 @@ HTML],
 HTML],
 
             'livrare' => ['Informații despre livrare', <<<HTML
-<p><em>Versiune în vigoare din :versiune.</em></p>
 <h2>Unde livrăm</h2>
 <p>Livrăm în toată România, prin firme de curierat, la adresa indicată în comandă (și, unde este disponibil, în lockere).</p>
 <h2>Cât durează</h2>
@@ -196,7 +193,6 @@ $firma
 HTML],
 
             'politica-confidentialitate' => ['Politica de confidențialitate', <<<HTML
-<p><em>Versiune în vigoare din :versiune.</em></p>
 <h2>1. Operatorul datelor</h2>
 $firma
 <p>Pentru orice întrebare despre datele tale personale ne poți scrie la <a href="mailto::email">:email</a>.</p>
@@ -245,7 +241,6 @@ $firma
 HTML],
 
             'politica-cookies' => ['Politica de cookies', <<<HTML
-<p><em>Versiune în vigoare din :versiune.</em></p>
 <h2>Ce sunt cookie-urile</h2>
 <p>Cookie-urile sunt fișiere mici pe care site-ul le salvează în browserul tău. Unele sunt strict necesare pentru funcționarea magazinului (coș, autentificare, securitate) și nu necesită acordul tău (art. 4 alin. (6) din Legea nr. 506/2004). Celelalte – de statistică și marketing – se activează <strong>numai dacă apeși „Accept”</strong> în mesajul despre cookie-uri.</p>
 

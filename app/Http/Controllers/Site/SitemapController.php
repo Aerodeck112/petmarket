@@ -42,7 +42,8 @@ class SitemapController extends Controller
                 ->each(fn ($p) => $add($p->path(), $p->updated_at, $p->mainImage?->url()));
         } elseif ($type === 'categorii') {
             Category::query()->visible()->orderBy('path')->get()->each(fn ($c) => $add($c->path(), $c->updated_at));
-            Brand::query()->orderBy('name')->get()->each(fn ($b) => $add($b->path(), $b->updated_at));
+            // Doar brandurile cu produse publicate: o pagină de brand goală nu are ce căuta în Google.
+            Brand::query()->whereHas('products', fn ($q) => $q->published())->orderBy('name')->get()->each(fn ($b) => $add($b->path(), $b->updated_at));
         } else {
             $add('/', null);
             $add('/magazin/', null);

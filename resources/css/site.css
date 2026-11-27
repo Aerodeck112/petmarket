@@ -419,7 +419,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   .nav.is-open .nav-logo { margin-bottom: 0; }
 }
 .footer-logo { display: inline-block; margin-bottom: 1.25rem; }
-.footer-logo img { display: block; height: clamp(96px, 9vw, 130px); width: auto; }
+.footer-logo img { display: block; width: auto; height: auto; max-width: 100%; max-height: clamp(96px, 9vw, 130px); object-fit: contain; }
 .bare-head img { height: 64px; width: auto; }
 
 /* Selectorul de limba din meniu */

@@ -64,6 +64,8 @@ class CatalogController extends Controller
         $brand = Brand::query()->where('slug', $slug)->firstOrFail();
         $seo->page($brand->seo_title ?: $brand->name, $brand->seo_description ?: ($brand->description ?: 'Produse '.$brand->name.' la Pet Market.'), $brand->logo)
             ->crumbs([['Acasă', '/'], ['Branduri', '/branduri/'], [$brand->name, $brand->path()]]);
+        // Brand fără produse publicate: pagina rămâne accesibilă, dar nu se indexează.
+        $seo->noindex = $seo->noindex || ! $brand->products()->published()->exists();
 
         return $this->listing($request, $seo, (new CatalogQuery($request))->forBrand($brand->id), $brand->name, null, ['brand' => $brand]);
     }

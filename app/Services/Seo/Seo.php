@@ -42,6 +42,12 @@ class Seo
 
     public function page(string $title, ?string $description = null, ?string $image = null): static
     {
+        // Paginile 2, 3... ale unei liste au titlu și descriere proprii („Hrană – pagina 2”), ca să nu fie duplicate.
+        $pageNo = (int) request()->query('page', 1);
+        if ($pageNo > 1) {
+            $title .= ' – pagina '.$pageNo;
+            $description = $description ? 'Pagina '.$pageNo.'. '.self::excerpt($description, 140) : null;
+        }
         // Titlul complet are cel mult ~65 de caractere (cât afișează Google); la titlurile lungi numele magazinului se omite.
         $full = $title.' – '.Settings::get('shop.name');
         $this->title = mb_strlen($full) > 65 && mb_strlen($title) >= 30 ? $title : $full;

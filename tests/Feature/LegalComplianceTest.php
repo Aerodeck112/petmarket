@@ -28,6 +28,9 @@ class LegalComplianceTest extends TestCase
         $this->assertSame([8.0, 'kg'], UnitPrice::detect('Royal Canin Mini Adult 2-10 kg 8kg'));
         $this->assertSame([0.25, 'l'], UnitPrice::detect('Brit Care Salmon Oil 250 ml'));
         $this->assertNull(UnitPrice::detect('Lesă reglabilă roșie'));
+        $this->assertNull(UnitPrice::detect('Bio PetActive Bio Urinamin 40 Tabs 0.30 gr'));
+        // O cantitate netă 0 (introdusă greșit) nu strică pagina: prețul pe unitate pur și simplu nu apare.
+        $this->assertNull(UnitPrice::label($this->product(['net_quantity' => 0, 'net_unit' => 'kg'])));
         $this->assertTrue(UnitPrice::eligiblePaths(['hrana/caini-hrana/hrana-uscata-caini-hrana']));
         $this->assertFalse(UnitPrice::eligiblePaths(['accesorii/caini-accesorii', 'otc/antiparazitare-otc/caini-externe']));
     }

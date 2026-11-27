@@ -54,13 +54,18 @@ class UnitPrice
             default => $value / 1000,
         } * $count;
 
+        // Sub 5 g / 5 ml nu e cantitatea netă a ambalajului, ci de obicei greutatea unei tablete („40 tabs 0,30 gr”).
+        if ($qty < 0.005) {
+            return null;
+        }
+
         return [round($qty, 3), in_array($unit, ['ml', 'l'], true) ? 'l' : 'kg'];
     }
 
     /** Textul afișat lângă preț: „12,34 lei/kg”, sau null. */
     public static function label(Product $product): ?string
     {
-        if (! $product->net_quantity || ! $product->net_unit || ! $product->price) {
+        if ((float) $product->net_quantity <= 0 || ! $product->net_unit || ! $product->price) {
             return null;
         }
 
