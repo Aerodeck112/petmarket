@@ -1,3 +1,31 @@
+# Manifestul versiunii 0.1.2
+
+| | |
+|---|---|
+| Versiune | 0.1.2 (28.11.2026) – SEO, accesibilitate, conformitate legală |
+| Cod sursă | ramura `claude/confident-gauss-9ogkxt` |
+
+## Pachetul de actualizare → 0.1.2
+
+| | |
+|---|---|
+| Fișier | `petmarket-update-0.1.2.zip` (semnat; se aplică peste orice 0.1.x: 0.1.0 sau 0.1.1) |
+| Dimensiune | 622 958 octeți |
+| Fișiere | 78 (tot ce s-a schimbat după primul pachet 0.1.0; include și 0.1.1) |
+| Migrări | `add_sale_restriction_to_products`, `apply_sale_restrictions_to_imported_products`, `add_unit_price_and_product_safety`, `publish_legal_documents` |
+| SHA-256 | `968146e4e78e778bc48399db0ac719ca652637a74bc6d66934ef7a6c3bbb0779` |
+| Verificare | Apache 2.4 + PHP 8.3 + MariaDB, aplicația în `public_html/petmarket`, peste o instalare 0.1.1 și peste una din 25.11 + 0.1.1; crawl complet (7.148 de adrese, 0 erori, 0 resurse lipsă); Lighthouse pe 6 tipuri de pagini, mobil și desktop: SEO 100, accesibilitate 100, best practices 100; aranjare verificată pe 168 de pagini la 390 px și 1366 px |
+
+## Pachetul de instalare 0.1.2
+
+| | |
+|---|---|
+| Fișier | `petmarket-install-0.1.2.zip` |
+| Dimensiune | 46 470 444 octeți |
+| SHA-256 | `80bc6af98c272c51863ea4dd4c9bf3321a61999c8a280bcc4b2c0545273a0de4` |
+
+---
+
 # Manifestul versiunii 0.1.1
 
 | | |
