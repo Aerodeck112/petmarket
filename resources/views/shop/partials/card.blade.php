@@ -3,7 +3,9 @@
     /** @var \App\Models\Product $p */
     $img = $p->mainImage?->thumbUrl();
     $variable = $p->isVariable();
-    $percent = $variable ? null : $p->discountPercent();
+    $reference = $variable ? null : $p->referencePrice();
+    $percent = $variable ? null : $p->referencePercent();
+    $unit = \App\Support\UnitPrice::label($p);
     $out = $p->stock_status->value === 'outofstock';
 @endphp
 <article class="card-p {{ $out ? 'is-out' : '' }}">
@@ -31,7 +33,8 @@
                 @else
                     @if ($variable && $p->price_max > $p->price)<small>de la</small>@endif
                     <span class="price-now {{ $p->on_sale ? 'is-sale' : '' }}">{{ money($p->price) }}</span>
-                    @if (! $variable && $p->on_sale)<s class="price-old">{{ money($p->regular_price) }}</s>@endif
+                    @if ($reference)<s class="price-old" title="Cel mai mic preț din ultimele 30 de zile">{{ money($reference) }}</s>@endif
+                    @if ($unit)<small class="price-unit">{{ $unit }}</small>@endif
                 @endif
             </p>
             @if (! $p->sold_online)

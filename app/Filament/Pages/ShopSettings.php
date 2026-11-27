@@ -88,6 +88,7 @@ class ShopSettings extends Page implements HasForms
                         TextInput::make($f('shop.legal_name'))->label('Denumire juridică')->maxLength(120),
                         TextInput::make($f('shop.cui'))->label('CUI')->maxLength(30),
                         TextInput::make($f('shop.reg_com'))->label('Nr. Reg. Com.')->maxLength(40),
+                        TextInput::make($f('shop.capital_social'))->label('Capital social')->maxLength(60)->placeholder('ex. 200 lei')->helperText('Apare în subsol, lângă datele firmei (Legea 31/1990, art. 74).'),
                     ]),
                     Section::make('Contact')->columns(2)->schema([
                         TextInput::make($f('shop.phone'))->label('Telefon')->required()->maxLength(30),
@@ -110,6 +111,7 @@ class ShopSettings extends Page implements HasForms
                     Section::make('Livrare și comandă')->columns(3)->schema([
                         TextInput::make($f('commerce.free_shipping_threshold'))->label('Livrare gratuită de la')->numeric()->suffix('lei')->helperText('0 = fără livrare gratuită.'),
                         TextInput::make($f('commerce.min_order'))->label('Comandă minimă')->numeric()->suffix('lei'),
+                        TextInput::make($f('commerce.delivery_time'))->label('Termen de livrare afișat')->maxLength(60)->placeholder('1–4 zile lucrătoare'),
                         Toggle::make($f('commerce.guest_checkout'))->label('Comandă fără cont'),
                     ]),
                     Section::make('Stoc și catalog')->columns(3)->schema([
@@ -118,6 +120,10 @@ class ShopSettings extends Page implements HasForms
                         TextInput::make($f('commerce.new_badge_days'))->label('Eticheta „Nou” timp de')->numeric()->suffix('zile'),
                         Toggle::make($f('commerce.reviews_enabled'))->label('Recenzii activate'),
                         Toggle::make($f('commerce.reviews_need_approval'))->label('Recenziile se aprobă înainte de publicare'),
+                    ]),
+                    Section::make('Medicamente veterinare vândute online')->description('Regulamentul (UE) 2019/6 și 2021/1904: magazinele care vând online medicamente veterinare fără rețetă afișează pe fiecare pagină logo-ul comun UE, cu link către înregistrarea din lista ANSVSA. Imaginea o primești de la ANSVSA; o urci în public_html/petmarket/public/media/brand/.')->columns(2)->schema([
+                        TextInput::make($f('legal.vmp_logo_url'))->label('Link către înregistrarea ANSVSA')->url(),
+                        TextInput::make($f('legal.vmp_logo_image'))->label('Calea imaginii logo-ului')->placeholder('media/brand/logo-ue-medicamente.png'),
                     ]),
                     Section::make('Produse care nu se vând online')->description('Textul afișat pe pagina produsului, după restricția din fișa lui. „:adresa” se înlocuiește cu adresa magazinului.')->schema([
                         Textarea::make($f('commerce.not_online_notice'))->label('Medicament cu rețetă veterinară')->rows(3),

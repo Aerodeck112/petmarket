@@ -42,15 +42,30 @@ class Seo
 
     public function page(string $title, ?string $description = null, ?string $image = null): static
     {
-        $this->title = $title.' – '.Settings::get('shop.name');
+        // Titlul complet are cel mult ~65 de caractere (cât afișează Google); la titlurile lungi numele magazinului se omite.
+        $full = $title.' – '.Settings::get('shop.name');
+        $this->title = mb_strlen($full) > 65 && mb_strlen($title) >= 30 ? $title : $full;
         if ($description) {
-            $this->description = mb_substr(trim(preg_replace('/\s+/', ' ', html_entity_decode(strip_tags(preg_replace('/<[^>]+>/', ' ', $description)), ENT_QUOTES | ENT_HTML5, 'UTF-8'))), 0, 160);
+            $this->description = self::excerpt($description, 158);
         }
         if ($image) {
             $this->image = asset($image);
         }
 
         return $this;
+    }
+
+    /** Text simplu din HTML, tăiat la ultimul cuvânt întreg, cu „…” dacă a fost scurtat. */
+    public static function excerpt(?string $html, int $max = 158): string
+    {
+        $text = trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags(preg_replace('/<[^>]+>/', ' ', (string) $html)), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+        if (mb_strlen($text) <= $max) {
+            return $text;
+        }
+        $cut = mb_substr($text, 0, $max - 1);
+        $space = mb_strrpos($cut, ' ');
+
+        return rtrim($space > $max * 0.6 ? mb_substr($cut, 0, $space) : $cut, ' ,.;:–-').'…';
     }
 
     /** @param list<array{0:string,1:string}> $items */

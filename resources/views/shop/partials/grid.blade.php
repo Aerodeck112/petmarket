@@ -6,6 +6,7 @@
         <a class="btn btn-dark btn-sm" href="{{ url()->current() }}">Șterge filtrele</a>
     </div>
 @else
+    <h2 class="sr-only">Produse</h2>
     <div class="grid-p">
         @foreach ($products as $p)@include('shop.partials.card', ['p' => $p])@endforeach
     </div>

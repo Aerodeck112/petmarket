@@ -72,4 +72,12 @@ class StorefrontTest extends TestCase
         $this->actingAs($this->staff(Role::Warehouse))->get('/admin/orders')->assertOk();
         $this->actingAs($this->customer())->get('/admin')->assertForbidden();
     }
+
+    public function test_www_host_redirects_permanently_to_the_canonical_domain(): void
+    {
+        $this->seedShop();
+        config(['app.url' => 'https://pet-market.ro']);
+        $this->get('http://www.pet-market.ro/categorie-produs/hrana/?page=2')->assertRedirect('https://pet-market.ro/categorie-produs/hrana/?page=2')->assertStatus(301);
+        $this->get('https://pet-market.ro/')->assertOk();
+    }
 }

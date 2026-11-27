@@ -11,9 +11,9 @@
   --cobalt: #1e3ba8;
   --cobalt-ink: #142a7a;
   --sun: #ffc21f;
-  --magenta: #e6177a;
+  --magenta: #d4106c; /* nuanta mai adanca: text alb pe magenta are contrast AA (5,1:1) */
   --tangerine: #ff6a1a;
-  --teal: #13958a;
+  --teal: #0f8279; /* contrast AA cu text alb (4,7:1) */
   --ink: #1f1638;
   --body: #4b4560;
   --paper: #e9f7f0;
@@ -290,6 +290,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .site-footer { background: var(--ink); color: #d4cfe6; padding: var(--section) 0 2rem; margin-top: var(--section); }
 .site-footer a:not(.btn) { color: #fff; text-decoration: none; }
 .site-footer a:not(.btn):hover { text-decoration: underline; }
+.site-footer .link-btn { color: #fff; font: inherit; text-decoration: none; text-align: left; }
+.site-footer .link-btn:hover { text-decoration: underline; }
 .footer-top { display: grid; grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 0.7fr)); gap: var(--gap); }
 .footer-top h2 { font: 600 1.05rem var(--text); color: #fff; margin-bottom: 0.9rem; }
 .footer-top ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }

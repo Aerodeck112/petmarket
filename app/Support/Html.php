@@ -8,6 +8,19 @@ use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
 /** Curata HTML-ul introdus in admin: fara scripturi, stiluri inline, iframe-uri sau atribute de eveniment. */
 class Html
 {
+    /**
+     * Continut importat care incepe direct cu h3 (dupa h1-ul paginii): titlurile urca un nivel, ca ordinea sa fie
+     * h1 > h2 > h3 (cerinta de accesibilitate si de structura a documentului). Daca exista deja h2, nu se schimba nimic.
+     */
+    public static function headingsFrom2(string $html): string
+    {
+        if (stripos($html, '<h2') !== false || stripos($html, '<h3') === false) {
+            return $html;
+        }
+
+        return preg_replace_callback('#<(/?)h([3-6])\b#i', fn ($m) => '<'.$m[1].'h'.($m[2] - 1), $html);
+    }
+
     public static function clean(string $html): string
     {
         static $sanitizer = null;

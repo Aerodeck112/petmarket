@@ -1,5 +1,23 @@
 # Jurnal de modificări
 
+## 0.1.2 — 28.11.2026 (actualizare: SEO, accesibilitate, conformitate legală)
+
+### Legal (România)
+- Documente legale noi, versionate: Termeni și condiții, Politica de retur (rambursare în 14 zile, excepțiile din art. 16 OUG 34/2014), Formular de retragere (anexa 1 OUG 34/2014), Livrare, Politica de confidențialitate (GDPR complet, ANSPDCP) și Politica de cookies (lista cookie-urilor). Paginile editate deja din admin cu o versiune nu se suprascriu.
+- Butonul final din coș: „Comandă cu obligație de plată” (OUG 34/2014, art. 8).
+- Prețul pe unitatea de măsură (lei/kg, lei/l) la hrană, diete, nisip, igienă și suplimente; cantitatea netă se poate corecta din fișa produsului.
+- Prețul tăiat la reduceri este cel mai mic preț din ultimele 30 de zile (Omnibus), iar procentul se calculează față de el.
+- Tabul „Producător și siguranță” pe pagina produsului (GPSR, Regulamentul UE 2023/988): producător (din fișa brandului), distribuitor, identificare, avertismente.
+- Subsolul: datele complete ale firmei (sediu, Reg. Com., CUI, capital social dacă e completat), „Formular de retragere”, „Setări cookie-uri” (retragerea acordului oricând); s-a scos linkul către platforma europeană SOL, desființată din 20.07.2025; rămâne SAL ANPC. Loc pentru logo-ul comun UE de vânzător online de medicamente veterinare (Setări magazin).
+- Recenzii: textul despre cum sunt verificate (Omnibus).
+- Termenul de livrare afișat vine din Setări magazin (implicit 1–4 zile lucrătoare); s-a scos promisiunea „pleacă în aceeași zi”.
+
+### SEO și accesibilitate
+- `www.pet-market.ro` → `pet-market.ro` cu redirect 301 (o singură adresă pentru Google).
+- Titluri unice pentru subcategoriile cu nume generic („Uscată – Câini – Suport renal”) și pentru produsele cu același nume; descrieri meta generate din produs/categorie, tăiate la cuvânt întreg; titlurile lungi fără sufixul magazinului.
+- Linkurile de paginare au slash final (fără redirecturi interne).
+- Contrast AA pentru textele pe magenta, portocaliu, verde și gri; nume accesibile pentru butoanele Cont, Favorite, Coș; ordinea titlurilor h1 > h2 > h3; proporția corectă a logo-ului.
+
 ## 0.1.1 — 27.11.2026 (actualizare: produse cu rețetă)
 
 - Medicamentele veterinare cu rețetă (584), produsele de uz exclusiv veterinar (10) și cele vândute doar la sediu (4) nu se mai pot comanda online; motivul apare pe card și pe pagina produsului, cu adresa și telefonul.

@@ -17,6 +17,15 @@ class PublicRedirects
             return $next($request);
         }
 
+        // O singura adresa pentru Google: www.pet-market.ro (si orice alias al domeniului) -> domeniul din APP_URL, cu 301.
+        // Schema (http -> https) se forteaza din gazduire („HTTPS Enforce”), unde se stie sigur daca cererea a venit criptat.
+        $canonical = parse_url((string) config('app.url'));
+        $canonicalHost = strtolower((string) ($canonical['host'] ?? ''));
+        $host = strtolower($request->getHost());
+        if ($canonicalHost && $host !== $canonicalHost && preg_replace('/^www\./', '', $host) === preg_replace('/^www\./', '', $canonicalHost)) {
+            return redirect()->away(rtrim((string) config('app.url'), '/').$request->getRequestUri(), 301);
+        }
+
         $path = '/'.trim($request->path(), '/');
         $key = $path === '/' ? '/' : $path.'/';
 

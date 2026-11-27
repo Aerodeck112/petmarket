@@ -51,7 +51,7 @@
                 <span class="sr-only">Meniu</span><x-hv-icon name="menu" width="22" height="22" />
             </button>
             <a class="brand-badge" href="{{ site_url('/') }}" aria-label="{{ $shop['name'] }} – pagina principală">
-                <img src="{{ asset('media/brand/pet-market-logo.png') }}" alt="{{ $shop['name'] }}" width="360" height="120">
+                <img src="{{ asset('media/brand/pet-market-logo.png') }}" alt="{{ $shop['name'] }}" width="360" height="106">
                 <span class="brand-by">{{ $shop['byline'] }}</span>
             </a>
 
@@ -80,13 +80,13 @@
             </form>
 
             <nav class="bar-actions" aria-label="Contul meu și coș">
-                <a class="bar-icon" href="{{ site_url(auth()->check() ? '/contul-meu/' : '/contul-meu/autentificare/') }}">
+                <a class="bar-icon" href="{{ site_url(auth()->check() ? '/contul-meu/' : '/contul-meu/autentificare/') }}" aria-label="{{ auth()->check() ? 'Contul meu' : 'Intră în cont' }}">
                     <x-hv-icon name="user" width="22" height="22" /><span>{{ auth()->check() ? 'Contul meu' : 'Intră în cont' }}</span>
                 </a>
-                <a class="bar-icon" href="{{ site_url(auth()->check() ? '/contul-meu/favorite/' : '/contul-meu/autentificare/') }}">
+                <a class="bar-icon" href="{{ site_url(auth()->check() ? '/contul-meu/favorite/' : '/contul-meu/autentificare/') }}" aria-label="Favorite">
                     <x-hv-icon name="heart-o" width="22" height="22" /><span>Favorite</span>
                 </a>
-                <a class="cart-btn" href="{{ site_url('/cos/') }}" @click.prevent="openCart()" data-track="cart_open">
+                <a class="cart-btn" href="{{ site_url('/cos/') }}" @click.prevent="openCart()" data-track="cart_open" aria-label="Coșul de cumpărături">
                     <x-hv-icon name="cart" width="22" height="22" />
                     <span class="cart-label">Coș</span>
                     <b class="cart-count" x-text="count" x-show="count > 0" @if (! $cartCount) x-cloak @endif>{{ $cartCount }}</b>
@@ -193,7 +193,7 @@
         </div>
         <div class="footer-top">
             <div>
-                <a class="footer-logo" href="{{ site_url('/') }}" aria-label="{{ $shop['name'] }} – pagina principală"><img src="{{ asset('media/brand/pet-market-logo-alb.png') }}" alt="" width="360" height="120" loading="lazy"></a>
+                <a class="footer-logo" href="{{ site_url('/') }}" aria-label="{{ $shop['name'] }} – pagina principală"><img src="{{ asset('media/brand/pet-market-logo-alb.png') }}" alt="" width="360" height="106" loading="lazy"></a>
                 <h2 class="sr-only">{{ $shop['name'] }}</h2>
                 <p class="measure">{{ $shop['tagline'] }}</p>
                 <ul class="footer-contact">
@@ -226,6 +226,8 @@
                     <li><a href="{{ site_url('/termeni-conditii/') }}">Termeni și condiții</a></li>
                     <li><a href="{{ site_url('/politica-confidentialitate/') }}">Confidențialitate</a></li>
                     <li><a href="{{ site_url('/politica-cookies/') }}">Cookies</a></li>
+                    @if ($shop['gtm_id'] || $shop['ga4_id'] || $shop['meta_pixel_id'] || \App\Support\Settings::get('marketing.google_ads_id'))<li><button type="button" class="link-btn" onclick="window.dispatchEvent(new CustomEvent('open-consent'))">Setări cookie-uri</button></li>@endif
+                    <li><a href="{{ site_url('/formular-retragere/') }}">Formular de retragere</a></li>
                     <li><a href="https://anpc.ro/" rel="noopener">ANPC</a></li>
                     @if ($shop['facebook'])<li><a href="{{ $shop['facebook'] }}" rel="noopener">Facebook</a></li>@endif
                     @if ($shop['instagram'])<li><a href="{{ $shop['instagram'] }}" rel="noopener">Instagram</a></li>@endif
@@ -234,7 +236,7 @@
         </div>
         <div class="footer-word" aria-hidden="true">Pet Market</div>
         <div class="footer-bottom">
-            <span>© {{ date('Y') }} {{ $shop['legal_name'] }}@if ($shop['cui']) · CUI {{ $shop['cui'] }}@endif @if ($shop['reg_com']) · {{ $shop['reg_com'] }}@endif. {{ $shop['name'] }} {{ $shop['byline'] }}.</span>
+            <span>© {{ date('Y') }} {{ $shop['legal_name'] }}, {{ $shop['address'] }}, {{ $shop['city'] }}, jud. {{ $shop['county'] }}@if ($shop['reg_com']) · {{ $shop['reg_com'] }}@endif @if ($shop['cui']) · CUI {{ $shop['cui'] }}@endif @if ($shop['capital']) · capital social {{ $shop['capital'] }}@endif. {{ $shop['name'] }} {{ $shop['byline'] }}.</span>
             <a class="made-by" href="https://vitim.ro/?utm_source=pet-market.ro&amp;utm_medium=referral&amp;utm_campaign=footer" rel="noopener" aria-label="Magazin dezvoltat de VITIM (vitim.ro)">
                 <span class="made-by-face" aria-hidden="true"></span>
                 <span class="made-by-text">Dezvoltat cu grijă (și multe recompense pentru Hiko) de <strong>VITIM</strong></span>
@@ -242,7 +244,7 @@
             </a>
             <div class="footer-badges">
                 <a href="https://reclamatiisal.anpc.ro/" rel="noopener"><img src="{{ asset('media/brand/anpc-sal.webp') }}" alt="ANPC – Soluționarea alternativă a litigiilor" width="250" height="62" loading="lazy"></a>
-                <a href="https://ec.europa.eu/consumers/odr" rel="noopener"><img src="{{ asset('media/brand/anpc-sol.webp') }}" alt="Soluționarea online a litigiilor (SOL)" width="250" height="62" loading="lazy"></a>
+                @if ($shop['vmp_logo_url'] && $shop['vmp_logo_image'])<a href="{{ $shop['vmp_logo_url'] }}" rel="noopener"><img src="{{ asset($shop['vmp_logo_image']) }}" alt="Logo comun UE – vânzător online autorizat de medicamente veterinare" height="62" loading="lazy"></a>@endif
             </div>
         </div>
     </div>

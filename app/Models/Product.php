@@ -202,6 +202,28 @@ class Product extends Model
     }
 
     /** Cel mai mic pret din ultimele 30 de zile dinaintea reducerii (Directiva Omnibus). */
+    /**
+     * Prețul de referință afișat tăiat la o reducere (Omnibus, OG 21/1992 art. 16^1): cel mai mic preț din ultimele
+     * 30 de zile dinaintea reducerii; fără istoric, prețul normal. Null dacă nu există o reducere reală față de el.
+     */
+    public function referencePrice(): ?int
+    {
+        if ($this->isVariable() || ! $this->on_sale || ! $this->price) {
+            return null;
+        }
+        $reference = $this->lowestPrice30() ?? $this->regular_price;
+
+        return $reference && $reference > $this->price ? (int) $reference : null;
+    }
+
+    /** Procentul reducerii calculat față de prețul de referință Omnibus. */
+    public function referencePercent(): ?int
+    {
+        $reference = $this->referencePrice();
+
+        return $reference ? (int) round(100 - $this->price * 100 / $reference) : null;
+    }
+
     public function lowestPrice30(?int $variantId = null): ?int
     {
         return PriceHistory::lowestBefore($this->id, $variantId, 30);

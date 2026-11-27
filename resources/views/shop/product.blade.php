@@ -7,7 +7,7 @@
 @endphp
 <div class="wrap pdp" x-data="productPage({{ json_encode([
     'id' => $product->id, 'variable' => $product->isVariable(), 'variants' => $variants, 'attrs' => $variationAttributes,
-    'images' => $images, 'price' => $product->price, 'regular' => $product->regular_price, 'onSale' => (bool) $product->on_sale,
+    'images' => $images, 'price' => $product->price, 'regular' => $product->referencePrice() ?? ($product->isVariable() ? $product->regular_price : null), 'onSale' => (bool) $product->on_sale,
     'stock' => $product->stock_status->value, 'qty' => $product->manage_stock ? $product->stock_qty : null, 'name' => $product->name,
     'sku' => $product->sku, 'brand' => $product->brand?->name, 'category' => $category?->name, 'lowest30' => $lowest30,
     'min' => $product->min_qty, 'max' => $product->max_qty, 'low' => (int) \App\Support\Settings::get('commerce.low_stock_threshold'),
@@ -59,7 +59,8 @@
                         <span class="sticker sticker--sale" x-show="onSale && regular" x-text="'-' + Math.round(100 - price * 100 / regular) + '%'" x-cloak></span>
                     </p>
                 </template>
-                <p class="omnibus" x-show="onSale && lowest30" x-cloak>Cel mai mic preț din ultimele 30 de zile: <b x-text="fmt(lowest30)"></b></p>
+                <p class="omnibus" x-show="onSale && regular" x-cloak>Prețul tăiat este cel mai mic preț practicat în ultimele 30 de zile înainte de reducere.</p>
+                @if ($unit = \App\Support\UnitPrice::label($product))<p class="price-unit">Preț pe unitate: <b>{{ $unit }}</b>@if ($product->net_quantity) <span>(cantitate netă {{ rtrim(rtrim(number_format((float) $product->net_quantity, 3, ',', ''), '0'), ',') }} {{ $product->net_unit }})</span>@endif</p>@endif
             </div>
 
             @if ($product->short_description)<div class="pdp-short prose">{!! \App\Support\Html::clean($product->short_description) !!}</div>@endif
@@ -106,8 +107,8 @@
             @endif
 
             <ul class="pdp-perks">
-                <li><x-hv-icon name="truck" /><span>@if ($freeFrom)<b>Livrare gratuită</b> de la {{ money($freeFrom) }}@else<b>Livrare</b> în toată țara @endif · 1–3 zile lucrătoare</span></li>
-                <li><x-hv-icon name="return" /><span><b>Retur 14 zile</b> pentru produsele nedesigilate</span></li>
+                <li><x-hv-icon name="truck" /><span>@if ($freeFrom)<b>Livrare gratuită</b> de la {{ money($freeFrom) }}@else<b>Livrare</b> în toată țara @endif · {{ $shop['delivery_time'] }}</span></li>
+                <li><x-hv-icon name="return" /><span><b>Retur în 14 zile</b> de la primire</span></li>
                 <li><x-hv-icon name="stethoscope" /><span><b>Întreabă un medic HiKeVet</b> ce i se potrivește: <a href="tel:{{ preg_replace('/[^0-9+]/', '', $shop['phone']) }}" data-track="phone_click">{{ $shop['phone'] }}</a></span></li>
             </ul>
             <x-buddy class="pdp-buddy" :kind="str_contains(mb_strtolower($category?->path ?? ''), 'pisic') ? 'cat' : 'dog'" pose="peek"
@@ -121,6 +122,7 @@
             @if ($specs->isNotEmpty())<button type="button" role="tab" :aria-selected="(tab === 'specs').toString()" @click="tab = 'specs'">Specificații</button>@endif
             <button type="button" role="tab" :aria-selected="(tab === 'reviews').toString()" @click="tab = 'reviews'" id="recenzii">Recenzii ({{ $product->rating_count }})</button>
             <button type="button" role="tab" :aria-selected="(tab === 'ship').toString()" @click="tab = 'ship'">Livrare și retur</button>
+            <button type="button" role="tab" :aria-selected="(tab === 'safety').toString()" @click="tab = 'safety'">Producător și siguranță</button>
         </div>
         @if ($product->description)<div class="tab-panel prose" role="tabpanel" x-show="tab === 'desc'">{!! \App\Support\Html::clean($product->description) !!}</div>@endif
         @if ($specs->isNotEmpty())
@@ -143,6 +145,8 @@
             @empty
                 <p>Încă nu există recenzii. Fii primul care spune ce crede animalul tău!</p>
             @endforelse
+            {{-- Omnibus (OUG 34/2014, art. 6 alin. 6^1): cum se verifica recenziile. --}}
+            <p class="review-policy"><small>Cum verificăm recenziile: le pot scrie doar clienții cu cont, iar echipa le citește înainte de publicare (eliminăm doar mesajele ofensatoare, publicitare sau fără legătură cu produsul, nu și pe cele negative). Mențiunea „a cumpărat produsul” apare doar dacă autorul are o comandă livrată cu acest produs.</small></p>
             @if ($canReview)
                 <form class="review-form card" method="post" action="{{ site_url($product->path()) }}recenzie">
                     @csrf
@@ -158,13 +162,22 @@
             @endif
         </div>
         <div class="tab-panel prose" role="tabpanel" x-show="tab === 'ship'" x-cloak>
-            <p>Comenzile plasate în zilele lucrătoare până la ora 14:00 pleacă de regulă în aceeași zi. Livrarea prin curier durează 1–3 zile lucrătoare.@if ($freeFrom) Livrarea este gratuită pentru comenzile de peste {{ money($freeFrom) }}.@endif</p>
-            <p>Poți returna produsele nedesigilate în 14 zile de la primire. Detalii în <a href="{{ site_url('/politica-de-retur/') }}">politica de retur</a> și <a href="{{ site_url('/livrare/') }}">pagina de livrare</a>.</p>
+            <p>Livrarea prin curier durează de regulă {{ $shop['delivery_time'] }} de la confirmarea comenzii.@if ($freeFrom) Livrarea este gratuită pentru comenzile de peste {{ money($freeFrom) }}.@endif</p>
+            <p>Poți returna produsele în 14 zile de la primire, fără să precizezi motivul; hrana, suplimentele și produsele de igienă doar cu sigiliul intact. Detalii în <a href="{{ site_url('/politica-de-retur/') }}">politica de retur</a> și <a href="{{ site_url('/livrare/') }}">pagina de livrare</a>.</p>
+        </div>
+        {{-- Regulamentul (UE) 2023/988 (GPSR): producătorul, persoana de contact din UE și avertismentele, pe pagina produsului. --}}
+        <div class="tab-panel prose" role="tabpanel" x-show="tab === 'safety'" x-cloak>
+            <dl class="specs">
+                <dt>Producător</dt><dd>@if ($product->brand?->manufacturer_info){!! nl2br(e($product->brand->manufacturer_info)) !!}@elseif ($product->brand){{ $product->brand->name }} (datele de contact ale producătorului se găsesc pe ambalaj sau le primești la cerere)@else Datele producătorului se găsesc pe ambalaj sau le primești la cerere.@endif</dd>
+                <dt>Vânzător / distribuitor</dt><dd>{{ $shop['legal_name'] }}, {{ $shop['address'] }}, {{ $shop['city'] }}, jud. {{ $shop['county'] }} · <a href="mailto:{{ $shop['email'] }}">{{ $shop['email'] }}</a> · {{ $shop['phone'] }}</dd>
+                <dt>Identificare produs</dt><dd>{{ $product->name }}@if ($product->sku) · cod {{ $product->sku }}@endif @if ($product->gtin) · EAN {{ $product->gtin }}@endif</dd>
+                <dt>Avertismente și utilizare</dt><dd>@if ($product->safety_info){!! nl2br(e($product->safety_info)) !!}@else Citește eticheta și instrucțiunile de pe ambalaj înainte de utilizare. Nu lăsa produsul la îndemâna copiilor.@endif</dd>
+            </dl>
         </div>
     </div>
 
     <div class="zoom" x-show="zoom" x-cloak x-transition.opacity @click="zoom = false" role="dialog" aria-modal="true" aria-label="Imagine mărită">
-        <img :src="current.src" :alt="current.alt">
+        <img :src="current.src" :alt="current.alt" alt="">
         <button type="button" class="icon-btn" aria-label="Închide"><x-hv-icon name="close" width="22" height="22" /></button>
     </div>
 </div>

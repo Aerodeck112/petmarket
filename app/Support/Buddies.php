@@ -24,7 +24,7 @@ class Buddies
         'contact' => ['dog', 'peek', ['Sună-ne! Eu dau din coadă la telefon.', 'Ne găsești ușor: urmează mirosul de recompense.', 'Eu sunt Hiko. Te aștept la ușă!']],
         'termeni' => ['cat', 'sleep', ['Zzz… documentele mă adorm.', 'Citește tu, eu țin pernuța caldă.', 'Miau? A, încă citești. Bravo.']],
         'politica' => ['cat', 'sleep', ['Zzz… documentele mă adorm.', 'Citește tu, eu țin pernuța caldă.']],
-        'livrare' => ['dog', 'peek', ['Curierul vine repede. Îl latru eu.', 'Coletul ajunge în 1–3 zile lucrătoare.']],
+        'livrare' => ['dog', 'peek', ['Curierul vine repede. Îl latru eu.', 'Coletul ajunge de regulă în câteva zile lucrătoare.']],
         'retur' => ['cat', 'sit', ['Se mai întâmplă. Și eu returnez cutia, dar păstrez cutia.', 'Ai 14 zile la dispoziție. Miau.']],
     ];
 

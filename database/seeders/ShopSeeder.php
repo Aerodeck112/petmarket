@@ -41,9 +41,14 @@ class ShopSeeder extends Seeder
             ['slug' => 'livrare', 'title' => 'Livrare', 'template' => 'legal'],
             ['slug' => 'politica-de-retur', 'title' => 'Politica de retur', 'template' => 'legal'],
         ];
+        $legal = \App\Support\LegalDocuments::all();
+        $pages[] = ['slug' => 'formular-retragere', 'title' => 'Formular de retragere', 'template' => 'legal'];
         foreach ($pages as $p) {
+            // Documentele legale vin din App\Support\LegalDocuments (versionate); celelalte pagini legale se preiau la import.
+            $doc = $legal[$p['slug']] ?? null;
             Page::query()->firstOrCreate(['slug' => $p['slug']], $p + ['status' => 'published', 'published_at' => now(),
-                'body' => $p['template'] === 'legal' ? '<p>Textul acestei pagini se preia din magazinul actual la importul catalogului (Sistem → Import catalog) sau se completează din Conținut → Pagini.</p>' : null]);
+                'body' => $doc['body'] ?? ($p['template'] === 'legal' ? '<p>Textul acestei pagini se preia din magazinul actual la importul catalogului (Sistem → Import catalog) sau se completează din Conținut → Pagini.</p>' : null),
+                'document_version' => $doc ? \App\Support\LegalDocuments::VERSION : null] + ($doc ? ['title' => $doc['title']] : []));
         }
 
         // Mesajele din bula de pe prima pagina si bannerele promo (imaginile din magazinul vechi).

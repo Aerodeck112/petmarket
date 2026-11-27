@@ -99,7 +99,7 @@
             </ul>
             <div x-ref="totals" aria-live="polite">@include('shop.partials.totals')</div>
             <button class="btn btn-primary btn-block btn-buy" type="submit" :disabled="submitting">
-                <x-hv-icon name="lock" width="20" height="20" /> <span x-text="submitting ? 'Se trimite…' : 'Plasează comanda'">Plasează comanda</span>
+                <x-hv-icon name="lock" width="20" height="20" /> <span x-text="submitting ? 'Se trimite…' : 'Comandă cu obligație de plată'">Comandă cu obligație de plată</span>
             </button>
             <p class="muted small">Comanda implică obligația de plată. Factura se emite la livrare.</p>
             <x-buddy class="co-buddy" kind="cat" pose="sit" :say="\App\Support\Buddies::forPath('finalizare')['say']" />

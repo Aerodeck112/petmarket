@@ -29,7 +29,18 @@ class ProductController extends Controller
             $crumbs[] = [$category->name, $category->path()];
         }
         $crumbs[] = [$product->name, $product->path()];
-        $seo->page($product->seo_title ?: $product->name, $product->seo_description ?: ($product->short_description ?: $product->description), $product->images->first()?->url())
+        // Titlu și descriere unice: la produsele cu același nume se adaugă codul; descrierea începe cu numele produsului.
+        $title = $product->seo_title ?: $product->name;
+        if (! $product->seo_title && Product::query()->published()->where('name', $product->name)->whereKeyNot($product->id)->exists()) {
+            $title .= ' – cod '.($product->sku ?: $product->id);
+        }
+        $excerpt = Seo::excerpt($product->short_description ?: $product->description, 400);
+        $description = $product->seo_description ?: ($excerpt !== ''
+            ? (str_starts_with(mb_strtolower($excerpt), mb_strtolower(mb_substr($product->name, 0, 20))) ? $excerpt : $product->name.': '.$excerpt)
+            : $product->name.($product->brand ? ', de la '.$product->brand->name : '').($product->sold_online
+                ? '. Cumpără de la Pet Market by HiKeVet, cu livrare în toată țara și retur în 14 zile.'
+                : '. Detalii și disponibilitate la Pet Market by HiKeVet; produsul nu se vinde online.'));
+        $seo->page($title, $description, $product->images->first()?->url())
             ->crumbs($crumbs);
         $seo->type = 'product';
         $seo->noindex = $preview;

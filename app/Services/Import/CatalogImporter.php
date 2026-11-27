@@ -346,6 +346,10 @@ class CatalogImporter
         if ($ids->isNotEmpty()) {
             $product->categories()->sync($ids->mapWithKeys(fn ($id, $i) => [$id => ['is_primary' => $i === 0]])->all());
         }
+        // Cantitatea neta, pentru pretul pe unitatea de masura (hrana, diete, nisip, igiena, suplimente).
+        if ($product->net_quantity === null && \App\Support\UnitPrice::eligiblePaths($c['categories'] ?? []) && ($found = \App\Support\UnitPrice::detect($product->name))) {
+            $product->forceFill(['net_quantity' => $found[0], 'net_unit' => $found[1]])->saveQuietly();
+        }
         // Restrictia de vanzare (reteta, uz veterinar, doar la sediu): produsul ramane vizibil, dar nu se poate pune in cos.
         if (array_key_exists('restriction', $c) && $product->sale_restriction !== $c['restriction']) {
             $product->sale_restriction = $c['restriction'];
@@ -467,7 +471,7 @@ class CatalogImporter
             }
             [$slug, $template] = $wanted[$row['slug']];
             $page = Page::query()->firstOrNew(['slug' => $slug]);
-            if ($page->exists && $page->wp_post_id === null && ! str_contains((string) $page->body, 'se preia din magazinul actual')) {
+            if ($page->exists && ($page->document_version || ($page->wp_post_id === null && ! str_contains((string) $page->body, 'se preia din magazinul actual')))) {
                 continue; // pagina editata deja in noua platforma: nu se suprascrie
             }
             $title = self::text($row['title']['rendered'] ?? $row['title'] ?? $slug);

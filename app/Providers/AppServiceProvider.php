@@ -69,6 +69,8 @@ class AppServiceProvider extends ServiceProvider
                 'announcement' => Settings::get('marketing.announcement'), 'free_shipping' => (int) Settings::get('commerce.free_shipping_threshold'),
                 'gtm_id' => Settings::get('marketing.gtm_id'), 'ga4_id' => Settings::get('marketing.ga4_id'), 'meta_pixel_id' => Settings::get('marketing.meta_pixel_id'),
                 'verification' => Settings::get('marketing.search_console_verification'),
+                'postcode' => Settings::get('shop.postcode'), 'capital' => Settings::get('shop.capital_social'), 'delivery_time' => Settings::get('commerce.delivery_time') ?: '1–4 zile lucrătoare',
+                'vmp_logo_url' => Settings::get('legal.vmp_logo_url'), 'vmp_logo_image' => Settings::get('legal.vmp_logo_image'),
             ];
             request()->attributes->set('pm.shop', $shop);
             $view->with('shop', $shop);

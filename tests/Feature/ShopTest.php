@@ -153,7 +153,10 @@ class ShopTest extends TestCase
         $this->assertTrue($product->fresh()->on_sale);
         $this->assertSame(7000, $product->fresh()->price);
         $this->assertSame(9000, $product->lowestPrice30());
-        $this->get($product->path())->assertSee('Cel mai mic preț din ultimele 30 de zile', false);
+        // Prețul tăiat este cel mai mic din ultimele 30 de zile (90 lei), nu prețul normal (100 lei).
+        $this->assertSame(9000, $product->fresh()->referencePrice());
+        $this->assertSame(22, $product->fresh()->referencePercent());
+        $this->get($product->path())->assertSee('Prețul tăiat este cel mai mic preț practicat în ultimele 30 de zile')->assertSee('&quot;regular&quot;:9000', false);
     }
 
     public function test_variable_products_take_min_max_price_from_variants(): void

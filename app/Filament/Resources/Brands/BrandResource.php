@@ -60,6 +60,8 @@ class BrandResource extends Resource
     {
         return $schema->columns(2)->components([
             Fields::title('name', 'Nume'), Fields::slug(),
+            Textarea::make('manufacturer_info')->label('Producător: denumire, adresă poștală, e-mail / site (GPSR)')->rows(3)->columnSpanFull()
+                ->helperText('Cerut de Regulamentul (UE) 2023/988 pe pagina produsului. Pentru producătorii din afara UE adaugă și persoana responsabilă din UE.'),
             FileUpload::make('logo')->label('Logo')->disk('public')->directory('brands')->image()
                 ->formatStateUsing(fn ($state) => $state ? preg_replace('#^uploads/#', '', $state) : null)
                 ->dehydrateStateUsing(fn ($state) => $state ? 'uploads/'.ltrim(preg_replace('#^uploads/#', '', is_array($state) ? reset($state) : $state), '/') : null),

@@ -23,6 +23,9 @@ class Settings
         'shop.postcode' => '540198',
         'shop.city' => 'Târgu Mureș',
         'shop.county' => 'Mureș',
+        'shop.capital_social' => '', // Legea 31/1990, art. 74: apare pe site langa datele firmei, daca este completat
+        'legal.vmp_logo_url' => '', // logo-ul comun UE pentru vanzarea online de medicamente veterinare: linkul catre inregistrarea din lista ANSVSA
+        'legal.vmp_logo_image' => '', // calea imaginii logo-ului primit de la ANSVSA (ex. media/brand/logo-ue-medicamente.png)
         'shop.hours' => 'Suport online 09:00 – 16:30',
         'shop.instagram' => 'https://www.instagram.com/petmarket.ro/',
         'shop.facebook' => 'https://www.facebook.com/profile.php?id=61591455733059',
@@ -34,6 +37,7 @@ class Settings
         'commerce.free_shipping_threshold' => 100000, // bani; magazinul vechi: livrare gratuita de la 1.000 lei cu TVA
         'commerce.shipping_vat' => false, // magazinul vechi nu aplica TVA pe livrare
         'commerce.min_order' => 0,
+        'commerce.delivery_time' => '1–4 zile lucrătoare',
         'commerce.low_stock_threshold' => 3,
         'commerce.allow_backorders' => false,
         'commerce.new_badge_days' => 30,

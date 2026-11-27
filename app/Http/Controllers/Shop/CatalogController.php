@@ -45,7 +45,11 @@ class CatalogController extends Controller
             $crumbs[] = [$a->name, $a->path()];
         }
         $crumbs[] = [$category->name, $category->path()];
-        $seo->page($category->seo_title ?: $category->name, $category->seo_description ?: $category->description, $category->image)->crumbs($crumbs);
+        // Subcategoriile cu nume generic („Uscată”, „Câini”) primesc în titlu și părinții, ca fiecare pagină să aibă titlu unic.
+        $trail = collect($category->ancestors())->pluck('name')->reverse()->take(2)->prepend($category->name)->implode(' – ');
+        $count = $category->product_count;
+        $seo->page($category->seo_title ?: $trail, $category->seo_description ?: ($category->description
+            ?: $trail.': '.$count.' '.($count === 1 ? 'produs' : 'produse').' la Pet Market by HiKeVet. Prețuri afișate cu TVA, livrare în toată țara și retur în 14 zile.'), $category->image)->crumbs($crumbs);
 
         $query = (new CatalogQuery($request))->inCategories($category->descendantIds());
 

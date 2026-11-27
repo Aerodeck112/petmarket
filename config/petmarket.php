@@ -2,7 +2,7 @@
 
 return [
     // Versiunea platformei, afisata in admin si verificata de sistemul de actualizari.
-    'version' => '0.1.1',
+    'version' => '0.1.2',
 
     // Cheia publica Ed25519 (base64) cu care sunt semnate pachetele de actualizare.
     'update_public_key' => env('PETMARKET_UPDATE_PUBLIC_KEY', 'lfFS4typhQKcrpYvx1XPAg2X/JgvTyxdDE017XTxs8A='),

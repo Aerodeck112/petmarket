@@ -35,7 +35,10 @@ class CatalogImportTest extends TestCase
         $this->assertSame($source->where('is_on_backorder', true)->count(), Product::query()->where('stock_status', 'onbackorder')->count());
         $this->assertSame($source->where('on_sale', true)->count(), Product::query()->where('on_sale', true)->count());
         $this->assertGreaterThan(0, Product::query()->whereNotNull('brand_id')->count());
-        $this->assertTrue(Page::query()->where('slug', 'livrare')->whereNotNull('wp_post_id')->exists());
+        // Documentele legale noi (versionate) nu se suprascriu cu textele din magazinul vechi.
+        $this->assertTrue(Page::query()->where('slug', 'livrare')->whereNotNull('document_version')->whereNull('wp_post_id')->exists());
+        $this->assertStringContainsString('cel mult <strong>14 zile</strong>', Page::query()->where('slug', 'politica-de-retur')->value('body'));
+        $this->assertTrue(Page::query()->where('slug', 'formular-retragere')->exists());
         $this->assertTrue(Redirect::query()->where('from_path', '/refund_returns/')->exists());
 
         // A doua rulare actualizeaza, nu dubleaza.

@@ -25,9 +25,20 @@ Alpine.data('consent', () => ({
         else if (saved !== 'no') this.visible = true;
     },
     choose(accepted) {
+        const before = localStorage.getItem('pm-consent');
         localStorage.setItem('pm-consent', accepted ? 'yes' : 'no');
         this.visible = false;
-        if (accepted) this.load();
+        if (accepted && before !== 'yes') this.load();
+        // Retragerea acordului: cookie-urile de masurare se sterg, iar pagina se reincarca fara scripturile lor.
+        if (! accepted && before === 'yes') {
+            window.gtag('consent', 'update', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+            document.cookie.split(';').map((c) => c.split('=')[0].trim()).filter((n) => /^(_ga|_gid|_gcl|_fbp|_fbc)/.test(n)).forEach((n) => {
+                const host = location.hostname.replace(/^www\./, '');
+                [location.hostname, '.' + host].forEach((d) => { document.cookie = n + '=; Max-Age=0; path=/; domain=' + d; });
+                document.cookie = n + '=; Max-Age=0; path=/';
+            });
+            location.reload();
+        }
     },
     load() {
         const cfg = window.hvTracking || {};

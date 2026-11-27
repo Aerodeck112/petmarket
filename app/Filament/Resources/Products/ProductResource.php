@@ -193,6 +193,11 @@ class ProductResource extends Resource
                         TextInput::make('badge')->label('Etichetă proprie')->maxLength(40)->placeholder('Bestseller'),
                     ]),
                     Textarea::make('purchase_note')->label('Notă după cumpărare (în email)')->rows(2),
+                    Grid::make(2)->schema([
+                        TextInput::make('net_quantity')->label('Cantitate netă')->numeric()->step(0.001)->helperText('Pentru prețul pe unitate (lei/kg sau lei/l). Ex.: 12 x 85 g = 1,02 kg.'),
+                        Select::make('net_unit')->label('Unitate')->options(['kg' => 'kg', 'l' => 'l'])->placeholder('—'),
+                    ]),
+                    Textarea::make('safety_info')->label('Avertismente și informații de siguranță (GPSR)')->rows(3)->helperText('Apar în tabul „Producător și siguranță”. Gol = textul general.'),
                     Fields::seo(),
                 ]),
             ])->contained(false),
