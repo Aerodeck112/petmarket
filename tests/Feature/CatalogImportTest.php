@@ -139,4 +139,23 @@ class CatalogImportTest extends TestCase
         // Filtrul „Animal” apare in catalog.
         $this->get('/categorie-produs/otc/')->assertOk()->assertSee('Animal');
     }
+
+    public function test_update_0_1_1_applies_sale_restrictions_to_already_imported_products(): void
+    {
+        $this->seedShop();
+        $make = fn (int $wc, ?string $restriction = null) => Product::query()->create(['name' => 'Produs '.$wc, 'slug' => 'produs-'.$wc, 'status' => 'published',
+            'regular_price' => 1000, 'wc_product_id' => $wc, 'sale_restriction' => $restriction]);
+        $rx = $make(3562);       // Librela: medicament cu reteta
+        $vet = $make(24716);     // anestezic: uz exclusiv veterinar
+        $free = $make(3161);     // echipament fara restrictie
+        $manual = $make(3565, 'location');  // setat deja din admin: ramane neschimbat
+        Product::query()->whereKey([$rx->id, $vet->id, $free->id])->update(['sale_restriction' => null, 'sold_online' => true]);
+
+        (require database_path('migrations/2026_11_27_000001_apply_sale_restrictions_to_imported_products.php'))->up();
+
+        $this->assertSame(['rx', false], [$rx->fresh()->sale_restriction, $rx->fresh()->sold_online]);
+        $this->assertSame(['vet', false], [$vet->fresh()->sale_restriction, $vet->fresh()->sold_online]);
+        $this->assertSame([null, true], [$free->fresh()->sale_restriction, $free->fresh()->sold_online]);
+        $this->assertSame('location', $manual->fresh()->sale_restriction);
+    }
 }

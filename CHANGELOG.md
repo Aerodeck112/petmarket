@@ -1,5 +1,12 @@
 # Jurnal de modificări
 
+## 0.1.1 — 27.11.2026 (actualizare: produse cu rețetă)
+
+- Medicamentele veterinare cu rețetă (584), produsele de uz exclusiv veterinar (10) și cele vândute doar la sediu (4) nu se mai pot comanda online; motivul apare pe card și pe pagina produsului, cu adresa și telefonul.
+- La actualizare, o migrare aplică restricțiile pe produsele deja importate; produsele care au deja o restricție setată din admin rămân neschimbate. Dacă produsele nu sunt încă importate, restricțiile se aplică la import.
+- Admin: câmpul și filtrul „Restricție de vânzare”; textele afișate se editează din Setări magazin → Reguli comerciale.
+- Include și corecturile din 25–27.11: prima pagină (dale, „Cele mai căutate”, bannere, telefon), încadrări corectate, `.htaccess` pentru instalarea în `public_html`.
+
 ## 0.1.0 — 23.11.2026 (prima versiune de probă)
 
 ### Magazin
