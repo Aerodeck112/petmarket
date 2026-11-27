@@ -1,3 +1,37 @@
+# Manifestul versiunii 0.1.1
+
+| | |
+|---|---|
+| Versiune | 0.1.1 (27.11.2026) – produsele cu rețetă nu se mai vând online |
+| Cod sursă | ramura `claude/confident-gauss-9ogkxt` |
+
+## Pachetul de actualizare 0.1.0 → 0.1.1
+
+| | |
+|---|---|
+| Fișier | `petmarket-update-0.1.1.zip` (incremental, semnat cu cheia Pet Market) |
+| Dimensiune | 483 083 octeți |
+| Fișiere | 56 (tot ce s-a schimbat după primul pachet 0.1.0, deci se potrivește oricărei instalări 0.1.0) |
+| Migrări | `add_sale_restriction_to_products`, `apply_sale_restrictions_to_imported_products` |
+| SHA-256 | `0f8b0c4f8a62115676ca7262b3a03ca5e3161fbaf7c8e5cd889d381dec39f73b` |
+| Verificare | Apache 2.4 + PHP 8.3 + MariaDB, aplicația în `public_html/petmarket`: (1) peste o instalare din pachetul din 25.11 (fără restricții, produse importate): 26 de fișiere schimbate, ambele migrări rulate, 598 de produse scoase de la vânzarea online, site și admin funcționale; (2) peste o instalare care avea deja restricțiile: doar migrarea de date, restricția setată manual din admin păstrată |
+
+Se aplică din admin: *Sistem → Actualizări → Încarcă pachet de actualizare*, sau prin File Manager în
+`storage/app/private/updates` și butonul „Pachet urcat prin File Manager”. Înainte se face automat backup
+la baza de date; la o eroare, fișierele și baza revin singure.
+
+## Pachetul de instalare 0.1.1
+
+| | |
+|---|---|
+| Fișier | `petmarket-install-0.1.1.zip` |
+| Dimensiune | 46 451 730 octeți (aproximativ 44 MB) |
+| SHA-256 | `ab3ba9b69d7efe1368aa0ae3870b11d0b86b48e2b34a45ae5d34c085c7820e6e` |
+
+Pentru o instalare nouă se folosește direct pachetul 0.1.1; pachetele de imagini rămân aceleași (vezi mai jos).
+
+---
+
 # Manifestul versiunii 0.1.0
 
 | | |
