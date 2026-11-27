@@ -28,6 +28,13 @@ Arhivele ZIP se șterg după dezarhivare.
    cd ~ && ln -s petmarket/public public_html
    ```
 
+   **Fără Terminal** (găzduire de bază, document root fix): pachetele se dezarhivează **în `public_html`**
+   (rezultă `public_html/petmarket/…`), iar în `public_html` se pune fișierul `.htaccess` din
+   `petmarket/deploy/public_html.htaccess` (File Manager → *Copy* în `public_html`, apoi *Rename* în `.htaccess`;
+   un `.htaccess` vechi de WordPress se înlocuiește). Toate adresele ajung în `petmarket/public`, iar restul
+   aplicației (`.env`, `storage`, `vendor`) nu se poate deschide din browser. Testat pe Apache 2.4 + PHP 8.3:
+   instalator, site, imagini, admin, redirecturi.
+
 6. **Instalatorul**: `https://pet-market.ro/install`, codul e în `petmarket/storage/app/install-code.txt` (§3.4).
    La SMTP pui datele căsuței `office@pet-market.ro`.
 7. **Catalogul**: `/admin` → *Sistem → Import catalog*: pașii 1 și 2 (categorii, produse). Imaginile se leagă

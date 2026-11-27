@@ -25,6 +25,9 @@
 - Magazinul vechi rămas în `public_html_vechi` este găsit automat: imaginile se copiază de pe disc, iar prețurile, reducerile, stocul exact și starea produselor se citesc din baza WooCommerce (`wp-config.php`).
 - Cheie nouă de semnare a actualizărilor, inclusă în pachet.
 
+### Instalare fără Terminal
+- Pentru găzduirile la care domeniul servește fix `public_html`: pachetele se dezarhivează în `public_html`, iar fișierul `deploy/public_html.htaccess` trimite toate adresele în `petmarket/public` (testat pe Apache 2.4 + PHP 8.3, instalare completă).
+
 ### Produse care nu se vând online
 - Toate produsele scanate după statutul legal: online se vând doar medicamentele veterinare fără rețetă (Legea 160/1998, art. 37; Regulamentul (UE) 2019/6). 598 de produse nu se mai pot pune în coș (pe site-ul vechi erau marcate doar 78): antibiotice, vaccinuri, hormoni, antiinflamatoare, injectabile, medicamente pentru animale de fermă și cai, antiparazitarele cu rețetă (Bravecto, NexGard, Simparica, Credelio, Stronghold, Advocate...).
 - Motivul se vede pe site: „Cu rețetă” (se ridică de la sediu, cu rețeta), „Uz veterinar” (anestezice, sedative, eutanasiante) sau „Doar la sediu”; textele se editează din Setări magazin → Reguli comerciale.

@@ -100,7 +100,7 @@ class ReleaseBuild extends Command
         // .env minim: productie, fara cheie si fara date; instalatorul il rescrie.
         $zip->addFromString('petmarket/.env', "APP_ENV=production\nAPP_DEBUG=false\nAPP_KEY=\nAPP_URL=\nDB_CONNECTION=mysql\nSESSION_DRIVER=file\nCACHE_STORE=file\nQUEUE_CONNECTION=sync\nLOG_CHANNEL=daily\n"
             .'PETMARKET_UPDATE_PUBLIC_KEY='.config('petmarket.update_public_key')."\n");
-        foreach (['INSTALL_CPANEL.md', 'UPDATES.md', 'SECURITY.md', 'CHANGELOG.md'] as $doc) {
+        foreach (['INSTALL_CPANEL.md', 'UPDATES.md', 'SECURITY.md', 'CHANGELOG.md', 'deploy/public_html.htaccess'] as $doc) {
             if (is_file($base.'/'.$doc)) {
                 $zip->addFile($base.'/'.$doc, 'petmarket/'.$doc);
             }

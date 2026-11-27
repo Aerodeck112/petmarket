@@ -1,0 +1,13 @@
+# Pet Market: domeniul servește public_html, aplicația stă în public_html/petmarket.
+# Toate cererile merg în petmarket/public; restul aplicației (.env, storage, vendor) nu se poate accesa din browser.
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Validarea certificatului SSL (AutoSSL / Let's Encrypt) rămâne în public_html/.well-known.
+    RewriteRule ^\.well-known/ - [L]
+    # Cererile deja trimise în folderul public nu se mai rescriu (altfel ar fi o buclă; merge și pe LiteSpeed).
+    RewriteCond %{REQUEST_URI} !^/petmarket/public/
+    RewriteRule ^(.*)$ petmarket/public/$1 [L]
+</IfModule>
