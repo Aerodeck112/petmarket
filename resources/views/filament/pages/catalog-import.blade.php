@@ -3,7 +3,7 @@
     @unless ($available)
         <section class="pm-card pm-card--note"><h3>Lipsește exportul catalogului</h3><p>Fișierele trebuie să fie în <code>database/seeders/data/catalog/</code> (vin în pachetul de instalare).</p></section>
     @endunless
-    <p class="pm-muted">Exportul a fost extras din magazinul actual (Store API public) pe 23.11.2026: {{ number_format($sourceTotal, 0, ',', '.') }} produse. Importul se poate rula de mai multe ori: actualizează prețurile și stocurile fără să dubleze produsele și nu atinge comenzile.</p>
+    <p class="pm-muted">Catalogul din pachet: {{ number_format($sourceTotal, 0, ',', '.') }} de produse, din magazinul WooCommerce (exportul public din 23.11.2026, completat cu exportul CSV din 25.11.2026: prețuri, stoc, greutate, EAN, TVA, produse cu rețetă). Importul se poate rula de mai multe ori: actualizează prețurile și stocurile fără să dubleze produsele și nu atinge comenzile.</p>
     <div class="pm-steps">
         <section class="pm-card">
             <h3>1. Categorii, branduri, pagini</h3>
@@ -26,8 +26,7 @@
             @php $ipct = $imgTotal ? round($imgLocal * 100 / $imgTotal) : 0; @endphp
             <div class="pm-progress"><span style="width: {{ $ipct }}%"></span></div>
             <p class="pm-muted">{{ number_format($imgLocal, 0, ',', '.') }} / {{ number_format($imgTotal, 0, ',', '.') }} copiate pe server @if ($imgFailed)· {{ $imgFailed }} eșuate <button type="button" class="pm-link" wire:click="retryFailed">reîncearcă</button>@endif</p>
-            <p class="pm-muted">Sursa: {!! $localUploads ? 'directorul <code>'.e($localUploads).'</code> de pe acest server (rapid)' : 'descărcare de pe pet-market.ro (lent, cu pauze)' !!}.</p>
-            <p class="pm-muted">Până la copiere, imaginile se afișează de pe pet-market.ro. Copierea trebuie terminată înainte de oprirea site-ului vechi.</p>
+            <p class="pm-muted">Imaginile vin din pachetele <code>petmarket-imagini-*.zip</code> (dezarhivate în folderul aplicației) și se leagă singure la import. Butonul leagă imaginile urcate ulterior{!! $localUploads ? ' sau le copiază din <code>'.e($localUploads).'</code>' : '' !!}.</p>
             @if ($running === 'images')
                 <x-filament::button color="gray" wire:click="stop" icon="heroicon-o-stop">Oprește</x-filament::button>
             @else

@@ -1,5 +1,10 @@
 # Jurnal de modificări
 
+## 0.1.3 — 28.11.2026 (actualizare: telefonul la comandă)
+
+- La finalizarea comenzii, numărul de telefon scris cu spații, cratime sau paranteze („0722 145 678”, „+40 (722) 145-678”) era respins ca invalid; acum se acceptă și se salvează fără separatori.
+- Pagina de import a catalogului descrie corect sursa datelor (exportul CSV și pachetele de imagini).
+
 ## 0.1.2 — 28.11.2026 (actualizare: SEO, accesibilitate, conformitate legală)
 
 ### Legal (România)

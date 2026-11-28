@@ -88,6 +88,10 @@ class CheckoutController extends Controller
             'password' => $request->boolean('create_account') && ! auth()->check() ? 'required|string|min:10' : 'nullable',
         ], $address('b_'), $shipDifferent ? $address('s_') : []);
 
+        // Telefonul se scrie cum vrea clientul („0722 145 678”, „0722-145-678”, „+40 722 145 678”): spațiile și separatorii se scot.
+        if (is_string($request->input('phone'))) {
+            $request->merge(['phone' => preg_replace('/[\s\-\.\(\)\/]+/u', '', $request->input('phone'))]);
+        }
         $data = $request->validate($rules, [
             'phone.regex' => 'Scrie un număr de telefon românesc valid (de exemplu 07xx xxx xxx).',
             'cui.regex' => 'CUI-ul trebuie să conțină doar cifre, opțional cu prefixul RO.',

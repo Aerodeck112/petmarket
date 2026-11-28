@@ -202,4 +202,15 @@ class ShopTest extends TestCase
         $q = app(PricingEngine::class)->quote([new Line($this->product(['regular_price' => 6000]), null, 1)], null, $this->courier());
         $this->assertSame(0, $q->shipping);
     }
+
+    public function test_phone_with_spaces_or_dashes_is_accepted_at_checkout(): void
+    {
+        $this->seedShop();
+        $product = $this->product();
+        $this->postJson('/cos/adauga', ['product_id' => $product->id, 'qty' => 1])->assertOk();
+        $this->post('/finalizare', $this->checkoutData(['phone' => '0722 145 678']))->assertSessionHasNoErrors();
+        $this->assertSame('0722145678', Order::query()->latest('id')->value('phone'));
+        $this->postJson('/cos/adauga', ['product_id' => $product->id, 'qty' => 1])->assertOk();
+        $this->post('/finalizare', $this->checkoutData(['phone' => '+40 (722) 145-678']))->assertSessionHasNoErrors();
+    }
 }
